@@ -14,7 +14,6 @@
 
 #include "l2Mps_thr.h"
 
-
 //Number of Threshold channels for BCM is 1 per bay: BCM, DIFF
 const uint8_t numBcmChs = 2;
 
@@ -30,29 +29,30 @@ class bcm_channel;
 typedef bcm_channel bcm_channel_t;
 
 // Function pointer data typed
-typedef const uint32_t (IMpsBcm::*BcmR32_t)(const bcm_channel_t) const;
-typedef void (IMpsBcm::*BcmW32_t)(const bcm_channel_t, const uint32_t) const;
-typedef const bool (IMpsBcm::*BcmR1_t)(const bcm_channel_t) const;
-typedef void (IMpsBcm::*BcmW1_t)(const bcm_channel_t, const bool) const;
+typedef const uint32_t (IMpsBcm::*BcmR32_t)(const bcm_channel&) const;
+typedef void (IMpsBcm::*BcmW32_t)(const bcm_channel&, const uint32_t) const;
+typedef const bool (IMpsBcm::*BcmR1_t)(const bcm_channel&) const;
+typedef void (IMpsBcm::*BcmW1_t)(const bcm_channel&, const bool) const;
 
 class IMpsBcm
 {
 public:
+    // Constructor
     IMpsBcm(Path mpsRoot, uint8_t amc);
     ~IMpsBcm();
 
-    uint32_t const  getCh           ( const bcm_channel_t& ch) const;
-    bool     const  getIdleEn       ( const bcm_channel_t& ch) const;
-    bool     const  getAltEn        ( const bcm_channel_t& ch) const;
-    bool     const  getLcls1En      ( const bcm_channel_t& ch) const;
-    uint32_t const  getByteMap      ( const bcm_channel_t& ch) const;
-    uint32_t const  getThrCount     ( const bcm_channel_t& ch) const;
+    uint32_t const  getCh           ( const bcm_channel& ch) const;
+    bool     const  getIdleEn       ( const bcm_channel& ch) const;
+    bool     const  getAltEn        ( const bcm_channel& ch) const;
+    bool     const  getLcls1En      ( const bcm_channel& ch) const;
+    uint32_t const  getByteMap      ( const bcm_channel& ch) const;
+    uint32_t const  getThrCount     ( const bcm_channel& ch) const;
    
-    void            setThreshold    ( const bcm_channel_t& ch, const uint32_t val) const;
-    const uint32_t  getThreshold    ( const bcm_channel_t& ch) const;
+    void            setThreshold    ( const bcm_channel& ch, const uint32_t val) const;
+    const uint32_t  getThreshold    ( const bcm_channel& ch) const;
    
-    void            setThresholdEn  ( const bcm_channel_t& ch, const bool val) const;
-    const bool      getThresholdEn  ( const bcm_channel_t& ch) const;
+    void            setThresholdEn  ( const bcm_channel& ch, const bool val) const;
+    const bool      getThresholdEn  ( const bcm_channel& ch) const;
 
     void printChInfo(const ThrChannel thr) const;
 
@@ -70,7 +70,6 @@ public:
         return MpsBcm(new IMpsBcm(mpsRoot, amc));
     }
 };
-
 
 class bcm_channel
 {
