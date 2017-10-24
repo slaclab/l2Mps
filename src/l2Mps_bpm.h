@@ -34,7 +34,6 @@ typedef void (IMpsBpm::*BpmW32_t)(const bpm_channel&, const uint32_t) const;
 typedef const bool (IMpsBpm::*BpmR1_t)(const bpm_channel&) const;
 typedef void (IMpsBpm::*BpmW1_t)(const bpm_channel&, const bool) const;
 
-
 class IMpsBpm
 {
 public:
