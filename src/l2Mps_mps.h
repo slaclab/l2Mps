@@ -96,6 +96,21 @@ public:
     // MPS RX Packet Received Counter
     uint32_t const getRxPktRcvdSentCnt(const uint8_t ch) const;
 
+    // MpsMessage counter
+    uint32_t const getMpsMsgCount(void) const;
+
+    // App ID in the last message
+    uint16_t const getLastMsgAppId(void) const;
+
+    // LCLS flag in the last message
+    bool     const getLastMsgLcls(void) const;
+
+    // Timestamp in the last message
+    uint16_t const getLastMsgTimeStamp(void) const;
+
+    // Bytes from the last message
+    uint8_t  const getLastMsgByte(uint8_t index) const;
+
 private:
     Path       _mpsRoot;
     ScalVal    _mpsAppId;
@@ -117,6 +132,13 @@ private:
 
     ScalVal_RO _mpsTxPktSentCnt;
     ScalVal_RO _mpsRxPktRcvdSentCnt;
+
+    ScalVal_RO _mpsMsgCnt;
+    ScalVal_RO _mpsLastMsgAppId;
+    ScalVal_RO _mpsLastMsgLcls;
+    ScalVal_RO _mpsLastMsgTimestamp;
+    ScalVal_RO _mpsLastMsgByte;
+    uint8_t    _lastMsgByteSize;
     // Command    RstCnt;
 
 

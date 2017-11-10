@@ -18,7 +18,14 @@ IMpsNode::IMpsNode(Path mpsRoot) :
     _mpsPllLocked        ( IScalVal_RO::create( _mpsRoot->findByName("AppMpsSalt/MpsPllLocked") )    ),
     _rollOverEn          ( IScalVal::create(    _mpsRoot->findByName("AppMpsSalt/RollOverEn") )      ),
     _mpsTxPktSentCnt     ( IScalVal_RO::create( _mpsRoot->findByName("AppMpsSalt/MpsTxPktSentCnt") ) ),
-    _mpsRxPktRcvdSentCnt ( IScalVal_RO::create( _mpsRoot->findByName("AppMpsSalt/MpsRxPktRcvdSentCnt") )  )
+    _mpsRxPktRcvdSentCnt ( IScalVal_RO::create( _mpsRoot->findByName("AppMpsSalt/MpsRxPktRcvdSentCnt") )  ),
+    
+    _mpsMsgCnt           ( IScalVal_RO::create( _mpsRoot->findByName("AppMpsThr/mpsMsgCount") )         ),
+    _mpsLastMsgAppId     ( IScalVal_RO::create( _mpsRoot->findByName("AppMpsThr/lastMsgAppId") )        ),
+    _mpsLastMsgLcls      ( IScalVal_RO::create( _mpsRoot->findByName("AppMpsThr/lastMsgLcls") )         ),
+    _mpsLastMsgTimestamp ( IScalVal_RO::create( _mpsRoot->findByName("AppMpsThr/lastMsgTimeStamp") )    ),
+    _mpsLastMsgByte      ( IScalVal_RO::create( _mpsRoot->findByName("AppMpsThr/lastMsgByte") )         ),
+    _lastMsgByteSize     ( _mpsLastMsgByte->getSize() )
 {
 }
 
@@ -217,11 +224,11 @@ bool const IMpsNode::getRxLinkUp(const uint8_t ch) const
 
 bool const IMpsNode::getMpsSlot(void) const
 {
-    if (!_appTypeG)
+    if (!_mpsSlotG)
         throw std::runtime_error("Register interface not implemented\n");
     
     uint8_t reg;
-    _appTypeG->getVal(&reg);
+    _mpsSlotG->getVal(&reg);
     return reg ? true : false;
 }
 
@@ -259,4 +266,56 @@ uint32_t const IMpsNode::getRxPktRcvdSentCnt(const uint8_t ch) const
     _mpsRxPktRcvdSentCnt->getVal(reg, n);
 
     return reg[ch];
+}
+
+uint32_t const IMpsNode::getMpsMsgCount(void) const
+{
+    if (!_mpsMsgCnt)
+        throw std::runtime_error("Register interface not implemented\n");
+
+    uint32_t reg;
+    _mpsMsgCnt->getVal(&reg);
+    return reg;
+}
+
+uint16_t const IMpsNode::getLastMsgAppId(void) const
+{
+    if (!_mpsLastMsgAppId)
+        throw std::runtime_error("Register interface not implemented\n");
+
+    uint16_t reg;
+    _mpsLastMsgAppId->getVal(&reg);
+    return reg;
+}
+
+bool const IMpsNode::getLastMsgLcls(void) const
+{
+    if (!_mpsLastMsgLcls)
+        throw std::runtime_error("Register interface not implemented\n");
+    uint8_t reg;
+    _mpsLastMsgLcls->getVal(&reg);
+    return reg ? true : false;
+}
+
+uint16_t const IMpsNode::getLastMsgTimeStamp(void) const
+{
+    if (!_mpsLastMsgTimestamp)
+        throw std::runtime_error("Register interface not implemented\n");
+    uint16_t reg;
+    _mpsLastMsgTimestamp->getVal(&reg);
+    return reg;
+}
+
+uint8_t const IMpsNode::getLastMsgByte(uint8_t index) const
+{
+    if (!_mpsLastMsgByte)
+        throw std::runtime_error("Register interface not implemented\n");
+
+    if (index > _lastMsgByteSize)
+        throw std::runtime_error("LastMsgByte: request index is out of range \n");
+
+    uint8_t reg[_lastMsgByteSize];
+
+    _mpsLastMsgByte->getVal(reg, _lastMsgByteSize);
+    return reg[index];
 }
