@@ -22,14 +22,16 @@ IThrChannel::IThrChannel(Path mpsRoot, uint8_t channel)
 
     // Get Channel header information register
     IScalVal_RO::create( _chRoot->findByName( "thresholdCount" ))->getVal(&_thrCount);
-    IScalVal_RO::create( _chRoot->findByName( "idleEn"         ))->getVal(&u8);
-    _idleEn = (u8 & 0x01)?true:false;
+    // IScalVal_RO::create( _chRoot->findByName( "idleEn"         ))->getVal(&u8);
+    // _idleEn = (u8 & 0x01)?true:false;
     IScalVal_RO::create( _chRoot->findByName( "altEn"          ))->getVal(&u8);
     _altEn = (u8 & 0x01)?true:false;
     IScalVal_RO::create( _chRoot->findByName( "lcls1En"        ))->getVal(&u8);
     _lcls1En = (u8 & 0x01)?true:false;
     IScalVal_RO::create( _chRoot->findByName( "byteMap"        ))->getVal(&_byteMap);
 
+    _idleEn = IScalVal::create(_chRoot->findByName("idleEn"));
+    
     // Cretae interfaces to LCLS1 Thresholds (table index 0, threshold count 1)
     _thrEnMap.insert( std::make_pair( thr_channel_t{{0,0,0}}, IScalVal::create( _chRoot->findByName( "lcls1Thr/minEn" ) ) ) );
     _thrEnMap.insert( std::make_pair( thr_channel_t{{0,1,0}}, IScalVal::create( _chRoot->findByName( "lcls1Thr/maxEn" ) ) ) );
@@ -124,4 +126,16 @@ const bool IThrChannel::getThresholdEn(thr_channel_t ch) const
     }
     else
         throw std::runtime_error("Threshold not defined\n");
+}
+
+bool IThrChannel::getIdleEn() const
+{
+    uint32_t u8;
+    _idleEn->getVal(&u8);
+    return (u8 & 0x01)?true:false;
+}
+
+void IThrChannel::setIdleEn(const bool en) const
+{
+    _idleEn->setVal(en);
 }
