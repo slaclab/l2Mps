@@ -25,7 +25,7 @@ IMpsNode::IMpsNode(Path mpsRoot) :
     _mpsLastMsgLcls      ( IScalVal_RO::create( _mpsRoot->findByName("AppMpsThr/lastMsgLcls") )         ),
     _mpsLastMsgTimestamp ( IScalVal_RO::create( _mpsRoot->findByName("AppMpsThr/lastMsgTimeStamp") )    ),
     _mpsLastMsgByte      ( IScalVal_RO::create( _mpsRoot->findByName("AppMpsThr/lastMsgByte") )         ),
-    _lastMsgByteSize     ( _mpsLastMsgByte->getSize() )
+    _lastMsgByteSize     ( _mpsLastMsgByte->getNelms() )
 {
 }
 
@@ -306,7 +306,7 @@ uint16_t const IMpsNode::getLastMsgTimeStamp(void) const
     return reg;
 }
 
-uint8_t const IMpsNode::getLastMsgByte(uint8_t index) const
+uint8_t const IMpsNode::getLastMsgByte(const uint8_t index) const
 {
     if (!_mpsLastMsgByte)
         throw std::runtime_error("Register interface not implemented\n");
@@ -315,7 +315,6 @@ uint8_t const IMpsNode::getLastMsgByte(uint8_t index) const
         throw std::runtime_error("LastMsgByte: request index is out of range \n");
 
     uint8_t reg[_lastMsgByteSize];
-
     _mpsLastMsgByte->getVal(reg, _lastMsgByteSize);
     return reg[index];
 }

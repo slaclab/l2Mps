@@ -109,7 +109,8 @@ public:
     uint16_t const getLastMsgTimeStamp(void) const;
 
     // Bytes from the last message
-    uint8_t  const getLastMsgByte(uint8_t index) const;
+    uint8_t  const getLastMsgByte(const uint8_t index) const;
+    std::size_t const getLastMsgByteSize(void) const { return _lastMsgByteSize; }
 
 private:
     Path       _mpsRoot;
@@ -138,7 +139,7 @@ private:
     ScalVal_RO _mpsLastMsgLcls;
     ScalVal_RO _mpsLastMsgTimestamp;
     ScalVal_RO _mpsLastMsgByte;
-    uint8_t    _lastMsgByteSize;
+    std::size_t _lastMsgByteSize;
     // Command    RstCnt;
 
 
