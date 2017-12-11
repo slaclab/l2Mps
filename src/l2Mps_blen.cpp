@@ -8,11 +8,14 @@ IMpsBlen::IMpsBlen(Path mpsRoot, uint8_t amc)
         {
             ThrChannel aThr(ThrChannelFactory::create(mpsRoot, ch));
 
-            if (aThr->getByteMap() == blenChByteMap[amc])
+            if (aThr->getThrCount())
             {
-                _ch  = ch;
-                _thr = aThr;
-                break;
+                if (aThr->getByteMap() == blenChByteMap[amc])
+                {
+                    _ch  = ch;
+                    _thr = aThr;
+                    break;
+                }
             }
         }
         catch (CPSWError &e)

@@ -9,12 +9,15 @@ IMpsBpm::IMpsBpm(Path mpsRoot, uint8_t amc)
         {
             ThrChannel aThr(ThrChannelFactory::create(mpsRoot, ch));
 
-            for (int i = 0; i < numBpmChs; ++i)
+            if (aThr->getThrCount())
             {
-                if (aThr->getByteMap() == bpmChByteMap[amc][i])
+                for (int i = 0; i < numBpmChs; ++i)
                 {
-                    _ch[i] = ch;
-                    _thr[i] = aThr;
+                    if (aThr->getByteMap() == bpmChByteMap[amc][i])
+                    {
+                        _ch[i] = ch;
+                        _thr[i] = aThr;
+                    }
                 }
             }
         }

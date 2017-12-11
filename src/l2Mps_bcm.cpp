@@ -7,14 +7,17 @@ IMpsBcm::IMpsBcm(Path mpsRoot, uint8_t amc)
         try
         {
             ThrChannel aThr(ThrChannelFactory::create(mpsRoot, ch));
-
-            for (int i = 0; i < numBcmChs; ++i)
+            
+            if (aThr->getThrCount())
             {
-                if (aThr->getByteMap() == bcmChByteMap[amc][i])
+                for (int i = 0; i < numBcmChs; ++i)
                 {
-                    _ch[i]  = ch;
-                    _thr[i] = aThr;
-                    break;
+                    if (aThr->getByteMap() == bcmChByteMap[amc][i])
+                    {
+                        _ch[i]  = ch;
+                        _thr[i] = aThr;
+                        break;
+                    }
                 }
             }
         }

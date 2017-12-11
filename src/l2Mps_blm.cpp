@@ -9,16 +9,19 @@ IMpsBlm::IMpsBlm(Path mpsRoot, const uint8_t amc)
         {
             ThrChannel aThr(ThrChannelFactory::create(mpsRoot, ch));
 
-            for (std::size_t i {0}; i < numBlmChs; ++i)
+            if (aThr->getThrCount())
             {
-                for (std::size_t j {0}; j < numBlmIntChs; ++j)
+                for (std::size_t i {0}; i < numBlmChs; ++i)
                 {
-                    if (aThr->getByteMap() == blmChByteMap[amc][i][j])        
+                    for (std::size_t j {0}; j < numBlmIntChs; ++j)
                     {
-                        _ch.insert( std::make_pair( std::make_pair(i, j), ch ) );
-                        _thr.insert( std::make_pair( std::make_pair(i, j), aThr ) );
-                    }
+                        if (aThr->getByteMap() == blmChByteMap[amc][i][j])        
+                        {
+                            _ch.insert( std::make_pair( std::make_pair(i, j), ch ) );
+                            _thr.insert( std::make_pair( std::make_pair(i, j), aThr ) );
+                        }
 
+                    }
                 }
             }
         }
