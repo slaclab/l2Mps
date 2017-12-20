@@ -112,7 +112,11 @@ public:
     uint8_t  const getLastMsgByte(const uint8_t index) const;
     std::size_t const getLastMsgByteSize(void) const { return _lastMsgByteSize; }
 
+    // Reset the SALT conuters
     void const resetSaltCnt(void) const;
+
+    // Reset the SALT PLL
+    void const resetSaltPll(void) const;
 
 private:
     Path       _mpsRoot;
@@ -144,6 +148,7 @@ private:
     std::size_t _lastMsgByteSize;
     
     Command    _rstCnt;
+    Command    _rstPll;
 
 
 };
