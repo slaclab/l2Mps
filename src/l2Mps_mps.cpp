@@ -25,7 +25,9 @@ IMpsNode::IMpsNode(Path mpsRoot) :
     _mpsLastMsgLcls      ( IScalVal_RO::create( _mpsRoot->findByName("AppMpsThr/lastMsgLcls") )         ),
     _mpsLastMsgTimestamp ( IScalVal_RO::create( _mpsRoot->findByName("AppMpsThr/lastMsgTimeStamp") )    ),
     _mpsLastMsgByte      ( IScalVal_RO::create( _mpsRoot->findByName("AppMpsThr/lastMsgByte") )         ),
-    _lastMsgByteSize     ( _mpsLastMsgByte->getNelms() )
+    _lastMsgByteSize     ( _mpsLastMsgByte->getNelms()                                                  ),
+    _rstCnt              ( ICommand::create(_mpsRoot->findByName("AppMpsSalt/RstCnt"))                  )
+
 {
 }
 
@@ -317,4 +319,13 @@ uint8_t const IMpsNode::getLastMsgByte(const uint8_t index) const
     uint8_t reg[_lastMsgByteSize];
     _mpsLastMsgByte->getVal(reg, _lastMsgByteSize);
     return reg[index];
+}
+
+void const IMpsNode::resetSaltCnt(void) const
+{
+    if (!_rstCnt)
+        throw std::runtime_error("Command interface not implemented\n");
+
+    _rstCnt->execute();
+
 }

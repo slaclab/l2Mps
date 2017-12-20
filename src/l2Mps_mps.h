@@ -112,6 +112,8 @@ public:
     uint8_t  const getLastMsgByte(const uint8_t index) const;
     std::size_t const getLastMsgByteSize(void) const { return _lastMsgByteSize; }
 
+    void const resetSaltCnt(void) const;
+
 private:
     Path       _mpsRoot;
     ScalVal    _mpsAppId;
@@ -140,7 +142,8 @@ private:
     ScalVal_RO _mpsLastMsgTimestamp;
     ScalVal_RO _mpsLastMsgByte;
     std::size_t _lastMsgByteSize;
-    // Command    RstCnt;
+    
+    Command    _rstCnt;
 
 
 };
