@@ -9,7 +9,7 @@ LIB_NAME = l2Mps
 # Host version
 HARCH      = rhel6
 # Buildroot versions
-BR_ARCHES += buildroot-2016.11.1 buildroot-2015.02
+BR_ARCHES += buildroot-2016.11.1
 
 ########################
 ### Package versions ###
