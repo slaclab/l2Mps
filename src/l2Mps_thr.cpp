@@ -16,7 +16,7 @@ IThrChannel::IThrChannel(Path mpsRoot, uint8_t channel)
     // Find MPS application root
     std::stringstream chStr;
     chStr.str("");
-    chStr << "AppMpsThr/channel[" << unsigned(_ch) << "]";
+    chStr << MpsThrModuleName << "/channel[" << unsigned(_ch) << "]";
     Path _chRoot = mpsRoot->findByName(chStr.str().c_str());
     uint8_t u8;
 

@@ -32,6 +32,9 @@ const uint8_t numThrLimits = 2;
 const uint8_t numThrCounts[numThrTables] = {1, 1, 8, 8};
 const uint8_t maxThrCount = 8; // Maxium 
 
+// Name of the MPS module where the threshold channels are defined
+const std::string MpsThrModuleName = "AppMpsRegAppCh";
+
 class IThrChannel
 {
 public:

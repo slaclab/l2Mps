@@ -1,33 +1,38 @@
 #include "l2Mps_mps.h"
 
 IMpsNode::IMpsNode(Path mpsRoot) :
+
+    // MPS root path
     _mpsRoot             ( mpsRoot-> clone()                                             ),
-    _mpsAppId            ( IScalVal::create(    _mpsRoot->findByName("AppMpsThr/mpsAppId") )         ),
-    _mpsEnable           ( IScalVal::create(    _mpsRoot->findByName("AppMpsThr/mpsEnable") )        ),
-    _lcls1Mode           ( IScalVal::create(    _mpsRoot->findByName("AppMpsThr/lcls1Mode") )        ),
-    _byteCount           ( IScalVal_RO::create( _mpsRoot->findByName("AppMpsThr/byteCount") )        ),
-    _digitalEn           ( IScalVal_RO::create( _mpsRoot->findByName("AppMpsThr/digitalEn") )        ),
-    _beamDestMask        ( IScalVal::create(    _mpsRoot->findByName("AppMpsThr/beamDestMask") )     ),
-    _altDestMask         ( IScalVal::create(    _mpsRoot->findByName("AppMpsThr/altDestMask") )      ),
-    _mpsTxLinkUpCnt      ( IScalVal_RO::create( _mpsRoot->findByName("AppMpsSalt/MpsTxLinkUpCnt") )  ),
-    _mpsRxLinkUpCnt      ( IScalVal_RO::create( _mpsRoot->findByName("AppMpsSalt/MpsRxLinkUpCnt") )  ),
-    _mpsTxLinkUP         ( IScalVal_RO::create( _mpsRoot->findByName("AppMpsSalt/MpsTxLinkUP") )     ),
-    _mpsRxLinkUP         ( IScalVal_RO::create( _mpsRoot->findByName("AppMpsSalt/MpsRxLinkUP") )     ),
-    _mpsSlotG            ( IScalVal_RO::create( _mpsRoot->findByName("AppMpsSalt/MPS_SLOT_G") )      ),
-    _appTypeG            ( IScalVal_RO::create( _mpsRoot->findByName("AppMpsSalt/APP_TYPE_G") )      ),
-    _mpsPllLocked        ( IScalVal_RO::create( _mpsRoot->findByName("AppMpsSalt/MpsPllLocked") )    ),
-    _rollOverEn          ( IScalVal::create(    _mpsRoot->findByName("AppMpsSalt/RollOverEn") )      ),
-    _mpsTxPktSentCnt     ( IScalVal_RO::create( _mpsRoot->findByName("AppMpsSalt/MpsTxPktSentCnt") ) ),
-    _mpsRxPktRcvdSentCnt ( IScalVal_RO::create( _mpsRoot->findByName("AppMpsSalt/MpsRxPktRcvdSentCnt") )  ),
-    
-    _mpsMsgCnt           ( IScalVal_RO::create( _mpsRoot->findByName("AppMpsThr/mpsMsgCount") )         ),
-    _mpsLastMsgAppId     ( IScalVal_RO::create( _mpsRoot->findByName("AppMpsThr/lastMsgAppId") )        ),
-    _mpsLastMsgLcls      ( IScalVal_RO::create( _mpsRoot->findByName("AppMpsThr/lastMsgLcls") )         ),
-    _mpsLastMsgTimestamp ( IScalVal_RO::create( _mpsRoot->findByName("AppMpsThr/lastMsgTimeStamp") )    ),
-    _mpsLastMsgByte      ( IScalVal_RO::create( _mpsRoot->findByName("AppMpsThr/lastMsgByte") )         ),
-    _lastMsgByteSize     ( _mpsLastMsgByte->getNelms()                                                  ),
-    _rstCnt              ( ICommand::create(_mpsRoot->findByName("AppMpsSalt/RstCnt"))                  ),
-    _rstPll              ( ICommand::create(_mpsRoot->findByName("AppMpsSalt/RstPll"))                  )
+
+    // MPS Base interfaces
+    _mpsAppId            ( IScalVal::create(    _mpsRoot->findByName( std::string(MpsBaseModuleName + "/mpsAppId").c_str()            ))),
+    _mpsEnable           ( IScalVal::create(    _mpsRoot->findByName( std::string(MpsBaseModuleName + "/mpsEnable").c_str()           ))),
+    _lcls1Mode           ( IScalVal::create(    _mpsRoot->findByName( std::string(MpsBaseModuleName + "/lcls1Mode").c_str()           ))),
+    _byteCount           ( IScalVal_RO::create( _mpsRoot->findByName( std::string(MpsBaseModuleName + "/byteCount").c_str()           ))),
+    _digitalEn           ( IScalVal_RO::create( _mpsRoot->findByName( std::string(MpsBaseModuleName + "/digitalEn").c_str()           ))),
+    _beamDestMask        ( IScalVal::create(    _mpsRoot->findByName( std::string(MpsBaseModuleName + "/beamDestMask").c_str()        ))),
+    _altDestMask         ( IScalVal::create(    _mpsRoot->findByName( std::string(MpsBaseModuleName + "/altDestMask").c_str()         ))),
+    _mpsMsgCnt           ( IScalVal_RO::create( _mpsRoot->findByName( std::string(MpsBaseModuleName + "/mpsMsgCount").c_str()          ))),
+    _mpsLastMsgAppId     ( IScalVal_RO::create( _mpsRoot->findByName( std::string(MpsBaseModuleName + "/lastMsgAppId").c_str()         ))),
+    _mpsLastMsgLcls      ( IScalVal_RO::create( _mpsRoot->findByName( std::string(MpsBaseModuleName + "/lastMsgLcls").c_str()          ))),
+    _mpsLastMsgTimestamp ( IScalVal_RO::create( _mpsRoot->findByName( std::string(MpsBaseModuleName + "/lastMsgTimeStamp").c_str()     ))),
+    _mpsLastMsgByte      ( IScalVal_RO::create( _mpsRoot->findByName( std::string(MpsBaseModuleName + "/lastMsgByte").c_str()          ))),
+    _lastMsgByteSize     ( _mpsLastMsgByte->getNelms()                                                                                  ),
+
+    // MPS SALT interfaces
+    _mpsTxLinkUpCnt      ( IScalVal_RO::create( _mpsRoot->findByName( std::string(MpsSaltModuleName + "/MpsTxLinkUpCnt").c_str()      ))),
+    _mpsRxLinkUpCnt      ( IScalVal_RO::create( _mpsRoot->findByName( std::string(MpsSaltModuleName + "/MpsRxLinkUpCnt").c_str()      ))),
+    _mpsTxLinkUP         ( IScalVal_RO::create( _mpsRoot->findByName( std::string(MpsSaltModuleName + "/MpsTxLinkUP").c_str()         ))),
+    _mpsRxLinkUP         ( IScalVal_RO::create( _mpsRoot->findByName( std::string(MpsSaltModuleName + "/MpsRxLinkUP").c_str()         ))),
+    _mpsSlotG            ( IScalVal_RO::create( _mpsRoot->findByName( std::string(MpsSaltModuleName + "/MPS_SLOT_G").c_str()          ))),
+    _appTypeG            ( IScalVal_RO::create( _mpsRoot->findByName( std::string(MpsSaltModuleName + "/APP_TYPE_G").c_str()          ))),
+    _mpsPllLocked        ( IScalVal_RO::create( _mpsRoot->findByName( std::string(MpsSaltModuleName + "/MpsPllLocked").c_str()        ))),
+    _rollOverEn          ( IScalVal::create(    _mpsRoot->findByName( std::string(MpsSaltModuleName + "/RollOverEn").c_str()          ))),
+    _mpsTxPktSentCnt     ( IScalVal_RO::create( _mpsRoot->findByName( std::string(MpsSaltModuleName + "/MpsTxPktSentCnt").c_str()     ))),
+    _mpsRxPktRcvdSentCnt ( IScalVal_RO::create( _mpsRoot->findByName( std::string(MpsSaltModuleName + "/MpsRxPktRcvdCnt").c_str()     ))),
+    _rstCnt              ( ICommand::create(    _mpsRoot->findByName( std::string(MpsSaltModuleName + "/RstCnt").c_str()              ))),
+    _rstPll              ( ICommand::create(    _mpsRoot->findByName( std::string(MpsSaltModuleName + "/RstPll").c_str()              )))
 
 {
 }

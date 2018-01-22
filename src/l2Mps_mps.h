@@ -15,6 +15,12 @@ class IMpsNode;
 
 typedef boost::shared_ptr<const IMpsNode>     MpsNode;
 
+// Name of the Base MPS module 
+const std::string MpsBaseModuleName = "AppMpsRegBase";
+
+// Name of the SALT MPS module
+const std::string MpsSaltModuleName = "AppMpsSalt";
+
 // Application type
 static std::map<int, std::string> appType = {
     {0,     "NONE"},  
