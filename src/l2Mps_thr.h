@@ -42,16 +42,15 @@ public:
     ~IThrChannel();
 
     // Channel header
-    uint8_t getChannel()    const   { return _ch;       } 
-    uint8_t getThrCount()   const   { return _thrCount; }
-    // bool    getIdleEn()     const   { return _idleEn;   }
-    bool    getAltEn()      const   { return _altEn;    }  
-    bool    getLcls1En()    const   { return _lcls1En;  }  
-    uint8_t getByteMap()    const   { return _byteMap;  }
-
-    bool    getIdleEn() const;
+    uint8_t getChannel()             const   { return _ch; } 
+    uint8_t getThrCount()            const;
+    bool    getIdleEn()              const;
     void    setIdleEn(const bool en) const;
+    bool    getAltEn()               const;
+    bool    getLcls1En()             const;
+    uint8_t getByteMap()             const;
 
+    
     // Read threshold register
     const uint32_t getThreshold(thr_channel_t ch) const;
 
@@ -67,13 +66,12 @@ public:
 private:
 
     // Channel information
-    uint8_t _ch;
-    uint8_t _thrCount;
-    // bool    _idleEn;
-    ScalVal _idleEn;
-    bool    _altEn;
-    bool    _lcls1En;
-    uint8_t _byteMap;
+    uint8_t    _ch;
+    ScalVal_RO _thrCount;
+    ScalVal    _idleEn;
+    ScalVal_RO _altEn;
+    ScalVal_RO _lcls1En;
+    ScalVal_RO _byteMap;
 
     // Threshod arrays:
     //   - Indexes:

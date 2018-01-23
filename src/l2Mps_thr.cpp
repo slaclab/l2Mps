@@ -17,20 +17,16 @@ IThrChannel::IThrChannel(Path mpsRoot, uint8_t channel)
     std::stringstream chStr;
     chStr.str("");
     chStr << MpsThrModuleName << "/channel[" << unsigned(_ch) << "]";
+
+
     Path _chRoot = mpsRoot->findByName(chStr.str().c_str());
-    uint8_t u8;
 
     // Get Channel header information register
-    IScalVal_RO::create( _chRoot->findByName( "thresholdCount" ))->getVal(&_thrCount);
-    // IScalVal_RO::create( _chRoot->findByName( "idleEn"         ))->getVal(&u8);
-    // _idleEn = (u8 & 0x01)?true:false;
-    IScalVal_RO::create( _chRoot->findByName( "altEn"          ))->getVal(&u8);
-    _altEn = (u8 & 0x01)?true:false;
-    IScalVal_RO::create( _chRoot->findByName( "lcls1En"        ))->getVal(&u8);
-    _lcls1En = (u8 & 0x01)?true:false;
-    IScalVal_RO::create( _chRoot->findByName( "byteMap"        ))->getVal(&_byteMap);
-
-    _idleEn = IScalVal::create(_chRoot->findByName("idleEn"));
+    _thrCount = IScalVal_RO::create( _chRoot->findByName( "thresholdCount" ));
+    _idleEn   = IScalVal::create(    _chRoot->findByName( "idleEn"         ));
+    _altEn    = IScalVal_RO::create( _chRoot->findByName( "altEn"          ));
+    _lcls1En  = IScalVal_RO::create( _chRoot->findByName( "lcls1En"        ));
+    _byteMap  = IScalVal_RO::create( _chRoot->findByName( "byteMap"        ));
     
     // Cretae interfaces to LCLS1 Thresholds (table index 0, threshold count 1)
     _thrEnMap.insert( std::make_pair( thr_channel_t{{0,0,0}}, IScalVal::create( _chRoot->findByName( "lcls1Thr/minEn" ) ) ) );
@@ -70,6 +66,65 @@ IThrChannel::IThrChannel(Path mpsRoot, uint8_t channel)
 
 IThrChannel::~IThrChannel()
 {
+}
+
+uint8_t IThrChannel::getThrCount() const
+{
+    if (!_thrCount)
+        throw std::runtime_error("Register interface not implemented\n");
+
+    uint8_t reg;
+    _thrCount->getVal(&reg);
+    return reg;
+}
+
+bool IThrChannel::getIdleEn() const
+{
+    if (!_idleEn)
+        throw std::runtime_error("Register interface not implemented\n");
+
+    uint8_t reg;
+    _idleEn->getVal(&reg);
+    return (reg & 0x01)?true:false;
+}
+
+void IThrChannel::setIdleEn(const bool en) const
+{
+    if (!_idleEn)
+        throw std::runtime_error("Register interface not implemented\n");
+
+    _idleEn->setVal(en);
+}
+
+bool IThrChannel::getAltEn() const
+{ 
+    if (!_altEn)
+        throw std::runtime_error("Register interface not implemented\n");
+
+    uint8_t reg;
+    _altEn->getVal(&reg);
+    return (reg & 0x01)?true:false;
+
+}
+
+bool IThrChannel::getLcls1En() const
+{
+    if (!_lcls1En)
+        throw std::runtime_error("Register interface not implemented\n");
+
+    uint8_t reg;
+    _lcls1En->getVal(&reg);
+    return (reg & 0x01)?true:false;
+}
+
+uint8_t IThrChannel::getByteMap() const
+{
+    if (!_byteMap)
+        throw std::runtime_error("Register interface not implemented\n");
+
+    uint8_t reg;
+    _byteMap->getVal(&reg);
+    return reg;
 }
 
 // const uint32_t IThrChannel::getThreshold(const uint8_t table, const uint8_t limit, const uint8_t position) const
@@ -126,16 +181,4 @@ const bool IThrChannel::getThresholdEn(thr_channel_t ch) const
     }
     else
         throw std::runtime_error("Threshold not defined\n");
-}
-
-bool IThrChannel::getIdleEn() const
-{
-    uint32_t u8;
-    _idleEn->getVal(&u8);
-    return (u8 & 0x01)?true:false;
-}
-
-void IThrChannel::setIdleEn(const bool en) const
-{
-    _idleEn->setVal(en);
 }
