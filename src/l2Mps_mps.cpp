@@ -1,46 +1,95 @@
 #include "l2Mps_mps.h"
 
 IMpsNode::IMpsNode(Path mpsRoot) :
-
     // MPS root path
-    _mpsRoot             ( mpsRoot-> clone()                                             ),
-
-    // MPS Base interfaces
-    _mpsAppId            ( IScalVal::create(    _mpsRoot->findByName( std::string(MpsBaseModuleName + "/mpsAppId").c_str()            ))),
-    _mpsEnable           ( IScalVal::create(    _mpsRoot->findByName( std::string(MpsBaseModuleName + "/mpsEnable").c_str()           ))),
-    _lcls1Mode           ( IScalVal::create(    _mpsRoot->findByName( std::string(MpsBaseModuleName + "/lcls1Mode").c_str()           ))),
-    _byteCount           ( IScalVal_RO::create( _mpsRoot->findByName( std::string(MpsBaseModuleName + "/byteCount").c_str()           ))),
-    _digitalEn           ( IScalVal_RO::create( _mpsRoot->findByName( std::string(MpsBaseModuleName + "/digitalEn").c_str()           ))),
-    _beamDestMask        ( IScalVal::create(    _mpsRoot->findByName( std::string(MpsBaseModuleName + "/beamDestMask").c_str()        ))),
-    _altDestMask         ( IScalVal::create(    _mpsRoot->findByName( std::string(MpsBaseModuleName + "/altDestMask").c_str()         ))),
-    _mpsMsgCnt           ( IScalVal_RO::create( _mpsRoot->findByName( std::string(MpsBaseModuleName + "/mpsMsgCount").c_str()          ))),
-    _mpsLastMsgAppId     ( IScalVal_RO::create( _mpsRoot->findByName( std::string(MpsBaseModuleName + "/lastMsgAppId").c_str()         ))),
-    _mpsLastMsgLcls      ( IScalVal_RO::create( _mpsRoot->findByName( std::string(MpsBaseModuleName + "/lastMsgLcls").c_str()          ))),
-    _mpsLastMsgTimestamp ( IScalVal_RO::create( _mpsRoot->findByName( std::string(MpsBaseModuleName + "/lastMsgTimeStamp").c_str()     ))),
-    _mpsLastMsgByte      ( IScalVal_RO::create( _mpsRoot->findByName( std::string(MpsBaseModuleName + "/lastMsgByte").c_str()          ))),
-    _lastMsgByteSize     ( _mpsLastMsgByte->getNelms()                                                                                  ),
-
-    // MPS SALT interfaces
-    _mpsTxLinkUpCnt      ( IScalVal_RO::create( _mpsRoot->findByName( std::string(MpsSaltModuleName + "/MpsTxLinkUpCnt").c_str()      ))),
-    _mpsRxLinkUpCnt      ( IScalVal_RO::create( _mpsRoot->findByName( std::string(MpsSaltModuleName + "/MpsRxLinkUpCnt").c_str()      ))),
-    _mpsTxLinkUP         ( IScalVal_RO::create( _mpsRoot->findByName( std::string(MpsSaltModuleName + "/MpsTxLinkUP").c_str()         ))),
-    _mpsRxLinkUP         ( IScalVal_RO::create( _mpsRoot->findByName( std::string(MpsSaltModuleName + "/MpsRxLinkUP").c_str()         ))),
-    _mpsSlotG            ( IScalVal_RO::create( _mpsRoot->findByName( std::string(MpsSaltModuleName + "/MPS_SLOT_G").c_str()          ))),
-    _appTypeG            ( IScalVal_RO::create( _mpsRoot->findByName( std::string(MpsSaltModuleName + "/APP_TYPE_G").c_str()          ))),
-    _mpsPllLocked        ( IScalVal_RO::create( _mpsRoot->findByName( std::string(MpsSaltModuleName + "/MpsPllLocked").c_str()        ))),
-    _rollOverEn          ( IScalVal::create(    _mpsRoot->findByName( std::string(MpsSaltModuleName + "/RollOverEn").c_str()          ))),
-    _mpsTxPktSentCnt     ( IScalVal_RO::create( _mpsRoot->findByName( std::string(MpsSaltModuleName + "/MpsTxPktSentCnt").c_str()     ))),
-    _mpsRxPktRcvdSentCnt ( IScalVal_RO::create( _mpsRoot->findByName( std::string(MpsSaltModuleName + "/MpsRxPktRcvdCnt").c_str()     ))),
-    _rstCnt              ( ICommand::create(    _mpsRoot->findByName( std::string(MpsSaltModuleName + "/RstCnt").c_str()              ))),
-    _rstPll              ( ICommand::create(    _mpsRoot->findByName( std::string(MpsSaltModuleName + "/RstPll").c_str()              )))
+    _mpsRoot             ( mpsRoot->clone())
 
 {
+    // MPS Base interfaces
+    _mpsAppId            = createInterface<ScalVal>(    MpsBaseModuleName + "/mpsAppId");
+    _mpsEnable           = createInterface<ScalVal>(    MpsBaseModuleName + "/mpsEnable");
+    _lcls1Mode           = createInterface<ScalVal>(    MpsBaseModuleName + "/lcls1Mode");
+    _byteCount           = createInterface<ScalVal_RO>( MpsBaseModuleName + "/byteCount");
+    _digitalEn           = createInterface<ScalVal_RO>( MpsBaseModuleName + "/digitalEn");
+    _beamDestMask        = createInterface<ScalVal>(    MpsBaseModuleName + "/beamDestMask");
+    _altDestMask         = createInterface<ScalVal>(    MpsBaseModuleName + "/altDestMask");
+    _mpsMsgCnt           = createInterface<ScalVal_RO>( MpsBaseModuleName + "/mpsMsgCount");
+    _mpsLastMsgAppId     = createInterface<ScalVal_RO>( MpsBaseModuleName + "/lastMsgAppId");
+    _mpsLastMsgLcls      = createInterface<ScalVal_RO>( MpsBaseModuleName + "/lastMsgLcls");
+    _mpsLastMsgTimestamp = createInterface<ScalVal_RO>( MpsBaseModuleName + "/lastMsgTimeStamp");
+    _mpsLastMsgByte      = createInterface<ScalVal_RO>( MpsBaseModuleName + "/lastMsgByte");
+
+    if (_mpsLastMsgByte)
+    {
+        try
+        {
+            _lastMsgByteSize = _mpsLastMsgByte->getNelms();
+        }
+        catch (CPSWError &e)
+        {
+            std::cout << "Couldn't read the number of elements from the last message: " << e.getInfo() << std::endl;
+        }
+    }
+
+    // MPS SALT interfaces
+    _mpsTxLinkUpCnt      = createInterface<ScalVal_RO>( MpsSaltModuleName + "/MpsTxLinkUpCnt");
+    _mpsRxLinkUpCnt      = createInterface<ScalVal_RO>( MpsSaltModuleName + "/MpsRxLinkUpCnt");
+    _mpsTxLinkUP         = createInterface<ScalVal_RO>( MpsSaltModuleName + "/MpsTxLinkUP");
+    _mpsRxLinkUP         = createInterface<ScalVal_RO>( MpsSaltModuleName + "/MpsRxLinkUP");
+    _mpsSlotG            = createInterface<ScalVal_RO>( MpsSaltModuleName + "/MPS_SLOT_G");
+    _appTypeG            = createInterface<ScalVal_RO>( MpsSaltModuleName + "/APP_TYPE_G");
+    _mpsPllLocked        = createInterface<ScalVal_RO>( MpsSaltModuleName + "/MpsPllLocked");
+    _rollOverEn          = createInterface<ScalVal>(    MpsSaltModuleName + "/RollOverEn");
+    _mpsTxPktSentCnt     = createInterface<ScalVal_RO>( MpsSaltModuleName + "/MpsTxPktSentCnt");
+    _mpsRxPktRcvdSentCnt = createInterface<ScalVal_RO>( MpsSaltModuleName + "/MpsRxPktRcvdCnt");
+    _rstCnt              = createInterface<Command>(    MpsSaltModuleName + "/RstCnt");
+    _rstPll              = createInterface<Command>(    MpsSaltModuleName + "/RstPll");
+    
 }
+
 
 IMpsNode::~IMpsNode()
 {
     std::cout << "MPS node destroyed" << std::endl;
 }
+
+// CPSW Interfaces constructor wrapper
+template <typename T>
+T IMpsNode::createInterface(const std::string& regName)
+{
+    T reg;
+
+    try
+    {
+        reg = CPSWCreate<T>(regName);
+    }
+    catch (CPSWError &e)
+    {
+        std::cout << "Couldn't create interface to \"" << regName << "\": "<< e.getInfo() << std::endl;
+    }
+
+    return reg;
+}
+
+// CPSW interface constructors
+template <>
+ScalVal IMpsNode::CPSWCreate(const std::string& regName)
+{
+    return IScalVal::create(_mpsRoot->findByName(regName.c_str()));
+}
+
+template <>
+ScalVal_RO IMpsNode::CPSWCreate(const std::string& regName)
+{
+    return IScalVal_RO::create(_mpsRoot->findByName(regName.c_str()));
+}
+
+template <>
+Command IMpsNode::CPSWCreate(const std::string& regName)
+{
+    return ICommand::create(_mpsRoot->findByName(regName.c_str()));
+}
+
 
 uint16_t const IMpsNode::getAppId(void) const
 {

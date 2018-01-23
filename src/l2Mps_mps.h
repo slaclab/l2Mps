@@ -46,6 +46,14 @@ public:
     // Destructor
     ~IMpsNode();
 
+    // CPSW Interfaces constructor wrapper
+    template <typename T>
+    T createInterface(const std::string& regName);
+
+    // CPSW interface constructor
+    template <typename T>
+    T CPSWCreate(const std::string& regName);
+
     // Mps Application ID
     uint16_t const getAppId(void) const;
     void setAppId(const uint16_t id) const;
