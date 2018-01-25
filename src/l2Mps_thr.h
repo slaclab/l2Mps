@@ -13,6 +13,8 @@
 #include <boost/shared_ptr.hpp>
 #include <cpsw_api_user.h>
 
+#include "l2Mps_base.h"
+
 class IThrChannel;
 
 typedef boost::shared_ptr<const IThrChannel>    ThrChannel;
@@ -64,7 +66,8 @@ public:
     void setThresholdEn(thr_channel_t ch, const bool val) const;
 
 private:
-
+    // Root path to the channel register space
+    Path       _chRoot;
     // Channel information
     uint8_t    _ch;
     ScalVal_RO _thrCount;

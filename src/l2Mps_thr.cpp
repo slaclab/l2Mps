@@ -18,27 +18,34 @@ IThrChannel::IThrChannel(Path mpsRoot, uint8_t channel)
     chStr.str("");
     chStr << MpsThrModuleName << "/channel[" << unsigned(_ch) << "]";
 
-
-    Path _chRoot = mpsRoot->findByName(chStr.str().c_str());
+    try
+    {
+        _chRoot = mpsRoot->findByName(chStr.str().c_str());
+    }
+    catch (CPSWError &e)
+    {
+        std::cout << "Channel not implemented: " << e.getInfo() << std::endl;
+        return;
+    }
 
     // Get Channel header information register
-    _thrCount = IScalVal_RO::create( _chRoot->findByName( "thresholdCount" ));
-    _idleEn   = IScalVal::create(    _chRoot->findByName( "idleEn"         ));
-    _altEn    = IScalVal_RO::create( _chRoot->findByName( "altEn"          ));
-    _lcls1En  = IScalVal_RO::create( _chRoot->findByName( "lcls1En"        ));
-    _byteMap  = IScalVal_RO::create( _chRoot->findByName( "byteMap"        ));
+    _thrCount = IMpsBase::createInterface<ScalVal_RO>( _chRoot, "thresholdCount" );
+    _idleEn   = IMpsBase::createInterface<ScalVal>(    _chRoot, "idleEn"         );
+    _altEn    = IMpsBase::createInterface<ScalVal_RO>( _chRoot, "altEn"          );
+    _lcls1En  = IMpsBase::createInterface<ScalVal_RO>( _chRoot, "lcls1En"        );
+    _byteMap  = IMpsBase::createInterface<ScalVal_RO>( _chRoot, "byteMap"        );
     
     // Cretae interfaces to LCLS1 Thresholds (table index 0, threshold count 1)
-    _thrEnMap.insert( std::make_pair( thr_channel_t{{0,0,0}}, IScalVal::create( _chRoot->findByName( "lcls1Thr/minEn" ) ) ) );
-    _thrEnMap.insert( std::make_pair( thr_channel_t{{0,1,0}}, IScalVal::create( _chRoot->findByName( "lcls1Thr/maxEn" ) ) ) );
-    _thrMap.insert(   std::make_pair( thr_channel_t{{0,0,0}}, IScalVal::create( _chRoot->findByName( "lcls1Thr/min"   ) ) ) );
-    _thrMap.insert(   std::make_pair( thr_channel_t{{0,1,0}}, IScalVal::create( _chRoot->findByName( "lcls1Thr/max"   ) ) ) );
+    _thrEnMap.insert( std::make_pair( thr_channel_t{{0,0,0}}, IMpsBase::createInterface<ScalVal>( _chRoot, "lcls1Thr/minEn"  )));
+    _thrEnMap.insert( std::make_pair( thr_channel_t{{0,1,0}}, IMpsBase::createInterface<ScalVal>( _chRoot, "lcls1Thr/maxEn"  )));
+    _thrMap.insert(   std::make_pair( thr_channel_t{{0,0,0}}, IMpsBase::createInterface<ScalVal>( _chRoot, "lcls1Thr/min"    )));
+    _thrMap.insert(   std::make_pair( thr_channel_t{{0,1,0}}, IMpsBase::createInterface<ScalVal>( _chRoot, "lcls1Thr/max"    )));
 
     // Cretae interfaces to IDLE Thresholds (table index 1, threshold count 1)
-    _thrEnMap.insert( std::make_pair( thr_channel_t{{1,0,0}}, IScalVal::create( _chRoot->findByName( "idleThr/minEn" ) ) ) );
-    _thrEnMap.insert( std::make_pair( thr_channel_t{{1,1,0}}, IScalVal::create( _chRoot->findByName( "idleThr/maxEn" ) ) ) );
-    _thrMap.insert(   std::make_pair( thr_channel_t{{1,0,0}}, IScalVal::create( _chRoot->findByName( "idleThr/min"   ) ) ) );
-    _thrMap.insert(   std::make_pair( thr_channel_t{{1,1,0}}, IScalVal::create( _chRoot->findByName( "idleThr/max"   ) ) ) );
+    _thrEnMap.insert( std::make_pair( thr_channel_t{{1,0,0}}, IMpsBase::createInterface<ScalVal>( _chRoot, "idleThr/minEn"  )));
+    _thrEnMap.insert( std::make_pair( thr_channel_t{{1,1,0}}, IMpsBase::createInterface<ScalVal>( _chRoot, "idleThr/maxEn"  )));
+    _thrMap.insert(   std::make_pair( thr_channel_t{{1,0,0}}, IMpsBase::createInterface<ScalVal>( _chRoot, "idleThr/min"    )));
+    _thrMap.insert(   std::make_pair( thr_channel_t{{1,1,0}}, IMpsBase::createInterface<ScalVal>( _chRoot, "idleThr/max"    )));
 
     // Cretae interfaces to STD Thresholds (table index 2, threshold count numThrCounts[2])
     std::stringstream regName;
@@ -46,10 +53,10 @@ IThrChannel::IThrChannel(Path mpsRoot, uint8_t channel)
     {
         regName.str("");
         regName << "stdThr[" << unsigned(i) << "]/";
-        _thrEnMap.insert( std::make_pair( thr_channel_t{{2,0,i}}, IScalVal::create( _chRoot->findByName( std::string(regName.str() + "minEn").c_str() ) ) ) );
-        _thrEnMap.insert( std::make_pair( thr_channel_t{{2,1,i}}, IScalVal::create( _chRoot->findByName( std::string(regName.str() + "maxEn").c_str() ) ) ) );
-        _thrMap.insert(   std::make_pair( thr_channel_t{{2,0,i}}, IScalVal::create( _chRoot->findByName( std::string(regName.str() + "min").c_str()   ) ) ) );
-        _thrMap.insert(   std::make_pair( thr_channel_t{{2,1,i}}, IScalVal::create( _chRoot->findByName( std::string(regName.str() + "max").c_str()   ) ) ) );
+        _thrEnMap.insert( std::make_pair( thr_channel_t{{2,0,i}}, IMpsBase::createInterface<ScalVal>( _chRoot, regName.str() + "minEn" )));
+        _thrEnMap.insert( std::make_pair( thr_channel_t{{2,1,i}}, IMpsBase::createInterface<ScalVal>( _chRoot, regName.str() + "maxEn" )));
+        _thrMap.insert(   std::make_pair( thr_channel_t{{2,0,i}}, IMpsBase::createInterface<ScalVal>( _chRoot, regName.str() + "min"   )));
+        _thrMap.insert(   std::make_pair( thr_channel_t{{2,1,i}}, IMpsBase::createInterface<ScalVal>( _chRoot, regName.str() + "max"   )));
     }
 
     // Cretae interfaces to ALT Thresholds (table index 3, threshold count numThrCounts[3])
@@ -57,10 +64,10 @@ IThrChannel::IThrChannel(Path mpsRoot, uint8_t channel)
     {
         regName.str("");
         regName << "altThr[" << unsigned(i) << "]/";
-        _thrEnMap.insert( std::make_pair( thr_channel_t{{3,0,i}}, IScalVal::create( _chRoot->findByName( std::string(regName.str() + "minEn").c_str() ) ) ) );
-        _thrEnMap.insert( std::make_pair( thr_channel_t{{3,1,i}}, IScalVal::create( _chRoot->findByName( std::string(regName.str() + "maxEn").c_str() ) ) ) );
-        _thrMap.insert(   std::make_pair( thr_channel_t{{3,0,i}}, IScalVal::create( _chRoot->findByName( std::string(regName.str() + "min").c_str()   ) ) ) );
-        _thrMap.insert(   std::make_pair( thr_channel_t{{3,1,i}}, IScalVal::create( _chRoot->findByName( std::string(regName.str() + "max").c_str()   ) ) ) );
+        _thrEnMap.insert( std::make_pair( thr_channel_t{{3,0,i}}, IMpsBase::createInterface<ScalVal>( _chRoot, regName.str() + "minEn" )));
+        _thrEnMap.insert( std::make_pair( thr_channel_t{{3,1,i}}, IMpsBase::createInterface<ScalVal>( _chRoot, regName.str() + "maxEn" )));
+        _thrMap.insert(   std::make_pair( thr_channel_t{{3,0,i}}, IMpsBase::createInterface<ScalVal>( _chRoot, regName.str() + "min"   )));
+        _thrMap.insert(   std::make_pair( thr_channel_t{{3,1,i}}, IMpsBase::createInterface<ScalVal>( _chRoot, regName.str() + "max"   )));
     }
 }
 
