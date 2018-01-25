@@ -12,8 +12,9 @@
 #include <stdexcept>
 #include <arpa/inet.h>
 
-#include "l2Mps_thr.h"
+#include "l2Mps_base.h"
 #include "l2Mps_mps.h"
+#include "l2Mps_thr.h"
 
 class IYamlSetIP : public IYamlFixup
 {
@@ -171,9 +172,9 @@ int main(int argc, char **argv)
                 std::cout << std::endl;
 
             }
-            catch (CPSWError &e)
+            catch (std::runtime_error &e)
             {
-                std::cout << "Channel not implemented!. CPSW error:" << e.getInfo() << std::endl;
+                std::cout << "Error while trying to read the threhold channel info: " << e.what() << std::endl;
             }
         }
         }
