@@ -6,18 +6,18 @@ IMpsNode::IMpsNode(Path mpsRoot) :
 
 {
     // MPS Base interfaces
-    _mpsAppId            = createInterface<ScalVal>(    MpsBaseModuleName + "/mpsAppId");
-    _mpsEnable           = createInterface<ScalVal>(    MpsBaseModuleName + "/mpsEnable");
-    _lcls1Mode           = createInterface<ScalVal>(    MpsBaseModuleName + "/lcls1Mode");
-    _byteCount           = createInterface<ScalVal_RO>( MpsBaseModuleName + "/byteCount");
-    _digitalEn           = createInterface<ScalVal_RO>( MpsBaseModuleName + "/digitalEn");
-    _beamDestMask        = createInterface<ScalVal>(    MpsBaseModuleName + "/beamDestMask");
-    _altDestMask         = createInterface<ScalVal>(    MpsBaseModuleName + "/altDestMask");
-    _mpsMsgCnt           = createInterface<ScalVal_RO>( MpsBaseModuleName + "/mpsMsgCount");
-    _mpsLastMsgAppId     = createInterface<ScalVal_RO>( MpsBaseModuleName + "/lastMsgAppId");
-    _mpsLastMsgLcls      = createInterface<ScalVal_RO>( MpsBaseModuleName + "/lastMsgLcls");
-    _mpsLastMsgTimestamp = createInterface<ScalVal_RO>( MpsBaseModuleName + "/lastMsgTimeStamp");
-    _mpsLastMsgByte      = createInterface<ScalVal_RO>( MpsBaseModuleName + "/lastMsgByte");
+    _mpsAppId            = IMpsBase::createInterface<ScalVal>(    _mpsRoot, MpsBaseModuleName + "/mpsAppId");
+    _mpsEnable           = IMpsBase::createInterface<ScalVal>(    _mpsRoot, MpsBaseModuleName + "/mpsEnable");
+    _lcls1Mode           = IMpsBase::createInterface<ScalVal>(    _mpsRoot, MpsBaseModuleName + "/lcls1Mode");
+    _byteCount           = IMpsBase::createInterface<ScalVal_RO>( _mpsRoot, MpsBaseModuleName + "/byteCount");
+    _digitalEn           = IMpsBase::createInterface<ScalVal_RO>( _mpsRoot, MpsBaseModuleName + "/digitalEn");
+    _beamDestMask        = IMpsBase::createInterface<ScalVal>(    _mpsRoot, MpsBaseModuleName + "/beamDestMask");
+    _altDestMask         = IMpsBase::createInterface<ScalVal>(    _mpsRoot, MpsBaseModuleName + "/altDestMask");
+    _mpsMsgCnt           = IMpsBase::createInterface<ScalVal_RO>( _mpsRoot, MpsBaseModuleName + "/mpsMsgCount");
+    _mpsLastMsgAppId     = IMpsBase::createInterface<ScalVal_RO>( _mpsRoot, MpsBaseModuleName + "/lastMsgAppId");
+    _mpsLastMsgLcls      = IMpsBase::createInterface<ScalVal_RO>( _mpsRoot, MpsBaseModuleName + "/lastMsgLcls");
+    _mpsLastMsgTimestamp = IMpsBase::createInterface<ScalVal_RO>( _mpsRoot, MpsBaseModuleName + "/lastMsgTimeStamp");
+    _mpsLastMsgByte      = IMpsBase::createInterface<ScalVal_RO>( _mpsRoot, MpsBaseModuleName + "/lastMsgByte");
 
     if (_mpsLastMsgByte)
     {
@@ -32,18 +32,18 @@ IMpsNode::IMpsNode(Path mpsRoot) :
     }
 
     // MPS SALT interfaces
-    _mpsTxLinkUpCnt      = createInterface<ScalVal_RO>( MpsSaltModuleName + "/MpsTxLinkUpCnt");
-    _mpsRxLinkUpCnt      = createInterface<ScalVal_RO>( MpsSaltModuleName + "/MpsRxLinkUpCnt");
-    _mpsTxLinkUP         = createInterface<ScalVal_RO>( MpsSaltModuleName + "/MpsTxLinkUP");
-    _mpsRxLinkUP         = createInterface<ScalVal_RO>( MpsSaltModuleName + "/MpsRxLinkUP");
-    _mpsSlotG            = createInterface<ScalVal_RO>( MpsSaltModuleName + "/MPS_SLOT_G");
-    _appTypeG            = createInterface<ScalVal_RO>( MpsSaltModuleName + "/APP_TYPE_G");
-    _mpsPllLocked        = createInterface<ScalVal_RO>( MpsSaltModuleName + "/MpsPllLocked");
-    _rollOverEn          = createInterface<ScalVal>(    MpsSaltModuleName + "/RollOverEn");
-    _mpsTxPktSentCnt     = createInterface<ScalVal_RO>( MpsSaltModuleName + "/MpsTxPktSentCnt");
-    _mpsRxPktRcvdSentCnt = createInterface<ScalVal_RO>( MpsSaltModuleName + "/MpsRxPktRcvdCnt");
-    _rstCnt              = createInterface<Command>(    MpsSaltModuleName + "/RstCnt");
-    _rstPll              = createInterface<Command>(    MpsSaltModuleName + "/RstPll");
+    _mpsTxLinkUpCnt      = IMpsBase::createInterface<ScalVal_RO>( _mpsRoot, MpsSaltModuleName + "/MpsTxLinkUpCnt");
+    _mpsRxLinkUpCnt      = IMpsBase::createInterface<ScalVal_RO>( _mpsRoot, MpsSaltModuleName + "/MpsRxLinkUpCnt");
+    _mpsTxLinkUP         = IMpsBase::createInterface<ScalVal_RO>( _mpsRoot, MpsSaltModuleName + "/MpsTxLinkUP");
+    _mpsRxLinkUP         = IMpsBase::createInterface<ScalVal_RO>( _mpsRoot, MpsSaltModuleName + "/MpsRxLinkUP");
+    _mpsSlotG            = IMpsBase::createInterface<ScalVal_RO>( _mpsRoot, MpsSaltModuleName + "/MPS_SLOT_G");
+    _appTypeG            = IMpsBase::createInterface<ScalVal_RO>( _mpsRoot, MpsSaltModuleName + "/APP_TYPE_G");
+    _mpsPllLocked        = IMpsBase::createInterface<ScalVal_RO>( _mpsRoot, MpsSaltModuleName + "/MpsPllLocked");
+    _rollOverEn          = IMpsBase::createInterface<ScalVal>(    _mpsRoot, MpsSaltModuleName + "/RollOverEn");
+    _mpsTxPktSentCnt     = IMpsBase::createInterface<ScalVal_RO>( _mpsRoot, MpsSaltModuleName + "/MpsTxPktSentCnt");
+    _mpsRxPktRcvdSentCnt = IMpsBase::createInterface<ScalVal_RO>( _mpsRoot, MpsSaltModuleName + "/MpsRxPktRcvdCnt");
+    _rstCnt              = IMpsBase::createInterface<Command>(    _mpsRoot, MpsSaltModuleName + "/RstCnt");
+    _rstPll              = IMpsBase::createInterface<Command>(    _mpsRoot, MpsSaltModuleName + "/RstPll");
     
 }
 
@@ -52,44 +52,6 @@ IMpsNode::~IMpsNode()
 {
     std::cout << "MPS node destroyed" << std::endl;
 }
-
-// CPSW Interfaces constructor wrapper
-template <typename T>
-T IMpsNode::createInterface(const std::string& regName)
-{
-    T reg;
-
-    try
-    {
-        reg = CPSWCreate<T>(regName);
-    }
-    catch (CPSWError &e)
-    {
-        std::cout << "Couldn't create interface to \"" << regName << "\": "<< e.getInfo() << std::endl;
-    }
-
-    return reg;
-}
-
-// CPSW interface constructors
-template <>
-ScalVal IMpsNode::CPSWCreate(const std::string& regName)
-{
-    return IScalVal::create(_mpsRoot->findByName(regName.c_str()));
-}
-
-template <>
-ScalVal_RO IMpsNode::CPSWCreate(const std::string& regName)
-{
-    return IScalVal_RO::create(_mpsRoot->findByName(regName.c_str()));
-}
-
-template <>
-Command IMpsNode::CPSWCreate(const std::string& regName)
-{
-    return ICommand::create(_mpsRoot->findByName(regName.c_str()));
-}
-
 
 uint16_t const IMpsNode::getAppId(void) const
 {

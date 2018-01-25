@@ -11,6 +11,8 @@
 #include <boost/shared_ptr.hpp>
 #include <cpsw_api_user.h>
 
+#include "l2Mps_base.h"
+
 class IMpsNode;
 
 typedef boost::shared_ptr<const IMpsNode>     MpsNode;
@@ -45,14 +47,6 @@ public:
 
     // Destructor
     ~IMpsNode();
-
-    // CPSW Interfaces constructor wrapper
-    template <typename T>
-    T createInterface(const std::string& regName);
-
-    // CPSW interface constructor
-    template <typename T>
-    T CPSWCreate(const std::string& regName);
 
     // Mps Application ID
     uint16_t const getAppId(void) const;
