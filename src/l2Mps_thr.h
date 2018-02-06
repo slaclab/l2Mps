@@ -3,6 +3,7 @@
 
 #include <stdio.h>
 #include <iostream>
+#include <vector>
 #include <sstream>
 #include <string.h>
 #include <iomanip>
@@ -18,8 +19,28 @@
 class IThrChannel;
 
 typedef boost::shared_ptr<const IThrChannel>    ThrChannel;
-typedef const std::array<int, 3>                thr_channel_t;
-typedef std::map<thr_channel_t, ScalVal>        thr_channel_map_t;
+
+typedef std::array<int, 3>                          thr_table_t;
+typedef std::pair<int, bool>                        thr_tableData_t;
+typedef std::map<thr_table_t, thr_tableData_t>      thr_chData_t;
+typedef std::pair<ScalVal, ScalVal>                 thr_tableScalval_t;
+typedef std::map<thr_table_t, thr_tableScalval_t>   thr_chScalval_t;
+
+struct thr_chInfo_t
+{
+    int  ch;
+    int  count;
+    int  byteMap;
+    bool idleEn;
+    bool altEn;
+    bool lcls1En;
+};
+
+struct thr_ch_t 
+{
+    thr_chInfo_t info;
+    thr_chData_t data;
+};
 
 // Maximum number of channels
 const uint8_t maxChannelCount = 24;
@@ -54,16 +75,21 @@ public:
 
     
     // Read threshold register
-    const uint32_t getThreshold(thr_channel_t ch) const;
+    const uint32_t getThreshold(thr_table_t ch) const;
 
     // Read threshold enable register
-    const bool getThresholdEn(thr_channel_t ch) const;
+    const bool getThresholdEn(thr_table_t ch) const;
 
     // Write threshold registers
-    void setThreshold(thr_channel_t ch, const uint32_t val) const;
+    void setThreshold(thr_table_t ch, const uint32_t val) const;
 
     // Write threshold enable register
-    void setThresholdEn(thr_channel_t ch, const bool val) const;
+    void setThresholdEn(thr_table_t ch, const bool val) const;
+
+    void readAll(thr_ch_t& data) const;
+    void readThrChInfo(thr_chInfo_t& info) const;
+    void readThrChData(thr_chData_t& data) const;
+
 
 private:
     // Root path to the channel register space
@@ -88,9 +114,7 @@ private:
     //           - 0: Min
     //           - 1: Max
     // Threshold registers
-    thr_channel_map_t _thrMap;
-    // Threshold enable registers
-    thr_channel_map_t _thrEnMap;
+    thr_chScalval_t _thrScalvalMap;
 };
 
 // Factory class

@@ -34,63 +34,89 @@ IThrChannel::IThrChannel(Path mpsRoot, uint8_t channel)
     _altEn    = IMpsBase::createInterface<ScalVal_RO>( _chRoot, "altEn"          );
     _lcls1En  = IMpsBase::createInterface<ScalVal_RO>( _chRoot, "lcls1En"        );
     _byteMap  = IMpsBase::createInterface<ScalVal_RO>( _chRoot, "byteMap"        );
+
+    thr_chInfo_t thrChInfo;
+    readThrChInfo(thrChInfo);
     
-    uint8_t enabled;
-    _lcls1En->getVal(&enabled);
-    
-    if (enabled)
+    if (thrChInfo.lcls1En)
     {
-        // Cretae interfaces to LCLS1 Thresholds (table index 0, threshold count 1) only is table is enabled
-        _thrEnMap.insert( std::make_pair( thr_channel_t{{0,0,0}}, IMpsBase::createInterface<ScalVal>( _chRoot, "lcls1Thr/minEn"  )));
-        _thrEnMap.insert( std::make_pair( thr_channel_t{{0,1,0}}, IMpsBase::createInterface<ScalVal>( _chRoot, "lcls1Thr/maxEn"  )));
-        _thrMap.insert(   std::make_pair( thr_channel_t{{0,0,0}}, IMpsBase::createInterface<ScalVal>( _chRoot, "lcls1Thr/min"    )));
-        _thrMap.insert(   std::make_pair( thr_channel_t{{0,1,0}}, IMpsBase::createInterface<ScalVal>( _chRoot, "lcls1Thr/max"    )));
+        _thrScalvalMap.insert( std::make_pair( thr_table_t{{0,0,0}}, std::make_pair(IMpsBase::createInterface<ScalVal>( _chRoot, "lcls1Thr/min" ), IMpsBase::createInterface<ScalVal>( _chRoot, "lcls1Thr/minEn" ))));
+        _thrScalvalMap.insert( std::make_pair( thr_table_t{{0,1,0}}, std::make_pair(IMpsBase::createInterface<ScalVal>( _chRoot, "lcls1Thr/max" ), IMpsBase::createInterface<ScalVal>( _chRoot, "lcls1Thr/maxEn" ))));   
     }
 
-    _idleEn->getVal(&enabled);
-    if (enabled)
+    if (thrChInfo.idleEn)
     {
-        // Cretae interfaces to IDLE Thresholds (table index 1, threshold count 1) only is table is enabled
-        _thrEnMap.insert( std::make_pair( thr_channel_t{{1,0,0}}, IMpsBase::createInterface<ScalVal>( _chRoot, "idleThr/minEn"  )));
-        _thrEnMap.insert( std::make_pair( thr_channel_t{{1,1,0}}, IMpsBase::createInterface<ScalVal>( _chRoot, "idleThr/maxEn"  )));
-        _thrMap.insert(   std::make_pair( thr_channel_t{{1,0,0}}, IMpsBase::createInterface<ScalVal>( _chRoot, "idleThr/min"    )));
-        _thrMap.insert(   std::make_pair( thr_channel_t{{1,1,0}}, IMpsBase::createInterface<ScalVal>( _chRoot, "idleThr/max"    )));
+        _thrScalvalMap.insert( std::make_pair( thr_table_t{{1,0,0}}, std::make_pair(IMpsBase::createInterface<ScalVal>( _chRoot, "idleThr/min" ), IMpsBase::createInterface<ScalVal>( _chRoot, "idleThr/minEn" ))));
+        _thrScalvalMap.insert( std::make_pair( thr_table_t{{1,1,0}}, std::make_pair(IMpsBase::createInterface<ScalVal>( _chRoot, "idleThr/max" ), IMpsBase::createInterface<ScalVal>( _chRoot, "idleThr/maxEn" ))));
     }
-
-    uint8_t numThr;
-    _thrCount->getVal(&numThr);
 
     std::stringstream regName;
 
-    // Cretae interfaces to STD Thresholds (table index 2, threshold count defined in _thrCount)
-    for (int i=0; i<numThr; ++i)
+    for (int i=0; i<thrChInfo.count; ++i)
     {
         regName.str("");
         regName << "stdThr[" << unsigned(i) << "]/";
-        _thrEnMap.insert( std::make_pair( thr_channel_t{{2,0,i}}, IMpsBase::createInterface<ScalVal>( _chRoot, regName.str() + "minEn" )));
-        _thrEnMap.insert( std::make_pair( thr_channel_t{{2,1,i}}, IMpsBase::createInterface<ScalVal>( _chRoot, regName.str() + "maxEn" )));
-        _thrMap.insert(   std::make_pair( thr_channel_t{{2,0,i}}, IMpsBase::createInterface<ScalVal>( _chRoot, regName.str() + "min"   )));
-        _thrMap.insert(   std::make_pair( thr_channel_t{{2,1,i}}, IMpsBase::createInterface<ScalVal>( _chRoot, regName.str() + "max"   )));
+        _thrScalvalMap.insert( std::make_pair( thr_table_t{{2,0,i}}, std::make_pair(IMpsBase::createInterface<ScalVal>( _chRoot, regName.str() + "min" ), IMpsBase::createInterface<ScalVal>( _chRoot, regName.str() + "minEn" ))));
+        _thrScalvalMap.insert( std::make_pair( thr_table_t{{2,1,i}}, std::make_pair(IMpsBase::createInterface<ScalVal>( _chRoot, regName.str() + "max" ), IMpsBase::createInterface<ScalVal>( _chRoot, regName.str() + "maxEn" ))));
     }
 
-    // Cretae interfaces to ALT Thresholds (table index 3, threshold count defined in _thrCount) only is table is enabled
-    _altEn->getVal(&enabled);
-    if (enabled)
+    if (thrChInfo.altEn)
     {
-        for (int i=0; i<numThr; ++i)
+        for (int i=0; i<thrChInfo.count; ++i)
         {
             regName.str("");
             regName << "altThr[" << unsigned(i) << "]/";
-            _thrEnMap.insert( std::make_pair( thr_channel_t{{3,0,i}}, IMpsBase::createInterface<ScalVal>( _chRoot, regName.str() + "minEn" )));
-            _thrEnMap.insert( std::make_pair( thr_channel_t{{3,1,i}}, IMpsBase::createInterface<ScalVal>( _chRoot, regName.str() + "maxEn" )));
-            _thrMap.insert(   std::make_pair( thr_channel_t{{3,0,i}}, IMpsBase::createInterface<ScalVal>( _chRoot, regName.str() + "min"   )));
-            _thrMap.insert(   std::make_pair( thr_channel_t{{3,1,i}}, IMpsBase::createInterface<ScalVal>( _chRoot, regName.str() + "max"   )));
+            _thrScalvalMap.insert( std::make_pair( thr_table_t{{3,0,i}}, std::make_pair(IMpsBase::createInterface<ScalVal>( _chRoot, regName.str() + "min" ), IMpsBase::createInterface<ScalVal>( _chRoot, regName.str() + "minEn" ))));
+            _thrScalvalMap.insert( std::make_pair( thr_table_t{{3,1,i}}, std::make_pair(IMpsBase::createInterface<ScalVal>( _chRoot, regName.str() + "max" ), IMpsBase::createInterface<ScalVal>( _chRoot, regName.str() + "maxEn" ))));
         }
     }
+
 }
 
 IThrChannel::~IThrChannel()
 {
+}
+
+
+void IThrChannel::readThrChInfo(thr_chInfo_t& info) const
+{
+    uint32_t u32;
+    
+    info.ch = _ch;
+
+    _thrCount->getVal(&u32);
+    info.count = u32;
+    
+    _byteMap->getVal(&u32);
+    info.byteMap = u32;
+
+    _idleEn->getVal(&u32);
+    info.idleEn = (u32?true:false);
+
+    _lcls1En->getVal(&u32);
+    info.lcls1En = (u32?true:false);
+
+    _altEn->getVal(&u32);
+    info.altEn = (u32?true:false);
+}
+
+void IThrChannel::readThrChData(thr_chData_t& data) const
+{
+    for (thr_chScalval_t::const_iterator it = _thrScalvalMap.begin(); it != _thrScalvalMap.end(); ++it)
+    {
+        uint32_t thrVal;
+        uint8_t  thrEn;
+        std::get<0>(it->second)->getVal(&thrVal);
+        std::get<1>(it->second)->getVal(&thrEn);
+        thr_tableData_t tableData = std::make_pair( thrVal, thrEn?true:false );
+        data.insert(std::make_pair( it->first, tableData ));
+    }
+}
+
+void IThrChannel::readAll(thr_ch_t& data) const
+{
+    readThrChInfo(data.info);
+    readThrChData(data.data);
 }
 
 uint8_t IThrChannel::getThrCount() const
@@ -152,56 +178,52 @@ uint8_t IThrChannel::getByteMap() const
     return reg;
 }
 
-// const uint32_t IThrChannel::getThreshold(const uint8_t table, const uint8_t limit, const uint8_t position) const
-const uint32_t IThrChannel::getThreshold(thr_channel_t ch) const
+const uint32_t IThrChannel::getThreshold(thr_table_t ch) const
 {  
-    thr_channel_map_t::const_iterator it;
-    it = _thrMap.find(ch);
-    if (it != _thrMap.end())
+    thr_chScalval_t::const_iterator it;
+    it = _thrScalvalMap.find(ch);
+    if (it != _thrScalvalMap.end())
     {
         uint32_t reg;
-        (*it).second->getVal(&reg, 1);
+        std::get<0>((*it).second)->getVal(&reg, 1);
         return reg;
     }
     else
         throw std::runtime_error("Threshold not defined\n");
 }
 
-// void IThrChannel::setThreshold(const uint8_t table, const uint8_t limit, const uint8_t position, const uint32_t val) const
-void IThrChannel::setThreshold(thr_channel_t ch, const uint32_t val) const
+void IThrChannel::setThreshold(thr_table_t ch, const uint32_t val) const
 {
-    thr_channel_map_t::const_iterator it;
-    it = _thrMap.find(ch);
-    if (it != _thrMap.end())
+    thr_chScalval_t::const_iterator it;
+    it = _thrScalvalMap.find(ch);
+    if (it != _thrScalvalMap.end())
     {
-        (*it).second->setVal(val);
+        std::get<0>((*it).second)->setVal(val);
     }
     else
         throw std::runtime_error("Threshold not defined\n");
 }
 
-// void IThrChannel::setThresholdEn(const uint8_t table, const uint8_t limit, const uint8_t position, const bool val) const
-void IThrChannel::setThresholdEn(thr_channel_t ch, const bool val) const
+void IThrChannel::setThresholdEn(thr_table_t ch, const bool val) const
 {
-    thr_channel_map_t::const_iterator it;
-    it = _thrEnMap.find(ch);
-    if (it != _thrEnMap.end())
+    thr_chScalval_t::const_iterator it;
+    it = _thrScalvalMap.find(ch);
+    if (it != _thrScalvalMap.end())
     {
-        (*it).second->setVal(val);
+        std::get<1>((*it).second)->setVal(val);
     }
     else
         throw std::runtime_error("Threshold not defined\n");
 }
 
-// const bool IThrChannel::getThresholdEn(const uint8_t table, const uint8_t limit, const uint8_t position) const
-const bool IThrChannel::getThresholdEn(thr_channel_t ch) const
+const bool IThrChannel::getThresholdEn(thr_table_t ch) const
 { 
-    thr_channel_map_t::const_iterator it;
-    it = _thrEnMap.find(ch);
-    if (it != _thrEnMap.end())
+    thr_chScalval_t::const_iterator it;
+    it = _thrScalvalMap.find(ch);
+    if (it != _thrScalvalMap.end())
     {
         uint8_t reg;
-        (*it).second->getVal(&reg, 1);
+        std::get<1>((*it).second)->getVal(&reg, 1);
         return reg?true:false;
     }
     else
