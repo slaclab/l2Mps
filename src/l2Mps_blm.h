@@ -11,6 +11,7 @@
 #include <array>
 #include <boost/shared_ptr.hpp>
 #include <cpsw_api_user.h>
+#include <pthread.h>
 
 #include "l2Mps_thr.h"
 
@@ -59,10 +60,18 @@ typedef void (IMpsBlm::*BlmW32_t)(const blm_channel&, const uint32_t) const;
 typedef const bool (IMpsBlm::*BlmR1_t)(const blm_channel&) const;
 typedef void (IMpsBlm::*BlmW1_t)(const blm_channel&, const bool) const;
 
+typedef std::array<int,2>                       _blm_channel_t;
+typedef thr_ch_t                                _blm_data_t;
+typedef std::map<_blm_channel_t, _blm_data_t>   _blm_dataMap_t;
+typedef std::map<_blm_channel_t, ThrChannel>    _blm_thrMap_t;
+
+typedef void (*p_func_t)(int, _blm_dataMap_t);
+
+
 class IMpsBlm
 {
 public:
-    IMpsBlm(Path mpsRoot, const uint8_t amc);
+    IMpsBlm(Path mpsRoot, const uint8_t amc, p_func_t blmCB);
     ~IMpsBlm();
 
     uint32_t const  getCh           ( const blm_channel& ch) const;
@@ -82,7 +91,16 @@ public:
 
 private:
     std::map<std::pair<int, int>, int> _ch;
-    std::map<std::pair<int, int>, ThrChannel> _thr;
+    _blm_thrMap_t _blmThrMap;
+
+    uint8_t _amc;
+    unsigned int _poll;
+    p_func_t _blmCB;
+
+    pthread_t _scanThread;
+
+    void scanTask();
+    static void *createThread(void* p) { static_cast<IMpsBlm*>(p)->scanTask(); return NULL; };
 
 
 };
@@ -90,24 +108,24 @@ private:
 class MpsBlmFactory
 {
 public:
-    static MpsBlm create(Path mpsRoot, const uint8_t amc)
+    static MpsBlm create(Path mpsRoot, const uint8_t amc, p_func_t blmCB)
     {
-        return MpsBlm(new IMpsBlm(mpsRoot, amc));
+        return MpsBlm(new IMpsBlm(mpsRoot, amc, blmCB));
     }
 };
 
 class blm_channel
 {
 public:
-    blm_channel(const std::array<int, 5> ch) : _ch(ch), _blm_ch(std::make_pair(ch[0], ch[1])), _thr_ch(thr_channel_t{{ch[2], ch[3], ch[4]}}) { }
-    thr_channel_t       const   getThrCh()          const   { return _thr_ch;   }
-    std::pair<int, int> const   getBlenCh()         const   { return _blm_ch;   }
+    blm_channel(const std::array<int, 5> ch) : _ch(ch), _blm_ch(_blm_channel_t{{ch[0], ch[1]}}), _thr_ch(thr_table_t{{ch[2], ch[3], ch[4]}}) { }
+    thr_table_t       const   getThrCh()          const   { return _thr_ch;   }
+    _blm_channel_t      const   getBlenCh()         const   { return _blm_ch;   }
     int                 const   operator[](int i)   const   { return _ch[i];    }
 
 private:
     std::array<int, 5>  _ch;
-    std::pair<int, int> _blm_ch;
-    thr_channel_t       _thr_ch;
+    std::array<int, 2>  _blm_ch;
+    thr_table_t       _thr_ch;
 };
 
 #endif
