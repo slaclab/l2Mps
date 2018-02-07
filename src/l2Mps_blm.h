@@ -81,12 +81,16 @@ public:
     uint32_t const  getByteMap      ( const blm_channel& ch) const;
     uint32_t const  getThrCount     ( const blm_channel& ch) const;
 
-    void            setThreshold    ( const blm_channel& ch, const uint32_t val) const;
-    const uint32_t  getThreshold    ( const blm_channel& ch) const;
-    
-    void            setThresholdEn  ( const blm_channel& ch, const bool val) const;
-    const bool      getThresholdEn  ( const blm_channel& ch) const;
-    
+    void            setThresholdMin    ( const blm_channel& ch, const uint32_t val) const;
+    void            setThresholdMax    ( const blm_channel& ch, const uint32_t val) const;
+    const uint32_t  getThresholdMin    ( const blm_channel& ch) const;    
+    const uint32_t  getThresholdMax    ( const blm_channel& ch) const;
+
+    void            setThresholdMinEn  ( const blm_channel& ch, const bool val) const;
+    void            setThresholdMaxEn  ( const blm_channel& ch, const bool val) const;
+    const bool      getThresholdMinEn  ( const blm_channel& ch) const;
+    const bool      getThresholdMaxEn  ( const blm_channel& ch) const;
+ 
     void            printChInfo     ( void ) const;
 
 private:
@@ -117,13 +121,13 @@ public:
 class blm_channel
 {
 public:
-    blm_channel(const std::array<int, 5> ch) : _ch(ch), _blm_ch(_blm_channel_t{{ch[0], ch[1]}}), _thr_ch(thr_table_t{{ch[2], ch[3], ch[4]}}) { }
+    blm_channel(const std::array<int, 4> ch) : _ch(ch), _blm_ch(_blm_channel_t{{ch[0], ch[1]}}), _thr_ch(thr_table_t{{ch[2], ch[3]}}) { }
     thr_table_t       const   getThrCh()          const   { return _thr_ch;   }
     _blm_channel_t      const   getBlenCh()         const   { return _blm_ch;   }
     int                 const   operator[](int i)   const   { return _ch[i];    }
 
 private:
-    std::array<int, 5>  _ch;
+    std::array<int, 4>  _ch;
     std::array<int, 2>  _blm_ch;
     thr_table_t       _thr_ch;
 };

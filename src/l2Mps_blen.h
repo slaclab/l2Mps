@@ -25,7 +25,7 @@ const uint8_t blenChByteMap[2] = {0, 1};
 class IMpsBlen;
 typedef boost::shared_ptr<IMpsBlen> MpsBlen;
 
-typedef std::array<int,3> blen_channel_t;
+typedef std::array<int,2> blen_channel_t;
 
 // Function pointer data typed
 typedef const uint32_t (IMpsBlen::*BlenR32_t)(const blen_channel_t) const;
@@ -46,11 +46,11 @@ public:
     uint32_t const  getByteMap      ( const blen_channel_t ch) const;
     uint32_t const  getThrCount     ( const blen_channel_t ch) const;
    
-    void            setThreshold    ( const blen_channel_t ch, const uint32_t val) const;
-    const uint32_t  getThreshold    ( const blen_channel_t ch) const;
+    void            setThresholdMin    ( const blen_channel_t ch, const uint32_t val) const;
+    const uint32_t  getThresholdMin    ( const blen_channel_t ch) const;
    
-    void            setThresholdEn  ( const blen_channel_t ch, const bool val) const;
-    const bool      getThresholdEn  ( const blen_channel_t ch) const;
+    void            setThresholdMinEn  ( const blen_channel_t ch, const bool val) const;
+    const bool      getThresholdMinEn  ( const blen_channel_t ch) const;
 
     void printChInfo(const ThrChannel thr) const;
 

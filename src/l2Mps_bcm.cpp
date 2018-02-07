@@ -90,37 +90,37 @@ uint32_t const IMpsBcm::getThrCount(const bcm_channel&  ch) const
     return _thr[ch.getBcmCh()]->getThrCount(); 
 }
 
-void IMpsBcm::setThreshold(const bcm_channel&  ch, const uint32_t val) const  
+void IMpsBcm::setThresholdMin(const bcm_channel&  ch, const uint32_t val) const  
 {
     if (!_thr[ch.getBcmCh()])
         throw std::runtime_error("Channel not defined!\n");
 
-    _thr[ch.getBcmCh()]->setThreshold(ch.getThrCh(), val); 
+    _thr[ch.getBcmCh()]->setThresholdMin(ch.getThrCh(), val); 
 }
 
-const uint32_t IMpsBcm::getThreshold(const bcm_channel& ch) const
+const uint32_t IMpsBcm::getThresholdMin(const bcm_channel& ch) const
 {
     if (!_thr[ch.getBcmCh()])
         throw std::runtime_error("Channel not defined!\n");
 
-    return _thr[ch.getBcmCh()]->getThreshold(ch.getThrCh()); 
+    return _thr[ch.getBcmCh()]->getThresholdMin(ch.getThrCh()); 
 }
 
-void IMpsBcm::setThresholdEn(const bcm_channel&  ch, const bool val) const     
+void IMpsBcm::setThresholdMinEn(const bcm_channel&  ch, const bool val) const     
 {
     if (!_thr[ch.getBcmCh()])
         throw std::runtime_error("Channel not defined!\n");
 
-    _thr[ch.getBcmCh()]->setThresholdEn(ch.getThrCh(), val); 
+    _thr[ch.getBcmCh()]->setThresholdMinEn(ch.getThrCh(), val); 
 
 }
 
-const bool IMpsBcm::getThresholdEn(const bcm_channel&  ch) const                     
+const bool IMpsBcm::getThresholdMinEn(const bcm_channel&  ch) const                     
 {
     if (!_thr[ch.getBcmCh()])
         throw std::runtime_error("Channel not defined!\n");
 
-    return _thr[ch.getBcmCh()]->getThresholdEn(ch.getThrCh()); 
+    return _thr[ch.getBcmCh()]->getThresholdMinEn(ch.getThrCh()); 
 
 }
 

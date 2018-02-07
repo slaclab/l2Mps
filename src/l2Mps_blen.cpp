@@ -81,36 +81,36 @@ uint32_t const IMpsBlen::getThrCount(const blen_channel_t ch) const
 	return _thr->getThrCount();
 }
 
-void IMpsBlen::setThreshold(const blen_channel_t ch, const uint32_t val) const
+void IMpsBlen::setThresholdMin(const blen_channel_t ch, const uint32_t val) const
 {
 	if (!_thr)
 		throw std::runtime_error("Channel not defined!\n");
 
-	_thr->setThreshold(ch, val);
+	_thr->setThresholdMin(ch, val);
 }
 
-const uint32_t IMpsBlen::getThreshold(const blen_channel_t ch) const
+const uint32_t IMpsBlen::getThresholdMin(const blen_channel_t ch) const
 {
 	if (!_thr)
 		throw std::runtime_error("Channel not defined!\n");
 
-	return _thr->getThreshold(ch);
+	return _thr->getThresholdMin(ch);
 }
 
-void IMpsBlen::setThresholdEn(const blen_channel_t ch, const bool val) const
+void IMpsBlen::setThresholdMinEn(const blen_channel_t ch, const bool val) const
 {
 	if (!_thr)
 		throw std::runtime_error("Channel not defined!\n");
 
-	_thr->setThresholdEn(ch, val);
+	_thr->setThresholdMinEn(ch, val);
 }
 
-const bool IMpsBlen::getThresholdEn(const blen_channel_t ch) const
+const bool IMpsBlen::getThresholdMinEn(const blen_channel_t ch) const
 {
 	if (!_thr)
 		throw std::runtime_error("Channel not defined!\n");
 
-	return _thr->getThresholdEn(ch);
+	return _thr->getThresholdMinEn(ch);
 }
 
 

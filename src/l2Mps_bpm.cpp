@@ -96,37 +96,37 @@ uint32_t const IMpsBpm::getThrCount(const bpm_channel&  ch) const
     return _thr[ch.getBpmCh()]->getThrCount(); 
 }
 
-void IMpsBpm::setThreshold(const bpm_channel&  ch, const uint32_t val) const  
+void IMpsBpm::setThresholdMin(const bpm_channel&  ch, const uint32_t val) const  
 {
     if (!_thr[ch.getBpmCh()])
         throw std::runtime_error("Channel not defined!\n");
 
-    _thr[ch.getBpmCh()]->setThreshold(ch.getThrCh(), val); 
+    _thr[ch.getBpmCh()]->setThresholdMin(ch.getThrCh(), val); 
 }
 
-const uint32_t IMpsBpm::getThreshold(const bpm_channel& ch) const
+const uint32_t IMpsBpm::getThresholdMin(const bpm_channel& ch) const
 {
     if (!_thr[ch.getBpmCh()])
         throw std::runtime_error("Channel not defined!\n");
 
-    return _thr[ch.getBpmCh()]->getThreshold(ch.getThrCh()); 
+    return _thr[ch.getBpmCh()]->getThresholdMin(ch.getThrCh()); 
 }
 
-void IMpsBpm::setThresholdEn(const bpm_channel&  ch, const bool val) const     
+void IMpsBpm::setThresholdMinEn(const bpm_channel&  ch, const bool val) const     
 {
     if (!_thr[ch.getBpmCh()])
         throw std::runtime_error("Channel not defined!\n");
 
-    _thr[ch.getBpmCh()]->setThresholdEn(ch.getThrCh(), val); 
+    _thr[ch.getBpmCh()]->setThresholdMinEn(ch.getThrCh(), val); 
 
 }
 
-const bool IMpsBpm::getThresholdEn(const bpm_channel&  ch) const                     
+const bool IMpsBpm::getThresholdMinEn(const bpm_channel&  ch) const                     
 {
     if (!_thr[ch.getBpmCh()])
         throw std::runtime_error("Channel not defined!\n");
 
-    return _thr[ch.getBpmCh()]->getThresholdEn(ch.getThrCh()); 
+    return _thr[ch.getBpmCh()]->getThresholdMinEn(ch.getThrCh()); 
 
 }
 

@@ -125,46 +125,85 @@ uint32_t const IMpsBlm::getThrCount (const blm_channel& ch) const
     return (it->second)->getThrCount();
 }
 
-void IMpsBlm::setThreshold(const blm_channel& ch, const uint32_t val) const
+void IMpsBlm::setThresholdMin(const blm_channel& ch, const uint32_t val) const
 {
     _blm_thrMap_t::const_iterator it = _blmThrMap.find(ch.getBlenCh());
 
     if (it == _blmThrMap.end())
         throw std::runtime_error("Channel not defined\n");
 
-    (it->second)->setThreshold(ch.getThrCh(), val);
+    (it->second)->setThresholdMin(ch.getThrCh(), val);
 }
 
-const uint32_t IMpsBlm::getThreshold(const blm_channel& ch) const
+void IMpsBlm::setThresholdMax(const blm_channel& ch, const uint32_t val) const
 {
     _blm_thrMap_t::const_iterator it = _blmThrMap.find(ch.getBlenCh());
 
     if (it == _blmThrMap.end())
         throw std::runtime_error("Channel not defined\n");
 
-    return (it->second)->getThreshold(ch.getThrCh());
+    (it->second)->setThresholdMax(ch.getThrCh(), val);
 }
-    
-void IMpsBlm::setThresholdEn(const blm_channel& ch, const bool val) const
+
+const uint32_t IMpsBlm::getThresholdMin(const blm_channel& ch) const
 {
     _blm_thrMap_t::const_iterator it = _blmThrMap.find(ch.getBlenCh());
 
     if (it == _blmThrMap.end())
         throw std::runtime_error("Channel not defined\n");
 
-    (it->second)->setThresholdEn(ch.getThrCh(), val);
+    return (it->second)->getThresholdMin(ch.getThrCh());
 }
-
-const bool IMpsBlm::getThresholdEn(const blm_channel& ch) const
+ 
+const uint32_t IMpsBlm::getThresholdMax(const blm_channel& ch) const
 {
     _blm_thrMap_t::const_iterator it = _blmThrMap.find(ch.getBlenCh());
 
     if (it == _blmThrMap.end())
         throw std::runtime_error("Channel not defined\n");
 
-    return (it->second)->getThresholdEn(ch.getThrCh());
+    return (it->second)->getThresholdMax(ch.getThrCh());
 }
-    
+
+void IMpsBlm::setThresholdMinEn(const blm_channel& ch, const bool val) const
+{
+    _blm_thrMap_t::const_iterator it = _blmThrMap.find(ch.getBlenCh());
+
+    if (it == _blmThrMap.end())
+        throw std::runtime_error("Channel not defined\n");
+
+    (it->second)->setThresholdMinEn(ch.getThrCh(), val);
+}
+
+void IMpsBlm::setThresholdMaxEn(const blm_channel& ch, const bool val) const
+{
+    _blm_thrMap_t::const_iterator it = _blmThrMap.find(ch.getBlenCh());
+
+    if (it == _blmThrMap.end())
+        throw std::runtime_error("Channel not defined\n");
+
+    (it->second)->setThresholdMaxEn(ch.getThrCh(), val);
+}
+
+const bool IMpsBlm::getThresholdMinEn(const blm_channel& ch) const
+{
+    _blm_thrMap_t::const_iterator it = _blmThrMap.find(ch.getBlenCh());
+
+    if (it == _blmThrMap.end())
+        throw std::runtime_error("Channel not defined\n");
+
+    return (it->second)->getThresholdMinEn(ch.getThrCh());
+}
+
+const bool IMpsBlm::getThresholdMaxEn(const blm_channel& ch) const
+{
+    _blm_thrMap_t::const_iterator it = _blmThrMap.find(ch.getBlenCh());
+
+    if (it == _blmThrMap.end())
+        throw std::runtime_error("Channel not defined\n");
+
+    return (it->second)->getThresholdMaxEn(ch.getThrCh());
+}  
 
 void IMpsBlm::printChInfo(void) const
 {

@@ -48,11 +48,11 @@ public:
     uint32_t const  getByteMap      ( const bcm_channel& ch) const;
     uint32_t const  getThrCount     ( const bcm_channel& ch) const;
    
-    void            setThreshold    ( const bcm_channel& ch, const uint32_t val) const;
-    const uint32_t  getThreshold    ( const bcm_channel& ch) const;
+    void            setThresholdMin    ( const bcm_channel& ch, const uint32_t val) const;
+    const uint32_t  getThresholdMin    ( const bcm_channel& ch) const;
    
-    void            setThresholdEn  ( const bcm_channel& ch, const bool val) const;
-    const bool      getThresholdEn  ( const bcm_channel& ch) const;
+    void            setThresholdMinEn  ( const bcm_channel& ch, const bool val) const;
+    const bool      getThresholdMinEn  ( const bcm_channel& ch) const;
 
     void printChInfo(const ThrChannel thr) const;
 
@@ -74,15 +74,15 @@ public:
 class bcm_channel
 {
 public:
-    bcm_channel(const std::array<int, 4> ch) : _ch(ch), _bcm_ch(ch[0]), _thr_ch(thr_channel_t{{ch[1], ch[2], ch[3]}}) { }
+    bcm_channel(const std::array<int, 3> ch) : _ch(ch), _bcm_ch(ch[0]), _thr_ch(thr_table_t{{ch[1], ch[2]}}) { }
     int const           getBcmCh() const        { return _bcm_ch; }
-    thr_channel_t const getThrCh() const        { return _thr_ch; }
+    thr_table_t const   getThrCh() const        { return _thr_ch; }
     int const           operator[](int i) const { return _ch[i];  }
 
 private:
-    std::array<int, 4> _ch;
+    std::array<int, 3> _ch;
     int                _bcm_ch;
-    thr_channel_t      _thr_ch;
+    thr_table_t      _thr_ch;
 };
 
 #endif
