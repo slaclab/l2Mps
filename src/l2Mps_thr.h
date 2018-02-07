@@ -20,10 +20,30 @@ class IThrChannel;
 
 typedef boost::shared_ptr<const IThrChannel>    ThrChannel;
 
-typedef std::array<int, 3>                          thr_table_t;
-typedef std::pair<int, bool>                        thr_tableData_t;
+typedef std::array<int, 2>                          thr_table_t;
+// typedef std::array<int, 3>                          thr_table_t;
+
+
+struct thr_tableData_t
+{
+    bool minEn;
+    bool maxEn;
+    int  min;
+    int  max;
+};
+//typedef std::pair<int, bool>                        thr_tableData_t;
+
 typedef std::map<thr_table_t, thr_tableData_t>      thr_chData_t;
-typedef std::pair<ScalVal, ScalVal>                 thr_tableScalval_t;
+
+struct thr_tableScalval_t
+{
+    ScalVal minEn;
+    ScalVal maxEn;
+    ScalVal min;
+    ScalVal max;
+};
+// typedef std::pair<ScalVal, ScalVal>                 thr_tableScalval_t;
+
 typedef std::map<thr_table_t, thr_tableScalval_t>   thr_chScalval_t;
 
 struct thr_chInfo_t
@@ -36,10 +56,26 @@ struct thr_chInfo_t
     bool lcls1En;
 };
 
+struct thr_infoScalval_t
+{
+    ScalVal_RO count;
+    ScalVal_RO byteMap;
+    ScalVal    idleEn;
+    ScalVal_RO altEn;
+    ScalVal_RO lcls1En;
+};
+
 struct thr_ch_t 
 {
     thr_chInfo_t info;
     thr_chData_t data;
+};
+
+struct thr_scalval_t
+{
+    thr_infoScalval_t info;
+    thr_chScalval_t   data;
+
 };
 
 // Maximum number of channels
@@ -65,7 +101,7 @@ public:
     ~IThrChannel();
 
     // Channel header
-    uint8_t getChannel()             const   { return _ch; } 
+    uint8_t getChannel()             const   { return ch; } 
     uint8_t getThrCount()            const;
     bool    getIdleEn()              const;
     void    setIdleEn(const bool en) const;
@@ -75,16 +111,20 @@ public:
 
     
     // Read threshold register
-    const uint32_t getThreshold(thr_table_t ch) const;
+    const uint32_t getThresholdMin(thr_table_t ch) const;
+    const uint32_t getThresholdMax(thr_table_t ch) const;
 
     // Read threshold enable register
-    const bool getThresholdEn(thr_table_t ch) const;
+    const bool getThresholdMinEn(thr_table_t ch) const;
+    const bool getThresholdMaxEn(thr_table_t ch) const;
 
     // Write threshold registers
-    void setThreshold(thr_table_t ch, const uint32_t val) const;
+    void setThresholdMin(thr_table_t ch, const uint32_t val) const;
+    void setThresholdMax(thr_table_t ch, const uint32_t val) const;
 
     // Write threshold enable register
-    void setThresholdEn(thr_table_t ch, const bool val) const;
+    void setThresholdMinEn(thr_table_t ch, const bool val) const;
+    void setThresholdMaxEn(thr_table_t ch, const bool val) const;
 
     void readAll(thr_ch_t& data) const;
     void readThrChInfo(thr_chInfo_t& info) const;
@@ -95,12 +135,12 @@ private:
     // Root path to the channel register space
     Path       _chRoot;
     // Channel information
-    uint8_t    _ch;
-    ScalVal_RO _thrCount;
-    ScalVal    _idleEn;
-    ScalVal_RO _altEn;
-    ScalVal_RO _lcls1En;
-    ScalVal_RO _byteMap;
+    // uint8_t    _ch;
+    // ScalVal_RO _thrCount;
+    // ScalVal    _idleEn;
+    // ScalVal_RO _altEn;
+    // ScalVal_RO _lcls1En;
+    // ScalVal_RO _byteMap;
 
     // Threshod arrays:
     //   - Indexes:
@@ -114,7 +154,9 @@ private:
     //           - 0: Min
     //           - 1: Max
     // Threshold registers
-    thr_chScalval_t _thrScalvalMap;
+    // thr_chScalval_t _thrScalvalMap;
+    int ch;
+    thr_scalval_t thrScalvals;
 };
 
 // Factory class
