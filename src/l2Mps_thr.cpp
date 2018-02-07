@@ -5,14 +5,9 @@ IThrChannel::IThrChannel(Path mpsRoot, uint8_t channel)
     if (channel > maxChannelCount)
     {
         std::cout << "        >   ERROR: channel" << unsigned(channel) << " exceeds the maximum channel number " << unsigned(maxChannelCount) << std::endl;
-        // std::cout << "        >   Using 0 instead." << std::endl;
-        // _ch = 0;
+        std::cout << "        >   Aborting..." << std::endl;
         return;
     }
-    // else
-    // {
-    //     _ch = channel;
-    // }
 
     ch = channel;
 
@@ -38,7 +33,7 @@ IThrChannel::IThrChannel(Path mpsRoot, uint8_t channel)
     thrScalvals.info.lcls1En = IMpsBase::createInterface<ScalVal_RO>( _chRoot, "lcls1En"        );
     thrScalvals.info.byteMap = IMpsBase::createInterface<ScalVal_RO>( _chRoot, "byteMap"        );
 
-    thr_chInfo_t thrChInfo;
+    thr_chInfoData_t thrChInfo;
     readThrChInfo(thrChInfo);
     
     if (thrChInfo.lcls1En)
@@ -115,7 +110,7 @@ IThrChannel::~IThrChannel()
 }
 
 
-void IThrChannel::readThrChInfo(thr_chInfo_t& info) const
+void IThrChannel::readThrChInfo(thr_chInfoData_t& info) const
 {
     uint32_t u32;
     
