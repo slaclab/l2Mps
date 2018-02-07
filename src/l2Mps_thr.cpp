@@ -141,6 +141,8 @@ void IThrChannel::readThrChData(thr_chData_t& data) const
 
         (it->second).max->getVal(&reg);
         tableData.max = reg;
+
+        data.insert( std::make_pair(it->first, tableData) );
     }
 }
 
