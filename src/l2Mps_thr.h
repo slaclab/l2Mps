@@ -20,10 +20,17 @@ class IThrChannel;
 
 typedef boost::shared_ptr<const IThrChannel>    ThrChannel;
 
+// Threshod table arrays:
+//   - Indexes:
+//       [table=0..numThrTables] [threshold=0..maxThrCount]
+//       - Table index: 
+//           - 0: Lcls1
+//           - 1: Idle
+//           - 2: Std
+//           - 3: Alt
 typedef std::array<int, 2>                          thr_table_t;
-// typedef std::array<int, 3>                          thr_table_t;
 
-
+// Threshold table data
 struct thr_tableData_t
 {
     bool minEn;
@@ -31,10 +38,11 @@ struct thr_tableData_t
     int  min;
     int  max;
 };
-//typedef std::pair<int, bool>                        thr_tableData_t;
 
+// Threshold table data map
 typedef std::map<thr_table_t, thr_tableData_t>      thr_chData_t;
 
+// Threhold table scalval interfaces
 struct thr_tableScalval_t
 {
     ScalVal minEn;
@@ -42,11 +50,12 @@ struct thr_tableScalval_t
     ScalVal min;
     ScalVal max;
 };
-// typedef std::pair<ScalVal, ScalVal>                 thr_tableScalval_t;
 
+// Threshold table scalval interfaces map
 typedef std::map<thr_table_t, thr_tableScalval_t>   thr_chScalval_t;
 
-struct thr_chInfo_t
+// Threhold channel information data
+struct thr_chInfoData_t
 {
     int  ch;
     int  count;
@@ -56,7 +65,8 @@ struct thr_chInfo_t
     bool lcls1En;
 };
 
-struct thr_infoScalval_t
+// Threshold channel information scalval interfaces 
+struct thr_chInfoScalval_t
 {
     ScalVal_RO count;
     ScalVal_RO byteMap;
@@ -65,15 +75,17 @@ struct thr_infoScalval_t
     ScalVal_RO lcls1En;
 };
 
+// Threhold data (information + table data)
 struct thr_ch_t 
 {
-    thr_chInfo_t info;
+    thr_chInfoData_t info;
     thr_chData_t data;
 };
 
+// Threhold scalval interfaces (information + table data)
 struct thr_scalval_t
 {
-    thr_infoScalval_t info;
+    thr_chInfoScalval_t info;
     thr_chScalval_t   data;
 
 };
@@ -127,36 +139,15 @@ public:
     void setThresholdMaxEn(thr_table_t ch, const bool val) const;
 
     void readAll(thr_ch_t& data) const;
-    void readThrChInfo(thr_chInfo_t& info) const;
+    void readThrChInfo(thr_chInfoData_t& info) const;
     void readThrChData(thr_chData_t& data) const;
 
 
 private:
-    // Root path to the channel register space
-    Path       _chRoot;
-    // Channel information
-    // uint8_t    _ch;
-    // ScalVal_RO _thrCount;
-    // ScalVal    _idleEn;
-    // ScalVal_RO _altEn;
-    // ScalVal_RO _lcls1En;
-    // ScalVal_RO _byteMap;
-
-    // Threshod arrays:
-    //   - Indexes:
-    //       [table=0..numThrTables] [limit=0..numThrLimits] [threshold=0..maxThrCount]
-    //       - Table index: 
-    //           - 0: Lcls1
-    //           - 1: Idle
-    //           - 2: Std
-    //           - 3: Alt
-    //       - Limit index: 
-    //           - 0: Min
-    //           - 1: Max
-    // Threshold registers
-    // thr_chScalval_t _thrScalvalMap;
-    int ch;
-    thr_scalval_t thrScalvals;
+    
+    Path            _chRoot;        // Root path to the channel register space
+    int             ch;             // Threhold channel number
+    thr_scalval_t   thrScalvals;    // Threshold scalval interfaces
 };
 
 // Factory class
