@@ -51,22 +51,24 @@ const uint8_t blmChByteMap[2][numBlmChs][numBlmIntChs] =
 class IMpsBlm;
 typedef boost::shared_ptr<IMpsBlm> MpsBlm;
 
-class blm_channel;
-typedef blm_channel blm_channel_t;
+typedef std::array<int,2>                       blm_channel_t;
+typedef thr_ch_t                                blm_data_t;
+typedef std::map<blm_channel_t, blm_data_t>   blm_dataMap_t;
+typedef std::map<blm_channel_t, ThrChannel>    blm_thrMap_t;
+
+typedef void (*p_func_t)(int, blm_dataMap_t);
+
+struct blmThr_channel_t 
+{
+    blm_channel_t blmCh;
+    thr_table_t    thrTb;
+};
 
 // Function pointer data types
-typedef const uint32_t (IMpsBlm::*BlmR32_t)(const blm_channel&) const;
-typedef void (IMpsBlm::*BlmW32_t)(const blm_channel&, const uint32_t) const;
-typedef const bool (IMpsBlm::*BlmR1_t)(const blm_channel&) const;
-typedef void (IMpsBlm::*BlmW1_t)(const blm_channel&, const bool) const;
-
-typedef std::array<int,2>                       _blm_channel_t;
-typedef thr_ch_t                                _blm_data_t;
-typedef std::map<_blm_channel_t, _blm_data_t>   _blm_dataMap_t;
-typedef std::map<_blm_channel_t, ThrChannel>    _blm_thrMap_t;
-
-typedef void (*p_func_t)(int, _blm_dataMap_t);
-
+typedef const uint32_t (IMpsBlm::*BlmR32_t)(const blmThr_channel_t&) const;
+typedef void (IMpsBlm::*BlmW32_t)(const blmThr_channel_t&, const uint32_t) const;
+typedef const bool (IMpsBlm::*BlmR1_t)(const blmThr_channel_t&) const;
+typedef void (IMpsBlm::*BlmW1_t)(const blmThr_channel_t&, const bool) const;
 
 class IMpsBlm
 {
@@ -74,28 +76,29 @@ public:
     IMpsBlm(Path mpsRoot, const uint8_t amc, p_func_t blmCB);
     ~IMpsBlm();
 
-    uint32_t const  getCh           ( const blm_channel& ch) const;
-    bool     const  getIdleEn       ( const blm_channel& ch) const;
-    bool     const  getAltEn        ( const blm_channel& ch) const;
-    bool     const  getLcls1En      ( const blm_channel& ch) const;
-    uint32_t const  getByteMap      ( const blm_channel& ch) const;
-    uint32_t const  getThrCount     ( const blm_channel& ch) const;
+    uint32_t const  getCh           ( const blm_channel_t& ch) const;
+    bool     const  getIdleEn       ( const blm_channel_t& ch) const;
+    bool     const  getAltEn        ( const blm_channel_t& ch) const;
+    bool     const  getLcls1En      ( const blm_channel_t& ch) const;
+    uint32_t const  getByteMap      ( const blm_channel_t& ch) const;
+    uint32_t const  getThrCount     ( const blm_channel_t& ch) const;
 
-    void            setThresholdMin    ( const blm_channel& ch, const uint32_t val) const;
-    void            setThresholdMax    ( const blm_channel& ch, const uint32_t val) const;
-    const uint32_t  getThresholdMin    ( const blm_channel& ch) const;    
-    const uint32_t  getThresholdMax    ( const blm_channel& ch) const;
+    void            setThresholdMax    ( const blmThr_channel_t& ch, const uint32_t val) const;
+    const uint32_t  getThresholdMin    ( const blmThr_channel_t& ch) const;    
+    const uint32_t  getThresholdMax    ( const blmThr_channel_t& ch) const;
 
-    void            setThresholdMinEn  ( const blm_channel& ch, const bool val) const;
-    void            setThresholdMaxEn  ( const blm_channel& ch, const bool val) const;
-    const bool      getThresholdMinEn  ( const blm_channel& ch) const;
-    const bool      getThresholdMaxEn  ( const blm_channel& ch) const;
+    void            setThresholdMin    ( const blmThr_channel_t& ch, const uint32_t val) const;
+
+    void            setThresholdMinEn  ( const blmThr_channel_t& ch, const bool val) const;
+    void            setThresholdMaxEn  ( const blmThr_channel_t& ch, const bool val) const;
+    const bool      getThresholdMinEn  ( const blmThr_channel_t& ch) const;
+    const bool      getThresholdMaxEn  ( const blmThr_channel_t& ch) const;
  
     void            printChInfo     ( void ) const;
 
 private:
     std::map<std::pair<int, int>, int> _ch;
-    _blm_thrMap_t _blmThrMap;
+    blm_thrMap_t _blmThrMap;
 
     uint8_t _amc;
     unsigned int _poll;
@@ -116,20 +119,6 @@ public:
     {
         return MpsBlm(new IMpsBlm(mpsRoot, amc, blmCB));
     }
-};
-
-class blm_channel
-{
-public:
-    blm_channel(const std::array<int, 4> ch) : _ch(ch), _blm_ch(_blm_channel_t{{ch[0], ch[1]}}), _thr_ch(thr_table_t{{ch[2], ch[3]}}) { }
-    thr_table_t       const   getThrCh()          const   { return _thr_ch;   }
-    _blm_channel_t      const   getBlenCh()         const   { return _blm_ch;   }
-    int                 const   operator[](int i)   const   { return _ch[i];    }
-
-private:
-    std::array<int, 4>  _ch;
-    std::array<int, 2>  _blm_ch;
-    thr_table_t       _thr_ch;
 };
 
 #endif
