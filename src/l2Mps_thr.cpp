@@ -101,7 +101,6 @@ IThrChannel::~IThrChannel()
 {
 }
 
-
 void IThrChannel::readThrChInfo(thr_chInfoData_t& info) const
 {
     uint32_t u32;
@@ -120,6 +119,8 @@ void IThrChannel::readThrChInfo(thr_chInfoData_t& info) const
 
     thrScalvals.info.altEn->getVal(&u32);
     info.altEn = (u32?true:false);
+
+    info.ch = ch;
 }
 
 void IThrChannel::readThrChData(thr_chData_t& data) const
