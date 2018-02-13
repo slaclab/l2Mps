@@ -51,17 +51,17 @@ const uint8_t blmChByteMap[2][numBlmChs][numBlmIntChs] =
 class IMpsBlm;
 typedef boost::shared_ptr<IMpsBlm> MpsBlm;
 
-typedef std::array<int,2>                       blm_channel_t;
-typedef thr_ch_t                                blm_data_t;
-typedef std::map<blm_channel_t, blm_data_t>   blm_dataMap_t;
-typedef std::map<blm_channel_t, ThrChannel>    blm_thrMap_t;
+typedef std::array<int,2>                   blm_channel_t;
+typedef thr_ch_t                            blm_data_t;
+typedef std::map<blm_channel_t, blm_data_t> blm_dataMap_t;
+typedef std::map<blm_channel_t, ThrChannel> blm_thrMap_t;
 
 typedef void (*p_func_t)(int, blm_dataMap_t);
 
 struct blmThr_channel_t 
 {
-    blm_channel_t blmCh;
-    thr_table_t    thrTb;
+    blm_channel_t   blmCh;
+    thr_table_t     thrTb;
 };
 
 // Function pointer data types
@@ -76,37 +76,44 @@ public:
     IMpsBlm(Path mpsRoot, const uint8_t amc, p_func_t blmCB);
     ~IMpsBlm();
 
-    uint32_t const  getCh           ( const blm_channel_t& ch) const;
-    bool     const  getIdleEn       ( const blm_channel_t& ch) const;
-    bool     const  getAltEn        ( const blm_channel_t& ch) const;
-    bool     const  getLcls1En      ( const blm_channel_t& ch) const;
-    uint32_t const  getByteMap      ( const blm_channel_t& ch) const;
-    uint32_t const  getThrCount     ( const blm_channel_t& ch) const;
+    // Threhold channel information
+    uint32_t const  getCh               ( const blm_channel_t& ch) const;
+    bool     const  getIdleEn           ( const blm_channel_t& ch) const;
+    bool     const  getAltEn            ( const blm_channel_t& ch) const;
+    bool     const  getLcls1En          ( const blm_channel_t& ch) const;
+    uint32_t const  getByteMap          ( const blm_channel_t& ch) const;
+    uint32_t const  getThrCount         ( const blm_channel_t& ch) const;
 
-    void            setThresholdMax    ( const blmThr_channel_t& ch, const uint32_t val) const;
-    const uint32_t  getThresholdMin    ( const blmThr_channel_t& ch) const;    
-    const uint32_t  getThresholdMax    ( const blmThr_channel_t& ch) const;
 
-    void            setThresholdMin    ( const blmThr_channel_t& ch, const uint32_t val) const;
+    // Threshold set enable methods
+    void            setThresholdMinEn   ( const blmThr_channel_t& ch, const bool val) const;
+    void            setThresholdMaxEn   ( const blmThr_channel_t& ch, const bool val) const;
 
-    void            setThresholdMinEn  ( const blmThr_channel_t& ch, const bool val) const;
-    void            setThresholdMaxEn  ( const blmThr_channel_t& ch, const bool val) const;
-    const bool      getThresholdMinEn  ( const blmThr_channel_t& ch) const;
-    const bool      getThresholdMaxEn  ( const blmThr_channel_t& ch) const;
+    // Threshold get enable methods
+    const bool      getThresholdMinEn   ( const blmThr_channel_t& ch) const;
+    const bool      getThresholdMaxEn   ( const blmThr_channel_t& ch) const;
+
+    // Threshold set methods
+    void            setThresholdMin     ( const blmThr_channel_t& ch, const uint32_t val) const;
+    void            setThresholdMax     ( const blmThr_channel_t& ch, const uint32_t val) const;
+       
+    // Threshold get methods
+    const uint32_t  getThresholdMin     ( const blmThr_channel_t& ch) const;    
+    const uint32_t  getThresholdMax     ( const blmThr_channel_t& ch) const;
  
+    // Print BLM channel information
     void            printChInfo     ( void ) const;
 
 private:
-    std::map<std::pair<int, int>, int> _ch;
-    blm_thrMap_t _blmThrMap;
+    std::map<std::pair<int, int>, int>  _ch;
+    blm_thrMap_t    _blmThrMap;
+    uint8_t         _amc;
+    unsigned int    _poll;
+    p_func_t        _blmCB;
+    pthread_t       _scanThread;
 
-    uint8_t _amc;
-    unsigned int _poll;
-    p_func_t _blmCB;
-
-    pthread_t _scanThread;
-
-    void scanTask();
+    // Polling functions
+    void        scanTask();
     static void *createThread(void* p) { static_cast<IMpsBlm*>(p)->scanTask(); return NULL; };
 
 
