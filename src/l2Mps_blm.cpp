@@ -3,7 +3,7 @@
 IMpsBlm::IMpsBlm(Path mpsRoot, const uint8_t amc, p_func_t blmCB) : _amc(amc), _poll(1), _blmCB(blmCB)
 {
 
-    for (std::size_t ch {0}; ch < maxChannelCount; ++ch)
+    for (int ch = 0; ch < maxChannelCount; ++ch)
     {
         try
         {
@@ -17,7 +17,6 @@ IMpsBlm::IMpsBlm(Path mpsRoot, const uint8_t amc, p_func_t blmCB) : _amc(amc), _
                     {
                         if (aThr->getByteMap() == blmChByteMap[_amc][i][j])        
                         {
-                            _ch.insert( std::make_pair( std::make_pair(i, j), ch ) );
                             _blmThrMap.insert( std::make_pair( blm_channel_t{{i,j}}, aThr ) );
                         }
 
@@ -214,16 +213,16 @@ void IMpsBlm::setThresholdMax(const blmThr_channel_t& ch, const uint32_t val) co
 // Print BLM channel information    
 void IMpsBlm::printChInfo(void) const
 {
-    for (std::size_t i {0}; i < numBlmChs; ++i)
+    for (int i {0}; i < numBlmChs; ++i)
     {
         std::cout << "        Channel = " << i << std::endl;
-        for (std::size_t j {0}; j < numBlmIntChs; ++j)
+        for (int j {0}; j < numBlmIntChs; ++j)
         {
             std::cout << "            Integration channel = " << j << ": Threshold channel = ";
 
-            std::map<std::pair<int, int>, int>::const_iterator it = _ch.find(std::make_pair(i,j));
-            if (it != _ch.end())
-                std::cout << it->second << std::endl;
+            blm_thrMap_t::const_iterator it = _blmThrMap.find(blm_channel_t{{i,j}});
+            if (it != _blmThrMap.end())
+                std::cout << unsigned((it->second)->getChannel()) << std::endl;
             else
                 std::cout << "Not implemented" << std::endl;
         }

@@ -105,7 +105,6 @@ public:
     void            printChInfo     ( void ) const;
 
 private:
-    std::map<std::pair<int, int>, int>  _ch;
     blm_thrMap_t    _blmThrMap;
     uint8_t         _amc;
     unsigned int    _poll;
