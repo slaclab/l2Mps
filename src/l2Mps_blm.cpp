@@ -1,6 +1,6 @@
 #include "l2Mps_blm.h"
 
-IMpsBlm::IMpsBlm(Path mpsRoot, const uint8_t amc, p_func_t blmCB) : _amc(amc), _poll(1), _blmCB(blmCB)
+IMpsBlm::IMpsBlm(Path mpsRoot, const uint8_t amc) : _amc(amc)
 {
 
     for (int ch = 0; ch < maxChannelCount; ++ch)
@@ -30,12 +30,6 @@ IMpsBlm::IMpsBlm(Path mpsRoot, const uint8_t amc, p_func_t blmCB) : _amc(amc), _
     }
     std::cout << "    > A BLM was created (AMC = " << unsigned(_amc) << ")" << std::endl;
     printChInfo();
-
-    std::cout << "      Starting scan thread..." << std::endl;
-
-    pthread_create(&_scanThread, NULL, createThread, this);
-
-    std::cout << "      Scan thread created succesfully." << std::endl;
 }
 
 IMpsBlm::~IMpsBlm()
@@ -43,10 +37,25 @@ IMpsBlm::~IMpsBlm()
     std::cout << "    > A BLM was destroyed (AMC = " << unsigned(_amc) << ")" << std::endl;
 }
 
+// Set polling thread with callback function
+const void IMpsBlm::startPollThread(unsigned int poll, p_func_t callBack )
+{
+    if (poll == 0)
+    {
+        std::cout << "Error creating poll thread: poll time must be greater than 0" << std::endl;
+        return;
+    }
+    _poll   = poll;
+    _blmCB  = callBack;
+
+    std::cout << "      Starting scan thread..." << std::endl;
+    pthread_create(&_scanThread, NULL, createThread, this);
+    std::cout << "      Scan thread created succesfully." << std::endl;
+}
+
 // Polling functions
 void IMpsBlm::scanTask()
 {
-    sleep(10);   
     while(1)
     {
         blm_dataMap_t dataMap;

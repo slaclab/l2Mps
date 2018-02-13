@@ -87,15 +87,13 @@ int main(int argc, char **argv)
         {
             std::cout << "BLM for AMC[" << i << "]: BLM[" << i << "]" << std::endl;
             std::cout << "====================================================" << std::endl;
-            myMpsBlm[i] = MpsBlmFactory::create(mpsRoot, i, NULL);
+            myMpsBlm[i] = MpsBlmFactory::create(mpsRoot, i);
             std::cout << "====================================================" << std::endl;
 
             std::cout << std::endl;
 
             int n;
             
-
-
             for (int j = 0; j < numBlmChs; ++j)
             {
                 for (int k = 0; k <numBlmIntChs; ++k)

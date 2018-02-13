@@ -73,7 +73,7 @@ typedef void (IMpsBlm::*BlmW1_t)(const blmThr_channel_t&, const bool) const;
 class IMpsBlm
 {
 public:
-    IMpsBlm(Path mpsRoot, const uint8_t amc, p_func_t blmCB);
+    IMpsBlm(Path mpsRoot, const uint8_t amc);
     ~IMpsBlm();
 
     // Threhold channel information
@@ -100,7 +100,10 @@ public:
     // Threshold get methods
     const uint32_t  getThresholdMin     ( const blmThr_channel_t& ch) const;    
     const uint32_t  getThresholdMax     ( const blmThr_channel_t& ch) const;
- 
+
+    // Set polling thread with callback function
+    const void      startPollThread     ( unsigned int poll, p_func_t callBack );
+
     // Print BLM channel information
     void            printChInfo     ( void ) const;
 
@@ -121,9 +124,9 @@ private:
 class MpsBlmFactory
 {
 public:
-    static MpsBlm create(Path mpsRoot, const uint8_t amc, p_func_t blmCB)
+    static MpsBlm create(Path mpsRoot, const uint8_t amc)
     {
-        return MpsBlm(new IMpsBlm(mpsRoot, amc, blmCB));
+        return MpsBlm(new IMpsBlm(mpsRoot, amc));
     }
 };
 
