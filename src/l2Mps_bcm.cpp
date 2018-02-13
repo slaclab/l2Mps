@@ -1,8 +1,8 @@
 #include "l2Mps_bcm.h"
 
-IMpsBcm::IMpsBcm(Path mpsRoot, uint8_t amc)
+IMpsBcm::IMpsBcm(Path mpsRoot, const uint8_t amc) : _amc(amc)
 {
-    for (uint8_t ch = 0 ; ch < maxChannelCount ; ch++)
+    for (int ch = 0; ch < maxChannelCount; ++ch)
     {
         try
         {
@@ -14,8 +14,7 @@ IMpsBcm::IMpsBcm(Path mpsRoot, uint8_t amc)
                 {
                     if (aThr->getByteMap() == bcmChByteMap[amc][i])
                     {
-                        _ch[i]  = ch;
-                        _thr[i] = aThr;
+                        _bcmThrMap.insert( std::make_pair( i, aThr ) );
                         break;
                     }
                 }
@@ -26,119 +25,74 @@ IMpsBcm::IMpsBcm(Path mpsRoot, uint8_t amc)
         }
     }
 
-    std::cout << "    > A BCM was created" << std::endl;
-    std::cout << "    > Threshold channel map:" << std::endl;
-
-    std::cout << "    >   BCM:" << std::endl;
-    printChInfo(_thr[0]);
-
-    std::cout << "    >   DIFF:" << std::endl;
-    printChInfo(_thr[1]);
-
+    std::cout << "    > A BCM was created (AMC = " << unsigned(_amc) << ")" << std::endl;
+    printChInfo();
 }
 
 IMpsBcm::~IMpsBcm()
 {
-    std::cout << "    > A BCM was destroyed" << std::endl;
+    std::cout << "    > A BCM was destroyed (AMC = " << unsigned(_amc) << ")" << std::endl;
 }
 
-uint32_t const IMpsBcm::getCh(const bcm_channel&  ch) const                      
+// Find ThrChannel in the BCM-ThrChannel map
+ThrChannel IMpsBcm::findThrChannel(const bcm_channel_t& bcmCh) const
 {
-    if (!_thr[ch.getBcmCh()])
-        throw std::runtime_error("Channel not defined!\n");
+    bcm_thrMap_t::const_iterator it = _bcmThrMap.find(bcmCh);
 
-    return  _ch[ch.getBcmCh()]; 
+    if (it == _bcmThrMap.end())
+        throw std::runtime_error("Channel not defined\n");
+
+    return it->second;
 }
 
-bool const IMpsBcm::getIdleEn(const bcm_channel&  ch) const                      
+// Set polling thread with callback function
+const void IMpsBcm::startPollThread(unsigned int poll, bcm_cb_func_t callBack )
 {
-    if (!_thr[ch.getBcmCh()])
-        throw std::runtime_error("Channel not defined!\n");
-
-    return _thr[ch.getBcmCh()]->getIdleEn();   
-}
-
-bool const  IMpsBcm::getAltEn(const bcm_channel&  ch) const                      
-{
-    if (!_thr[ch.getBcmCh()])
-        throw std::runtime_error("Channel not defined!\n");
-
-    return _thr[ch.getBcmCh()]->getAltEn();   
-}
-
-bool const IMpsBcm::getLcls1En(const bcm_channel&  ch) const                      
-{
-    if (!_thr[ch.getBcmCh()])
-        throw std::runtime_error("Channel not defined!\n");
-
-    return _thr[ch.getBcmCh()]->getLcls1En();   
-}
-
-uint32_t const IMpsBcm::getByteMap(const bcm_channel&  ch) const                      
-{
-    if (!_thr[ch.getBcmCh()])
-        throw std::runtime_error("Channel not defined!\n");
-
-    return _thr[ch.getBcmCh()]->getByteMap(); 
-}
-
-uint32_t const IMpsBcm::getThrCount(const bcm_channel&  ch) const                     
-{ 
-    if (!_thr[ch.getBcmCh()])
-        throw std::runtime_error("Channel not defined!\n");
-
-    return _thr[ch.getBcmCh()]->getThrCount(); 
-}
-
-void IMpsBcm::setThresholdMin(const bcm_channel&  ch, const uint32_t val) const  
-{
-    if (!_thr[ch.getBcmCh()])
-        throw std::runtime_error("Channel not defined!\n");
-
-    _thr[ch.getBcmCh()]->setThresholdMin(ch.getThrCh(), val); 
-}
-
-const uint32_t IMpsBcm::getThresholdMin(const bcm_channel& ch) const
-{
-    if (!_thr[ch.getBcmCh()])
-        throw std::runtime_error("Channel not defined!\n");
-
-    return _thr[ch.getBcmCh()]->getThresholdMin(ch.getThrCh()); 
-}
-
-void IMpsBcm::setThresholdMinEn(const bcm_channel&  ch, const bool val) const     
-{
-    if (!_thr[ch.getBcmCh()])
-        throw std::runtime_error("Channel not defined!\n");
-
-    _thr[ch.getBcmCh()]->setThresholdMinEn(ch.getThrCh(), val); 
-
-}
-
-const bool IMpsBcm::getThresholdMinEn(const bcm_channel&  ch) const                     
-{
-    if (!_thr[ch.getBcmCh()])
-        throw std::runtime_error("Channel not defined!\n");
-
-    return _thr[ch.getBcmCh()]->getThresholdMinEn(ch.getThrCh()); 
-
-}
-
-void IMpsBcm::printChInfo(const ThrChannel thr) const
-{
-    // if (!thr)
-        // throw std::runtime_error("Channel not defined!\n");
-    if (thr)
+    if (poll == 0)
     {
-        std::cout << "          channel              = " << unsigned(thr->getChannel()) << std::endl;
-        std::cout << "          Threshold count      = " << unsigned(thr->getThrCount()) << std::endl;
-        std::cout << "          Idle table enabled?  = " << std::boolalpha << unsigned(thr->getIdleEn()) << std::endl;
-        std::cout << "          Alt table enabled?   = " << std::boolalpha << unsigned(thr->getAltEn()) << std::endl;
-        std::cout << "          Lcls1 table enabled? = " << std::boolalpha << unsigned(thr->getLcls1En()) << std::endl;
-        std::cout << "          Byte map             = " << unsigned(thr->getByteMap()) << std::endl;
+        std::cout << "Error creating poll thread: poll time must be greater than 0" << std::endl;
+        return;
     }
-    else
+    _poll   = poll;
+    _bcmCB  = callBack;
+
+    std::cout << "      Starting scan thread..." << std::endl;
+    pthread_create(&_scanThread, NULL, createThread, this);
+    std::cout << "      Scan thread created succesfully." << std::endl;
+}
+
+// Polling functions
+void IMpsBcm::pollThread()
+{
+    while(1)
     {
-        std::cout << "          Channel not defined!" << std::endl;
+        bcm_dataMap_t dataMap;
+        for (bcm_thrMap_t::const_iterator it = _bcmThrMap.begin() ; it != _bcmThrMap.end(); ++it)
+        {
+            thr_ch_t data;
+            (it->second)->readAll(data);
+
+            dataMap.insert(std::make_pair(it->first, data));
+        }
+
+        _bcmCB(_amc, dataMap);
+        dataMap.clear();
+        sleep(_poll);
+    }
+}
+
+// Print BCM channel information    
+void IMpsBcm::printChInfo(void) const
+{
+    for (int i {0}; i < numBcmChs; ++i)
+    {
+        std::cout << "        Channel = " << i << ": Threshold channel = ";
+
+        bcm_thrMap_t::const_iterator it = _bcmThrMap.find(i);
+
+        if (it != _bcmThrMap.end())
+            std::cout << unsigned((it->second)->getChannel()) << std::endl;
+        else
+            std::cout << "Not implemented" << std::endl;
     }
 }
