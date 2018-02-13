@@ -107,7 +107,7 @@ int main(int argc, char **argv)
                         std::cout << "  Channel = (" << j << ", " << k << "):" << std::endl;
                         std::cout << "  ===============================================" << std::endl;
 
-                        std::cout << "    Thr channel =   " << myMpsBlm[i]->getCh(blmCh) << std::endl;
+                        std::cout << "    Thr channel =   " << myMpsBlm[i]->getChannel(blmCh) << std::endl;
                         std::cout << "    Thr count =     " << myMpsBlm[i]->getThrCount(blmCh) << std::endl;
                         std::cout << "    Byte map =      " << myMpsBlm[i]->getByteMap(blmCh) << std::endl;
                         std::cout << "    Idle Enabled =  " << std::boolalpha << myMpsBlm[i]->getIdleEn(blmCh) << std::endl;

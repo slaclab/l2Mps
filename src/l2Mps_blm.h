@@ -77,32 +77,35 @@ public:
     ~IMpsBlm();
 
     // Threhold channel information
-    uint32_t const  getCh               ( const blm_channel_t& ch) const;
-    bool     const  getIdleEn           ( const blm_channel_t& ch) const;
-    bool     const  getAltEn            ( const blm_channel_t& ch) const;
-    bool     const  getLcls1En          ( const blm_channel_t& ch) const;
-    uint32_t const  getByteMap          ( const blm_channel_t& ch) const;
-    uint32_t const  getThrCount         ( const blm_channel_t& ch) const;
+    uint32_t const  getChannel          ( const blm_channel_t& ch) const { return findThrChannel(ch)->getChannel();     };
+    bool     const  getIdleEn           ( const blm_channel_t& ch) const { return findThrChannel(ch)->getIdleEn();      };
+    bool     const  getAltEn            ( const blm_channel_t& ch) const { return findThrChannel(ch)->getAltEn();       };
+    bool     const  getLcls1En          ( const blm_channel_t& ch) const { return findThrChannel(ch)->getLcls1En();     };
+    uint32_t const  getByteMap          ( const blm_channel_t& ch) const { return findThrChannel(ch)->getByteMap();     };
+    uint32_t const  getThrCount         ( const blm_channel_t& ch) const { return findThrChannel(ch)->getThrCount();    };
 
 
     // Threshold set enable methods
-    void            setThresholdMinEn   ( const blmThr_channel_t& ch, const bool val) const;
-    void            setThresholdMaxEn   ( const blmThr_channel_t& ch, const bool val) const;
+    void            setThresholdMinEn   ( const blmThr_channel_t& ch, const bool val) const { findThrChannel(ch.blmCh)->setThresholdMinEn(ch.thrTb, val); };
+    void            setThresholdMaxEn   ( const blmThr_channel_t& ch, const bool val) const { findThrChannel(ch.blmCh)->setThresholdMaxEn(ch.thrTb, val); };
 
     // Threshold get enable methods
-    const bool      getThresholdMinEn   ( const blmThr_channel_t& ch) const;
-    const bool      getThresholdMaxEn   ( const blmThr_channel_t& ch) const;
+    const bool      getThresholdMinEn   ( const blmThr_channel_t& ch) const { return findThrChannel(ch.blmCh)->getThresholdMinEn(ch.thrTb); };
+    const bool      getThresholdMaxEn   ( const blmThr_channel_t& ch) const { return findThrChannel(ch.blmCh)->getThresholdMaxEn(ch.thrTb); };
 
     // Threshold set methods
-    void            setThresholdMin     ( const blmThr_channel_t& ch, const uint32_t val) const;
-    void            setThresholdMax     ( const blmThr_channel_t& ch, const uint32_t val) const;
+    void            setThresholdMin     ( const blmThr_channel_t& ch, const uint32_t val) const { findThrChannel(ch.blmCh)->setThresholdMin(ch.thrTb, val); };
+    void            setThresholdMax     ( const blmThr_channel_t& ch, const uint32_t val) const { findThrChannel(ch.blmCh)->setThresholdMax(ch.thrTb, val); };
        
     // Threshold get methods
-    const uint32_t  getThresholdMin     ( const blmThr_channel_t& ch) const;    
-    const uint32_t  getThresholdMax     ( const blmThr_channel_t& ch) const;
+    const uint32_t  getThresholdMin     ( const blmThr_channel_t& ch) const { return findThrChannel(ch.blmCh)->getThresholdMin(ch.thrTb); };
+    const uint32_t  getThresholdMax     ( const blmThr_channel_t& ch) const { return findThrChannel(ch.blmCh)->getThresholdMax(ch.thrTb); };
 
     // Set polling thread with callback function
     const void      startPollThread     ( unsigned int poll, p_func_t callBack );
+
+    // Find ThrChannel in the Blm-ThrChannel map
+    ThrChannel      findThrChannel(const blm_channel_t& blmCh) const;
 
     // Print BLM channel information
     void            printChInfo     ( void ) const;
