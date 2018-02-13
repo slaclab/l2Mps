@@ -54,7 +54,7 @@ const void IMpsBlm::startPollThread(unsigned int poll, p_func_t callBack )
 }
 
 // Polling functions
-void IMpsBlm::scanTask()
+void IMpsBlm::pollThread()
 {
     while(1)
     {

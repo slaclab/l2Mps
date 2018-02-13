@@ -115,8 +115,8 @@ private:
     pthread_t       _scanThread;
 
     // Polling functions
-    void        scanTask();
-    static void *createThread(void* p) { static_cast<IMpsBlm*>(p)->scanTask(); return NULL; };
+    void        pollThread();
+    static void *createThread(void* p) { static_cast<IMpsBlm*>(p)->pollThread(); return NULL; };
 
 
 };
