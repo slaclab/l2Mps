@@ -4,3 +4,4 @@ O.*/
 # Ignore all directories, except for the src directory
 */
 !src/
+!src/test
