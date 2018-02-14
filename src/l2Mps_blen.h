@@ -40,10 +40,10 @@ struct blenThr_channel_t
 typedef void (*blen_cb_func_t)(int, blen_dataMap_t);
 
 // Function pointer data typed
-typedef const uint32_t (IMpsBlen::*BlenR32_t)(const blenThr_channel_t) const;
-typedef void (IMpsBlen::*BlenW32_t)(const blenThr_channel_t, const uint32_t) const;
-typedef const bool (IMpsBlen::*BlenR1_t)(const blenThr_channel_t) const;
-typedef void (IMpsBlen::*BlenW1_t)(const blenThr_channel_t, const bool) const;
+typedef const uint32_t (IMpsBlen::*BlenR32_t)(const blenThr_channel_t&) const;
+typedef void (IMpsBlen::*BlenW32_t)(const blenThr_channel_t&, const uint32_t) const;
+typedef const bool (IMpsBlen::*BlenR1_t)(const blenThr_channel_t&) const;
+typedef void (IMpsBlen::*BlenW1_t)(const blenThr_channel_t&, const bool) const;
 
 class IMpsBlen
 {
