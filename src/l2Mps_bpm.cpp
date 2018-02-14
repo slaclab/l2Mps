@@ -1,9 +1,9 @@
 #include "l2Mps_bpm.h"
 
-IMpsBpm::IMpsBpm(Path mpsRoot, uint8_t amc)
+IMpsBpm::IMpsBpm(Path mpsRoot, uint8_t amc) : _amc(amc)
 {
 
-    for (uint8_t ch = 0 ; ch < maxChannelCount ; ch++)
+    for (int ch = 0 ; ch < maxChannelCount ; ++ch)
     {
         try
         {
@@ -15,8 +15,8 @@ IMpsBpm::IMpsBpm(Path mpsRoot, uint8_t amc)
                 {
                     if (aThr->getByteMap() == bpmChByteMap[amc][i])
                     {
-                        _ch[i] = ch;
-                        _thr[i] = aThr;
+                        _bpmThrMap.insert( std::make_pair( i, aThr ) );
+                        break;
                     }
                 }
             }
@@ -27,125 +27,74 @@ IMpsBpm::IMpsBpm(Path mpsRoot, uint8_t amc)
 
     }
 
-    std::cout << "    > A BPM was created" << std::endl;
-    std::cout << "    > Threshold channel map:" << std::endl;
-
-    std::cout << "    >   X:" << std::endl;
-    printChInfo(_thr[0]);
-
-    std::cout << "    >   Y:" << std::endl;
-    printChInfo(_thr[1]);
-
-    std::cout << "    >   C:" << std::endl;
-    printChInfo(_thr[2]);
-
-    std::cout << "    >   R:" << std::endl;
-    printChInfo(_thr[3]);
+    std::cout << "    > A BPM was created (AMC = " << unsigned(_amc) << ")" << std::endl;
+    printChInfo();
 }
 
 IMpsBpm::~IMpsBpm()
 {
-    std::cout << "    > A BPM was destroyed" << std::endl;
+    std::cout << "    > A BPM was destroyed (AMC = " << unsigned(_amc) << ")" << std::endl;
 }
 
-uint32_t const IMpsBpm::getCh(const bpm_channel&  ch) const                      
+// Find ThrChannel in the BPM-ThrChannel map
+ThrChannel IMpsBpm::findThrChannel(const bpm_channel_t& bpmCh) const
 {
-    if (!_thr[ch.getBpmCh()])
-        throw std::runtime_error("Channel not defined!\n");
+    bpm_thrMap_t::const_iterator it = _bpmThrMap.find(bpmCh);
 
-    return  _ch[ch.getBpmCh()]; 
+    if (it == _bpmThrMap.end())
+        throw std::runtime_error("Channel not defined\n");
+
+    return it->second;
 }
 
-bool const IMpsBpm::getIdleEn(const bpm_channel&  ch) const                      
+// Set polling thread with callback function
+const void IMpsBpm::startPollThread(unsigned int poll, bpm_cb_func_t callBack )
 {
-    if (!_thr[ch.getBpmCh()])
-        throw std::runtime_error("Channel not defined!\n");
-
-    return _thr[ch.getBpmCh()]->getIdleEn();   
-}
-
-bool const  IMpsBpm::getAltEn(const bpm_channel&  ch) const                      
-{
-    if (!_thr[ch.getBpmCh()])
-        throw std::runtime_error("Channel not defined!\n");
-
-    return _thr[ch.getBpmCh()]->getAltEn();   
-}
-
-bool const IMpsBpm::getLcls1En(const bpm_channel&  ch) const                      
-{
-    if (!_thr[ch.getBpmCh()])
-        throw std::runtime_error("Channel not defined!\n");
-
-    return _thr[ch.getBpmCh()]->getLcls1En();   
-}
-
-uint32_t const IMpsBpm::getByteMap(const bpm_channel&  ch) const                      
-{
-    if (!_thr[ch.getBpmCh()])
-        throw std::runtime_error("Channel not defined!\n");
-
-    return _thr[ch.getBpmCh()]->getByteMap(); 
-}
-
-uint32_t const IMpsBpm::getThrCount(const bpm_channel&  ch) const                     
-{ 
-    if (!_thr[ch.getBpmCh()])
-        throw std::runtime_error("Channel not defined!\n");
-
-    return _thr[ch.getBpmCh()]->getThrCount(); 
-}
-
-void IMpsBpm::setThresholdMin(const bpm_channel&  ch, const uint32_t val) const  
-{
-    if (!_thr[ch.getBpmCh()])
-        throw std::runtime_error("Channel not defined!\n");
-
-    _thr[ch.getBpmCh()]->setThresholdMin(ch.getThrCh(), val); 
-}
-
-const uint32_t IMpsBpm::getThresholdMin(const bpm_channel& ch) const
-{
-    if (!_thr[ch.getBpmCh()])
-        throw std::runtime_error("Channel not defined!\n");
-
-    return _thr[ch.getBpmCh()]->getThresholdMin(ch.getThrCh()); 
-}
-
-void IMpsBpm::setThresholdMinEn(const bpm_channel&  ch, const bool val) const     
-{
-    if (!_thr[ch.getBpmCh()])
-        throw std::runtime_error("Channel not defined!\n");
-
-    _thr[ch.getBpmCh()]->setThresholdMinEn(ch.getThrCh(), val); 
-
-}
-
-const bool IMpsBpm::getThresholdMinEn(const bpm_channel&  ch) const                     
-{
-    if (!_thr[ch.getBpmCh()])
-        throw std::runtime_error("Channel not defined!\n");
-
-    return _thr[ch.getBpmCh()]->getThresholdMinEn(ch.getThrCh()); 
-
-}
-
-
-void IMpsBpm::printChInfo(const ThrChannel thr) const
-{
-    // if (!thr)
-        // throw std::runtime_error("Channel not defined!\n");
-    if (thr)
+    if (poll == 0)
     {
-        std::cout << "          channel              = " << unsigned(thr->getChannel()) << std::endl;
-        std::cout << "          Threshold count      = " << unsigned(thr->getThrCount()) << std::endl;
-        std::cout << "          Idle table enabled?  = " << std::boolalpha << unsigned(thr->getIdleEn()) << std::endl;
-        std::cout << "          Alt table enabled?   = " << std::boolalpha << unsigned(thr->getAltEn()) << std::endl;
-        std::cout << "          Lcls1 table enabled? = " << std::boolalpha << unsigned(thr->getLcls1En()) << std::endl;
-        std::cout << "          Byte map             = " << unsigned(thr->getByteMap()) << std::endl;
+        std::cout << "Error creating poll thread: poll time must be greater than 0" << std::endl;
+        return;
     }
-    else
+    _poll   = poll;
+    _bpmCB  = callBack;
+
+    std::cout << "      Starting scan thread..." << std::endl;
+    pthread_create(&_scanThread, NULL, createThread, this);
+    std::cout << "      Scan thread created succesfully." << std::endl;
+}
+
+// Polling functions
+void IMpsBpm::pollThread()
+{
+    while(1)
     {
-        std::cout << "          Channel not defined!" << std::endl;
+        bpm_dataMap_t dataMap;
+        for (bpm_thrMap_t::const_iterator it = _bpmThrMap.begin() ; it != _bpmThrMap.end(); ++it)
+        {
+            thr_ch_t data;
+            (it->second)->readAll(data);
+
+            dataMap.insert(std::make_pair(it->first, data));
+        }
+
+        _bpmCB(_amc, dataMap);
+        dataMap.clear();
+        sleep(_poll);
+    }
+}
+
+// Print BPM channel information    
+void IMpsBpm::printChInfo(void) const
+{
+    for (int i {0}; i < numBpmChs; ++i)
+    {
+        std::cout << "        Channel = " << i << ": Threshold channel = ";
+
+        bpm_thrMap_t::const_iterator it = _bpmThrMap.find(i);
+
+        if (it != _bpmThrMap.end())
+            std::cout << unsigned((it->second)->getChannel()) << std::endl;
+        else
+            std::cout << "Not implemented" << std::endl;
     }
 }
