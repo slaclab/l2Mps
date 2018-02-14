@@ -1,20 +1,22 @@
 #include "l2Mps_blen.h"
 
-IMpsBlen::IMpsBlen(Path mpsRoot, uint8_t amc)
+IMpsBlen::IMpsBlen(Path mpsRoot, const uint8_t amc) : _amc(amc)
 {
-    for (uint8_t ch = 0 ; ch < maxChannelCount ; ch++)
+    for (int ch = 0; ch < maxChannelCount; ++ch)
     {
         try
         {
             ThrChannel aThr(ThrChannelFactory::create(mpsRoot, ch));
-
+            
             if (aThr->getThrCount())
             {
-                if (aThr->getByteMap() == blenChByteMap[amc])
+                for (int i = 0; i < numBlenChs; ++i)
                 {
-                    _ch  = ch;
-                    _thr = aThr;
-                    break;
+                    if (aThr->getByteMap() == blenChByteMap[amc][i])
+                    {
+                        _blenThrMap.insert( std::make_pair( i, aThr ) );
+                        break;
+                    }
                 }
             }
         }
@@ -23,112 +25,74 @@ IMpsBlen::IMpsBlen(Path mpsRoot, uint8_t amc)
         }
     }
 
-    std::cout << "    > A BLEN was created" << std::endl;
-    std::cout << "    > Threshold channel map:" << std::endl;
-    printChInfo(_thr);
+    std::cout << "    > A BLEN was created (AMC = " << unsigned(_amc) << ")" << std::endl;
+    printChInfo();
 }
 
 IMpsBlen::~IMpsBlen()
 {
-    std::cout << "    > A BLEN was destroyed" << std::endl;
+    std::cout << "    > A BLEN was destroyed (AMC = " << unsigned(_amc) << ")" << std::endl;
 }
 
-uint32_t const  IMpsBlen::getCh(const blen_channel_t ch) const
+// Find ThrChannel in the BLEN-ThrChannel map
+ThrChannel IMpsBlen::findThrChannel(const blen_channel_t& blenCh) const
 {
-	if (!_thr)
-		throw std::runtime_error("Channel not defined!\n");
+    blen_thrMap_t::const_iterator it = _blenThrMap.find(blenCh);
 
-	return _ch;
+    if (it == _blenThrMap.end())
+        throw std::runtime_error("Channel not defined\n");
+
+    return it->second;
 }
 
-bool const  IMpsBlen::getIdleEn(const blen_channel_t ch) const
+// Set polling thread with callback function
+const void IMpsBlen::startPollThread(unsigned int poll, blen_cb_func_t callBack )
 {
-	if (!_thr)
-		throw std::runtime_error("Channel not defined!\n");
-
-	return _thr->getIdleEn();
-}
-
-bool const  IMpsBlen::getAltEn(const blen_channel_t ch) const
-{
-	if (!_thr)
-		throw std::runtime_error("Channel not defined!\n");
-
-	return _thr->getAltEn();
-}
-
-bool const  IMpsBlen::getLcls1En(const blen_channel_t ch) const
-{
-	if (!_thr)
-		throw std::runtime_error("Channel not defined!\n");
-
-	return _thr->getLcls1En();
-}
-
-uint32_t const IMpsBlen::getByteMap(const blen_channel_t ch) const
-{
-	if (!_thr)
-		throw std::runtime_error("Channel not defined!\n");
-
-	return _thr->getByteMap();
-}
-
-uint32_t const IMpsBlen::getThrCount(const blen_channel_t ch) const
-{
-	if (!_thr)
-		throw std::runtime_error("Channel not defined!\n");
-
-	return _thr->getThrCount();
-}
-
-void IMpsBlen::setThresholdMin(const blen_channel_t ch, const uint32_t val) const
-{
-	if (!_thr)
-		throw std::runtime_error("Channel not defined!\n");
-
-	_thr->setThresholdMin(ch, val);
-}
-
-const uint32_t IMpsBlen::getThresholdMin(const blen_channel_t ch) const
-{
-	if (!_thr)
-		throw std::runtime_error("Channel not defined!\n");
-
-	return _thr->getThresholdMin(ch);
-}
-
-void IMpsBlen::setThresholdMinEn(const blen_channel_t ch, const bool val) const
-{
-	if (!_thr)
-		throw std::runtime_error("Channel not defined!\n");
-
-	_thr->setThresholdMinEn(ch, val);
-}
-
-const bool IMpsBlen::getThresholdMinEn(const blen_channel_t ch) const
-{
-	if (!_thr)
-		throw std::runtime_error("Channel not defined!\n");
-
-	return _thr->getThresholdMinEn(ch);
-}
-
-
-void IMpsBlen::printChInfo(const ThrChannel thr) const
-{
-    // if (!thr)
-        // throw std::runtime_error("Channel not defined!\n");
-    if (thr)
+    if (poll == 0)
     {
-        std::cout << "      channel              = " << unsigned(thr->getChannel()) << std::endl;
-        std::cout << "      Threshold count      = " << unsigned(thr->getThrCount()) << std::endl;
-        std::cout << "      Idle table enabled?  = " << std::boolalpha << unsigned(thr->getIdleEn()) << std::endl;
-        std::cout << "      Alt table enabled?   = " << std::boolalpha << unsigned(thr->getAltEn()) << std::endl;
-        std::cout << "      Lcls1 table enabled? = " << std::boolalpha << unsigned(thr->getLcls1En()) << std::endl;
-        std::cout << "      Byte map             = " << unsigned(thr->getByteMap()) << std::endl;
+        std::cout << "Error creating poll thread: poll time must be greater than 0" << std::endl;
+        return;
     }
-    else
+    _poll   = poll;
+    _blenCB  = callBack;
+
+    std::cout << "      Starting scan thread..." << std::endl;
+    pthread_create(&_scanThread, NULL, createThread, this);
+    std::cout << "      Scan thread created succesfully." << std::endl;
+}
+
+// Polling functions
+void IMpsBlen::pollThread()
+{
+    while(1)
     {
-        std::cout << "      Channel not defined!" << std::endl;
+        blen_dataMap_t dataMap;
+        for (blen_thrMap_t::const_iterator it = _blenThrMap.begin() ; it != _blenThrMap.end(); ++it)
+        {
+            thr_ch_t data;
+            (it->second)->readAll(data);
+
+            dataMap.insert(std::make_pair(it->first, data));
+        }
+
+        _blenCB(_amc, dataMap);
+        dataMap.clear();
+        sleep(_poll);
+    }
+}
+
+// Print BLEN channel information    
+void IMpsBlen::printChInfo(void) const
+{
+    for (int i {0}; i < numBlenChs; ++i)
+    {
+        std::cout << "        Channel = " << i << ": Threshold channel = ";
+
+        blen_thrMap_t::const_iterator it = _blenThrMap.find(i);
+
+        if (it != _blenThrMap.end())
+            std::cout << unsigned((it->second)->getChannel()) << std::endl;
+        else
+            std::cout << "Not implemented" << std::endl;
     }
 }
