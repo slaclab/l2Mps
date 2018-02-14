@@ -20,7 +20,7 @@ const uint8_t numBpmChs = 4;
 // Channel to byte map: 
 //   - Fisrt index is the AMC number (0 or 1)
 //   - The second index is the channel (0=X, 1=Y, 2=Charge, 3=Radius)
-const uint8_t bpmChByteMap[2][4] = { {2, 4, 0, 6}, {3, 5, 1, 7} };
+const uint8_t bpmChByteMap[2][numBpmChs] = { {2, 4, 0, 6}, {3, 5, 1, 7} };
 
 class IMpsBpm;
 typedef boost::shared_ptr<IMpsBpm>  MpsBpm;

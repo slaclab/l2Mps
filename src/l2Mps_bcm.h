@@ -20,7 +20,7 @@ const uint8_t numBcmChs = 2;
 // Channel to byte map
 //   - The index is the AMC nuber (0 or 1)
 //   - The second index is the channel (0=BCM, 1=DIFF)
-const uint8_t bcmChByteMap[2][2] = { {0, 2}, {1, 3} };
+const uint8_t bcmChByteMap[2][numBcmChs] = { {0, 2}, {1, 3} };
 
 class IMpsBcm;
 typedef boost::shared_ptr<IMpsBcm> MpsBcm;
