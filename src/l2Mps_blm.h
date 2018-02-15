@@ -63,12 +63,6 @@ struct blmThr_channel_t
     thr_table_t     thrTb;
 };
 
-// Function pointer data types
-typedef const uint32_t (IMpsBlm::*BlmR32_t)(const blmThr_channel_t&) const;
-typedef void (IMpsBlm::*BlmW32_t)(const blmThr_channel_t&, const uint32_t) const;
-typedef const bool (IMpsBlm::*BlmR1_t)(const blmThr_channel_t&) const;
-typedef void (IMpsBlm::*BlmW1_t)(const blmThr_channel_t&, const bool) const;
-
 class IMpsBlm
 {
 public:

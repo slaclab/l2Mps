@@ -38,12 +38,6 @@ struct bcmThr_channel_t
 // Callback function pointer
 typedef void (*bcm_cb_func_t)(int, bcm_dataMap_t);
 
-// Function pointer data typed
-typedef const uint32_t (IMpsBcm::*BcmR32_t)(const bcmThr_channel_t&) const;
-typedef void (IMpsBcm::*BcmW32_t)(const bcmThr_channel_t&, const uint32_t) const;
-typedef const bool (IMpsBcm::*BcmR1_t)(const bcmThr_channel_t&) const;
-typedef void (IMpsBcm::*BcmW1_t)(const bcmThr_channel_t&, const bool) const;
-
 class IMpsBcm
 {
 public:

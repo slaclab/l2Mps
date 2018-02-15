@@ -38,12 +38,6 @@ struct bpmThr_channel_t
 // Callback function pointer
 typedef void (*bpm_cb_func_t)(int, bpm_dataMap_t);
 
-// Function pointer data types
-typedef const uint32_t (IMpsBpm::*BpmR32_t)(const bpmThr_channel_t&) const;
-typedef void (IMpsBpm::*BpmW32_t)(const bpmThr_channel_t&, const uint32_t) const;
-typedef const bool (IMpsBpm::*BpmR1_t)(const bpmThr_channel_t&) const;
-typedef void (IMpsBpm::*BpmW1_t)(const bpmThr_channel_t&, const bool) const;
-
 class IMpsBpm
 {
 public:
