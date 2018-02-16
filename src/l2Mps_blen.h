@@ -12,7 +12,7 @@
 #include <boost/shared_ptr.hpp>
 #include <cpsw_api_user.h>
 
-#include "l2Mps_thr.h"
+#include "l2Mps_base.h"
 
 
 //Number of Threshold channels for BLEN is 1 pre bay
@@ -30,70 +30,16 @@ typedef boost::shared_ptr<IMpsBlen> MpsBlen;
 typedef int                                  blen_channel_t;
 typedef std::map<blen_channel_t, thr_ch_t>   blen_dataMap_t;
 typedef std::map<blen_channel_t, ThrChannel> blen_thrMap_t;
+typedef appThr_channel_t<blen_channel_t>     blenThr_channel_t;
 
-struct blenThr_channel_t 
-{
-    blen_channel_t   blenCh;
-    thr_table_t     thrTb;
-};
-
-// Callback function pointer
-typedef void (*blen_cb_func_t)(int, blen_dataMap_t);
-
-class IMpsBlen
+class IMpsBlen : public IMpsAppBase<blen_channel_t> 
 {
 public:
     IMpsBlen(Path mpsRoot, uint8_t amc);
     ~IMpsBlen();
 
-    // Threhold channel information
-    uint32_t const  getChannel          ( const blen_channel_t& ch) const { return findThrChannel(ch)->getChannel();     };
-    bool     const  getIdleEn           ( const blen_channel_t& ch) const { return findThrChannel(ch)->getIdleEn();      };
-    bool     const  getAltEn            ( const blen_channel_t& ch) const { return findThrChannel(ch)->getAltEn();       };
-    bool     const  getLcls1En          ( const blen_channel_t& ch) const { return findThrChannel(ch)->getLcls1En();     };
-    uint32_t const  getByteMap          ( const blen_channel_t& ch) const { return findThrChannel(ch)->getByteMap();     };
-    uint32_t const  getThrCount         ( const blen_channel_t& ch) const { return findThrChannel(ch)->getThrCount();    };
+    virtual void printChInfo(void) const;
 
-
-    // Threshold set enable methods
-    void            setThresholdMinEn   ( const blenThr_channel_t& ch, const bool val) const { findThrChannel(ch.blenCh)->setThresholdMinEn(ch.thrTb, val); };
-    void            setThresholdMaxEn   ( const blenThr_channel_t& ch, const bool val) const { findThrChannel(ch.blenCh)->setThresholdMaxEn(ch.thrTb, val); };
-
-    // Threshold get enable methods
-    const bool      getThresholdMinEn   ( const blenThr_channel_t& ch) const { return findThrChannel(ch.blenCh)->getThresholdMinEn(ch.thrTb); };
-    const bool      getThresholdMaxEn   ( const blenThr_channel_t& ch) const { return findThrChannel(ch.blenCh)->getThresholdMaxEn(ch.thrTb); };
-
-    // Threshold set methods
-    void            setThresholdMin     ( const blenThr_channel_t& ch, const float val) const { findThrChannel(ch.blenCh)->setThresholdMin(ch.thrTb, val); };
-    void            setThresholdMax     ( const blenThr_channel_t& ch, const float val) const { findThrChannel(ch.blenCh)->setThresholdMax(ch.thrTb, val); };
-       
-    // Threshold get methods
-    const float     getThresholdMin     ( const blenThr_channel_t& ch) const { return findThrChannel(ch.blenCh)->getThresholdMin(ch.thrTb); };
-    const float     getThresholdMax     ( const blenThr_channel_t& ch) const { return findThrChannel(ch.blenCh)->getThresholdMax(ch.thrTb); };
-
-    // Scale factors set/get methods for thresholds 
-    void            setScaleFactor      ( const blen_channel_t& ch, const float sf) const { findThrChannel(ch)->setScaleFactor(sf);          };
-    const float     getScaleFactor      ( const blen_channel_t& ch) const                 { return findThrChannel(ch)->getScaleFactor();     };
-
-    // Set polling thread with callback function
-    const void      startPollThread     ( unsigned int poll, blen_cb_func_t callBack );
-
-    // Find ThrChannel in the BLEN-ThrChannel map
-    ThrChannel      findThrChannel(const blen_channel_t& blenCh) const;
-
-    // Print BLEN channel information
-    void            printChInfo     ( void ) const;
-
-private:
-    blen_thrMap_t    _blenThrMap;
-    uint8_t         _amc;
-    unsigned int    _poll;
-    blen_cb_func_t   _blenCB;
-    pthread_t       _scanThread;
-
-    // Polling functions
-    void        pollThread();
-    static void *createThread(void* p) { static_cast<IMpsBlen*>(p)->pollThread(); return NULL; };
 };
 
 class MpsBlenFactory

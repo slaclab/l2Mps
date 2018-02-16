@@ -119,7 +119,7 @@ int main(int argc, char **argv)
                     std::cout << "    ==========================================" << std::endl;
 
                     blenThr_channel_t blenThrCh;
-                    blenThrCh.blenCh = blenCh;
+                    blenThrCh.appCh = blenCh;
                     
                     try
                     {

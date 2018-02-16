@@ -119,7 +119,7 @@ int main(int argc, char **argv)
                     std::cout << "    ==========================================" << std::endl;
 
                     bpmThr_channel_t bpmThrCh;
-                    bpmThrCh.bpmCh = bpmCh;
+                    bpmThrCh.appCh = bpmCh;
                     
                     try
                     {

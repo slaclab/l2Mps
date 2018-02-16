@@ -121,7 +121,7 @@ int main(int argc, char **argv)
                         std::cout << "    ==========================================" << std::endl;
 
                         blmThr_channel_t blmThrCh;
-                        blmThrCh.blmCh = blmCh;
+                        blmThrCh.appCh = blmCh;
                         
                         try
                         {

@@ -14,7 +14,7 @@
 #include <boost/shared_ptr.hpp>
 #include <cpsw_api_user.h>
 
-#include "l2Mps_base.h"
+#include "l2Mps_common.h"
 
 class IThrChannel;
 

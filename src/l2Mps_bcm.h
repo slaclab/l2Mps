@@ -12,7 +12,7 @@
 #include <boost/shared_ptr.hpp>
 #include <cpsw_api_user.h>
 
-#include "l2Mps_thr.h"
+#include "l2Mps_base.h"
 
 //Number of Threshold channels for BCM is 1 per bay: BCM, DIFF
 const uint8_t numBcmChs = 2;
@@ -29,70 +29,17 @@ typedef boost::shared_ptr<IMpsBcm> MpsBcm;
 typedef int                                 bcm_channel_t;
 typedef std::map<bcm_channel_t, thr_ch_t>   bcm_dataMap_t;
 typedef std::map<bcm_channel_t, ThrChannel> bcm_thrMap_t;
-struct bcmThr_channel_t 
-{
-    bcm_channel_t   bcmCh;
-    thr_table_t     thrTb;
-};
+typedef appThr_channel_t<bcm_channel_t>     bcmThr_channel_t;
 
-// Callback function pointer
-typedef void (*bcm_cb_func_t)(int, bcm_dataMap_t);
 
-class IMpsBcm
+class IMpsBcm : public IMpsAppBase<bcm_channel_t>
 {
 public:
     // Constructor
     IMpsBcm(Path mpsRoot, const uint8_t amc);
     ~IMpsBcm();
 
-    // Threhold channel information
-    uint32_t const  getChannel          ( const bcm_channel_t& ch) const { return findThrChannel(ch)->getChannel();     };
-    bool     const  getIdleEn           ( const bcm_channel_t& ch) const { return findThrChannel(ch)->getIdleEn();      };
-    bool     const  getAltEn            ( const bcm_channel_t& ch) const { return findThrChannel(ch)->getAltEn();       };
-    bool     const  getLcls1En          ( const bcm_channel_t& ch) const { return findThrChannel(ch)->getLcls1En();     };
-    uint32_t const  getByteMap          ( const bcm_channel_t& ch) const { return findThrChannel(ch)->getByteMap();     };
-    uint32_t const  getThrCount         ( const bcm_channel_t& ch) const { return findThrChannel(ch)->getThrCount();    };
-
-
-    // Threshold set enable methods
-    void            setThresholdMinEn   ( const bcmThr_channel_t& ch, const bool val) const { findThrChannel(ch.bcmCh)->setThresholdMinEn(ch.thrTb, val); };
-    void            setThresholdMaxEn   ( const bcmThr_channel_t& ch, const bool val) const { findThrChannel(ch.bcmCh)->setThresholdMaxEn(ch.thrTb, val); };
-
-    // Threshold get enable methods
-    const bool      getThresholdMinEn   ( const bcmThr_channel_t& ch) const { return findThrChannel(ch.bcmCh)->getThresholdMinEn(ch.thrTb); };
-    const bool      getThresholdMaxEn   ( const bcmThr_channel_t& ch) const { return findThrChannel(ch.bcmCh)->getThresholdMaxEn(ch.thrTb); };
-
-    // Threshold set methods
-    void            setThresholdMin     ( const bcmThr_channel_t& ch, const float val) const { findThrChannel(ch.bcmCh)->setThresholdMin(ch.thrTb, val); };
-    void            setThresholdMax     ( const bcmThr_channel_t& ch, const float val) const { findThrChannel(ch.bcmCh)->setThresholdMax(ch.thrTb, val); };
-       
-    // Threshold get methods
-    const float     getThresholdMin     ( const bcmThr_channel_t& ch) const { return findThrChannel(ch.bcmCh)->getThresholdMin(ch.thrTb); };
-    const float     getThresholdMax     ( const bcmThr_channel_t& ch) const { return findThrChannel(ch.bcmCh)->getThresholdMax(ch.thrTb); };
-
-    // Scale factors set/get methods for thresholds 
-    void            setScaleFactor      ( const bcm_channel_t& ch, const float sf) const { findThrChannel(ch)->setScaleFactor(sf);          };
-    const float     getScaleFactor      ( const bcm_channel_t& ch) const                 { return findThrChannel(ch)->getScaleFactor();     };
-
-    // Set polling thread with callback function
-    const void      startPollThread     ( unsigned int poll, bcm_cb_func_t callBack );
-
-    // Find ThrChannel in the BCM-ThrChannel map
-    ThrChannel      findThrChannel(const bcm_channel_t& bcmCh) const;
-
-    // Print BCM channel information
-    void            printChInfo     ( void ) const;
-
-private:
-    bcm_thrMap_t    _bcmThrMap;
-    uint8_t         _amc;
-    unsigned int    _poll;
-    bcm_cb_func_t   _bcmCB;
-    pthread_t       _scanThread;
-
-    // Polling functions
-    void        pollThread();
-    static void *createThread(void* p) { static_cast<IMpsBcm*>(p)->pollThread(); return NULL; };
+    virtual void printChInfo(void) const;   
 };
 
 class MpsBcmFactory

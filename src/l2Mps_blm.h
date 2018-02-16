@@ -13,7 +13,7 @@
 #include <cpsw_api_user.h>
 #include <pthread.h>
 
-#include "l2Mps_thr.h"
+#include "l2Mps_base.h"
 
 // Number of Channel for BLM is 3 (per AMC)
 const uint8_t numBlmChs = 3;
@@ -51,74 +51,22 @@ const uint8_t blmChByteMap[2][numBlmChs][numBlmIntChs] =
 class IMpsBlm;
 typedef boost::shared_ptr<IMpsBlm> MpsBlm;
 
+// BLM data types
 typedef std::array<int,2>                   blm_channel_t;
 typedef std::map<blm_channel_t, thr_ch_t>   blm_dataMap_t;
 typedef std::map<blm_channel_t, ThrChannel> blm_thrMap_t;
+typedef appThr_channel_t<blm_channel_t>     blmThr_channel_t;
 
-struct blmThr_channel_t 
-{
-    blm_channel_t   blmCh;
-    thr_table_t     thrTb;
-};
 
-// Callback function pointer
-typedef void (*p_func_t)(int, blm_dataMap_t);
-
-class IMpsBlm
+class IMpsBlm : public IMpsAppBase<blm_channel_t> 
 {
 public:
     IMpsBlm(Path mpsRoot, const uint8_t amc);
     ~IMpsBlm();
 
-    // Threhold channel information
-    uint32_t const  getChannel          ( const blm_channel_t& ch) const { return findThrChannel(ch)->getChannel();     };
-    bool     const  getIdleEn           ( const blm_channel_t& ch) const { return findThrChannel(ch)->getIdleEn();      };
-    bool     const  getAltEn            ( const blm_channel_t& ch) const { return findThrChannel(ch)->getAltEn();       };
-    bool     const  getLcls1En          ( const blm_channel_t& ch) const { return findThrChannel(ch)->getLcls1En();     };
-    uint32_t const  getByteMap          ( const blm_channel_t& ch) const { return findThrChannel(ch)->getByteMap();     };
-    uint32_t const  getThrCount         ( const blm_channel_t& ch) const { return findThrChannel(ch)->getThrCount();    };
-
-
-    // Threshold set enable methods
-    void            setThresholdMinEn   ( const blmThr_channel_t& ch, const bool val) const { findThrChannel(ch.blmCh)->setThresholdMinEn(ch.thrTb, val); };
-    void            setThresholdMaxEn   ( const blmThr_channel_t& ch, const bool val) const { findThrChannel(ch.blmCh)->setThresholdMaxEn(ch.thrTb, val); };
-
-    // Threshold get enable methods
-    const bool      getThresholdMinEn   ( const blmThr_channel_t& ch) const { return findThrChannel(ch.blmCh)->getThresholdMinEn(ch.thrTb); };
-    const bool      getThresholdMaxEn   ( const blmThr_channel_t& ch) const { return findThrChannel(ch.blmCh)->getThresholdMaxEn(ch.thrTb); };
-
-    // Threshold set methods
-    void            setThresholdMin     ( const blmThr_channel_t& ch, const float val) const { findThrChannel(ch.blmCh)->setThresholdMin(ch.thrTb, val); };
-    void            setThresholdMax     ( const blmThr_channel_t& ch, const float val) const { findThrChannel(ch.blmCh)->setThresholdMax(ch.thrTb, val); };
-       
-    // Threshold get methods
-    const float     getThresholdMin     ( const blmThr_channel_t& ch) const { return findThrChannel(ch.blmCh)->getThresholdMin(ch.thrTb); };
-    const float     getThresholdMax     ( const blmThr_channel_t& ch) const { return findThrChannel(ch.blmCh)->getThresholdMax(ch.thrTb); };
-
-    // Scale factors set/get methods for thresholds 
-    void            setScaleFactor      ( const blm_channel_t& ch, const float sf) const { findThrChannel(ch)->setScaleFactor(sf);          };
-    const float     getScaleFactor      ( const blm_channel_t& ch) const                 { return findThrChannel(ch)->getScaleFactor();     };
-
-    // Set polling thread with callback function
-    const void      startPollThread     ( unsigned int poll, p_func_t callBack );
-
-    // Find ThrChannel in the Blm-ThrChannel map
-    ThrChannel      findThrChannel(const blm_channel_t& blmCh) const;
-
-    // Print BLM channel information
-    void            printChInfo     ( void ) const;
-
-private:
-    blm_thrMap_t    _blmThrMap;
-    uint8_t         _amc;
-    unsigned int    _poll;
-    p_func_t        _blmCB;
-    pthread_t       _scanThread;
-
-    // Polling functions
-    void        pollThread();
-    static void *createThread(void* p) { static_cast<IMpsBlm*>(p)->pollThread(); return NULL; };
+    virtual void printChInfo(void) const;
 };
+
 
 class MpsBlmFactory
 {

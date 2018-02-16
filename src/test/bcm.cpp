@@ -119,7 +119,7 @@ int main(int argc, char **argv)
                     std::cout << "    ==========================================" << std::endl;
 
                     bcmThr_channel_t bcmThrCh;
-                    bcmThrCh.bcmCh = bcmCh;
+                    bcmThrCh.appCh = bcmCh;
                     
                     try
                     {
