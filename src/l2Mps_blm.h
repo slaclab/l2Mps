@@ -94,6 +94,10 @@ public:
     const uint32_t  getThresholdMin     ( const blmThr_channel_t& ch) const { return findThrChannel(ch.blmCh)->getThresholdMin(ch.thrTb); };
     const uint32_t  getThresholdMax     ( const blmThr_channel_t& ch) const { return findThrChannel(ch.blmCh)->getThresholdMax(ch.thrTb); };
 
+    // Scale factors set/get methods for thresholds 
+    void            setScaleFactor      ( const blm_channel_t& ch, const float sf) const { findThrChannel(ch)->setScaleFactor(sf);          };
+    const float     getScaleFactor      ( const blm_channel_t& ch) const            { return findThrChannel(ch)->getScaleFactor();     };
+
     // Set polling thread with callback function
     const void      startPollThread     ( unsigned int poll, p_func_t callBack );
 
@@ -113,8 +117,6 @@ private:
     // Polling functions
     void        pollThread();
     static void *createThread(void* p) { static_cast<IMpsBlm*>(p)->pollThread(); return NULL; };
-
-
 };
 
 class MpsBlmFactory
