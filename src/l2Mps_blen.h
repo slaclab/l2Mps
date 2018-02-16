@@ -30,6 +30,7 @@ typedef boost::shared_ptr<IMpsBlen> MpsBlen;
 typedef int                                  blen_channel_t;
 typedef std::map<blen_channel_t, thr_ch_t>   blen_dataMap_t;
 typedef std::map<blen_channel_t, ThrChannel> blen_thrMap_t;
+
 struct blenThr_channel_t 
 {
     blen_channel_t   blenCh;
@@ -63,12 +64,12 @@ public:
     const bool      getThresholdMaxEn   ( const blenThr_channel_t& ch) const { return findThrChannel(ch.blenCh)->getThresholdMaxEn(ch.thrTb); };
 
     // Threshold set methods
-    void            setThresholdMin     ( const blenThr_channel_t& ch, const uint32_t val) const { findThrChannel(ch.blenCh)->setThresholdMin(ch.thrTb, val); };
-    void            setThresholdMax     ( const blenThr_channel_t& ch, const uint32_t val) const { findThrChannel(ch.blenCh)->setThresholdMax(ch.thrTb, val); };
+    void            setThresholdMin     ( const blenThr_channel_t& ch, const float val) const { findThrChannel(ch.blenCh)->setThresholdMin(ch.thrTb, val); };
+    void            setThresholdMax     ( const blenThr_channel_t& ch, const float val) const { findThrChannel(ch.blenCh)->setThresholdMax(ch.thrTb, val); };
        
     // Threshold get methods
-    const uint32_t  getThresholdMin     ( const blenThr_channel_t& ch) const { return findThrChannel(ch.blenCh)->getThresholdMin(ch.thrTb); };
-    const uint32_t  getThresholdMax     ( const blenThr_channel_t& ch) const { return findThrChannel(ch.blenCh)->getThresholdMax(ch.thrTb); };
+    const float     getThresholdMin     ( const blenThr_channel_t& ch) const { return findThrChannel(ch.blenCh)->getThresholdMin(ch.thrTb); };
+    const float     getThresholdMax     ( const blenThr_channel_t& ch) const { return findThrChannel(ch.blenCh)->getThresholdMax(ch.thrTb); };
 
     // Set polling thread with callback function
     const void      startPollThread     ( unsigned int poll, blen_cb_func_t callBack );
