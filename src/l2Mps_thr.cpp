@@ -323,14 +323,14 @@ void IThrChannel::setThresholdMaxEn(thr_table_t ch, const bool val) const
         throw std::runtime_error("Threshold not defined\n");
 }
 
-// Set scale factor
+// Set the scale factor
 void IThrChannel::setScaleFactor(const float sf)
 { 
     if (sf != 0)
         scaleFactor = sf;    
 }
 
-// Get scale factor
+// Get the scale factor
 const float IThrChannel::getScaleFactor() const
 { 
     return scaleFactor;   
