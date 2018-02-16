@@ -71,6 +71,10 @@ public:
     const float     getThresholdMin     ( const blenThr_channel_t& ch) const { return findThrChannel(ch.blenCh)->getThresholdMin(ch.thrTb); };
     const float     getThresholdMax     ( const blenThr_channel_t& ch) const { return findThrChannel(ch.blenCh)->getThresholdMax(ch.thrTb); };
 
+    // Scale factors set/get methods for thresholds 
+    void            setScaleFactor      ( const blen_channel_t& ch, const float sf) const { findThrChannel(ch)->setScaleFactor(sf);          };
+    const float     getScaleFactor      ( const blen_channel_t& ch) const                 { return findThrChannel(ch)->getScaleFactor();     };
+
     // Set polling thread with callback function
     const void      startPollThread     ( unsigned int poll, blen_cb_func_t callBack );
 
