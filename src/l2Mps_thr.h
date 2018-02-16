@@ -33,10 +33,10 @@ typedef std::array<int, 2>                          thr_table_t;
 // Threshold table data
 struct thr_tableData_t
 {
-    bool minEn;
-    bool maxEn;
-    int  min;
-    int  max;
+    bool    minEn;
+    bool    maxEn;
+    float   min;
+    float   max;
 };
 
 // Threshold table data map
@@ -123,16 +123,16 @@ public:
 
     
     // Read threshold register
-    const uint32_t getThresholdMin(thr_table_t ch) const;
-    const uint32_t getThresholdMax(thr_table_t ch) const;
+    const float getThresholdMin(thr_table_t ch) const;
+    const float getThresholdMax(thr_table_t ch) const;
 
     // Read threshold enable register
     const bool getThresholdMinEn(thr_table_t ch) const;
     const bool getThresholdMaxEn(thr_table_t ch) const;
 
     // Write threshold registers
-    void setThresholdMin(thr_table_t ch, const uint32_t val) const;
-    void setThresholdMax(thr_table_t ch, const uint32_t val) const;
+    void setThresholdMin(thr_table_t ch, const float val) const;
+    void setThresholdMax(thr_table_t ch, const float val) const;
 
     // Write threshold enable register
     void setThresholdMinEn(thr_table_t ch, const bool val) const;
