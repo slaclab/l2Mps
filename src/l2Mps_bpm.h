@@ -70,6 +70,10 @@ public:
     const float     getThresholdMin     ( const bpmThr_channel_t& ch) const { return findThrChannel(ch.bpmCh)->getThresholdMin(ch.thrTb); };
     const float     getThresholdMax     ( const bpmThr_channel_t& ch) const { return findThrChannel(ch.bpmCh)->getThresholdMax(ch.thrTb); };
 
+    // Scale factors set/get methods for thresholds 
+    void            setScaleFactor      ( const bpm_channel_t& ch, const float sf) const { findThrChannel(ch)->setScaleFactor(sf);          };
+    const float     getScaleFactor      ( const bpm_channel_t& ch) const                 { return findThrChannel(ch)->getScaleFactor();     };
+
     // Set polling thread with callback function
     const void      startPollThread     ( unsigned int poll, bpm_cb_func_t callBack );
 
