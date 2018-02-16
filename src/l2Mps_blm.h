@@ -55,13 +55,14 @@ typedef std::array<int,2>                   blm_channel_t;
 typedef std::map<blm_channel_t, thr_ch_t>   blm_dataMap_t;
 typedef std::map<blm_channel_t, ThrChannel> blm_thrMap_t;
 
-typedef void (*p_func_t)(int, blm_dataMap_t);
-
 struct blmThr_channel_t 
 {
     blm_channel_t   blmCh;
     thr_table_t     thrTb;
 };
+
+// Callback function pointer
+typedef void (*p_func_t)(int, blm_dataMap_t);
 
 class IMpsBlm
 {
