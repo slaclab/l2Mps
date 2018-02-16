@@ -63,12 +63,12 @@ public:
     const bool      getThresholdMaxEn   ( const bcmThr_channel_t& ch) const { return findThrChannel(ch.bcmCh)->getThresholdMaxEn(ch.thrTb); };
 
     // Threshold set methods
-    void            setThresholdMin     ( const bcmThr_channel_t& ch, const uint32_t val) const { findThrChannel(ch.bcmCh)->setThresholdMin(ch.thrTb, val); };
-    void            setThresholdMax     ( const bcmThr_channel_t& ch, const uint32_t val) const { findThrChannel(ch.bcmCh)->setThresholdMax(ch.thrTb, val); };
+    void            setThresholdMin     ( const bcmThr_channel_t& ch, const float val) const { findThrChannel(ch.bcmCh)->setThresholdMin(ch.thrTb, val); };
+    void            setThresholdMax     ( const bcmThr_channel_t& ch, const float val) const { findThrChannel(ch.bcmCh)->setThresholdMax(ch.thrTb, val); };
        
     // Threshold get methods
-    const uint32_t  getThresholdMin     ( const bcmThr_channel_t& ch) const { return findThrChannel(ch.bcmCh)->getThresholdMin(ch.thrTb); };
-    const uint32_t  getThresholdMax     ( const bcmThr_channel_t& ch) const { return findThrChannel(ch.bcmCh)->getThresholdMax(ch.thrTb); };
+    const float     getThresholdMin     ( const bcmThr_channel_t& ch) const { return findThrChannel(ch.bcmCh)->getThresholdMin(ch.thrTb); };
+    const float     getThresholdMax     ( const bcmThr_channel_t& ch) const { return findThrChannel(ch.bcmCh)->getThresholdMax(ch.thrTb); };
 
     // Set polling thread with callback function
     const void      startPollThread     ( unsigned int poll, bcm_cb_func_t callBack );
