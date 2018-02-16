@@ -18,7 +18,7 @@
 
 class IThrChannel;
 
-typedef boost::shared_ptr<const IThrChannel>    ThrChannel;
+typedef boost::shared_ptr<IThrChannel>    ThrChannel;
 
 // Threshod table arrays:
 //   - Indexes:
@@ -138,16 +138,20 @@ public:
     void setThresholdMinEn(thr_table_t ch, const bool val) const;
     void setThresholdMaxEn(thr_table_t ch, const bool val) const;
 
+    // Set/get scale factor
+    void        setScaleFactor(const float sf);       
+    const float getScaleFactor() const;
+
     void readAll(thr_ch_t& data) const;
     void readThrChInfo(thr_chInfoData_t& info) const;
     void readThrChData(thr_chData_t& data) const;
 
 
 private:
-    
     Path            _chRoot;        // Root path to the channel register space
     int             ch;             // Threhold channel number
     thr_scalval_t   thrScalvals;    // Threshold scalval interfaces
+    float           scaleFactor;    // Scale factor (egu/raw)
 };
 
 // Factory class

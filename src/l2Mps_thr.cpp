@@ -1,6 +1,6 @@
 #include "l2Mps_thr.h"
 
-IThrChannel::IThrChannel(Path mpsRoot, uint8_t channel)
+IThrChannel::IThrChannel(Path mpsRoot, uint8_t channel) : scaleFactor(1.0)
 {
     if (channel > maxChannelCount)
     {
@@ -138,10 +138,10 @@ void IThrChannel::readThrChData(thr_chData_t& data) const
         tableData.maxEn = reg?true:false;
         
         (it->second).min->getVal(&reg);
-        tableData.min = reg;
+        tableData.min = (uint32_t)(reg*scaleFactor);
 
         (it->second).max->getVal(&reg);
-        tableData.max = reg;
+        tableData.max = (uint32_t)(reg*scaleFactor);
 
         data.insert( std::make_pair(it->first, tableData) );
     }
@@ -221,7 +221,8 @@ const uint32_t IThrChannel::getThresholdMin(thr_table_t ch) const
     {
         uint32_t reg;
         (it->second).min->getVal(&reg, 1);
-        return reg;
+        float scaledVal = reg * scaleFactor;
+        return (uint32_t)scaledVal;
     }
     else
         throw std::runtime_error("Threshold not defined\n");
@@ -235,7 +236,8 @@ const uint32_t IThrChannel::getThresholdMax(thr_table_t ch) const
     {
         uint32_t reg;
         (it->second).max->getVal(&reg, 1);
-        return reg;
+        float scaledVal = reg * scaleFactor;
+        return (uint32_t) scaledVal;
     }
     else
         throw std::runtime_error("Threshold not defined\n");
@@ -277,7 +279,8 @@ void IThrChannel::setThresholdMin(thr_table_t ch, const uint32_t val) const
     it = thrScalvals.data.find(ch);
     if (it != thrScalvals.data.end())
     {
-        (it->second).min->setVal(val);
+        uint32_t scaledVal = (uint32_t)(val/scaleFactor);
+        (it->second).min->setVal(scaledVal);
     }
     else
         throw std::runtime_error("Threshold not defined\n");
@@ -289,7 +292,8 @@ void IThrChannel::setThresholdMax(thr_table_t ch, const uint32_t val) const
     it = thrScalvals.data.find(ch);
     if (it != thrScalvals.data.end())
     {
-        (it->second).max->setVal(val);
+        uint32_t scaledVal = (uint32_t)(val/scaleFactor);
+        (it->second).max->setVal(scaledVal);
     }
     else
         throw std::runtime_error("Threshold not defined\n");
@@ -317,4 +321,17 @@ void IThrChannel::setThresholdMaxEn(thr_table_t ch, const bool val) const
     }
     else
         throw std::runtime_error("Threshold not defined\n");
+}
+
+// Set scale factor
+void IThrChannel::setScaleFactor(const float sf)
+{ 
+    if (sf != 0)
+        scaleFactor = sf;    
+}
+
+// Get scale factor
+const float IThrChannel::getScaleFactor() const
+{ 
+    return scaleFactor;   
 }
