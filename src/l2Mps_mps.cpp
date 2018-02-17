@@ -5,25 +5,66 @@ IMpsNode::IMpsNode(Path mpsRoot) :
     _mpsRoot             ( mpsRoot->clone())
 
 {
-    // MPS Base interfaces
-    _mpsAppId            = IMpsBase::createInterface<ScalVal>(    _mpsRoot, MpsBaseModuleName + "/mpsAppId");
-    _mpsEnable           = IMpsBase::createInterface<ScalVal>(    _mpsRoot, MpsBaseModuleName + "/mpsEnable");
-    _lcls1Mode           = IMpsBase::createInterface<ScalVal>(    _mpsRoot, MpsBaseModuleName + "/lcls1Mode");
-    _byteCount           = IMpsBase::createInterface<ScalVal_RO>( _mpsRoot, MpsBaseModuleName + "/byteCount");
-    _digitalEn           = IMpsBase::createInterface<ScalVal_RO>( _mpsRoot, MpsBaseModuleName + "/digitalEn");
-    _beamDestMask        = IMpsBase::createInterface<ScalVal>(    _mpsRoot, MpsBaseModuleName + "/beamDestMask");
-    _altDestMask         = IMpsBase::createInterface<ScalVal>(    _mpsRoot, MpsBaseModuleName + "/altDestMask");
-    _mpsMsgCnt           = IMpsBase::createInterface<ScalVal_RO>( _mpsRoot, MpsBaseModuleName + "/mpsMsgCount");
-    _mpsLastMsgAppId     = IMpsBase::createInterface<ScalVal_RO>( _mpsRoot, MpsBaseModuleName + "/lastMsgAppId");
-    _mpsLastMsgLcls      = IMpsBase::createInterface<ScalVal_RO>( _mpsRoot, MpsBaseModuleName + "/lastMsgLcls");
-    _mpsLastMsgTimestamp = IMpsBase::createInterface<ScalVal_RO>( _mpsRoot, MpsBaseModuleName + "/lastMsgTimeStamp");
-    _mpsLastMsgByte      = IMpsBase::createInterface<ScalVal_RO>( _mpsRoot, MpsBaseModuleName + "/lastMsgByte");
+    // // MPS Base interfaces
+    // _mpsAppId            = IMpsBase::createInterface<ScalVal>(    _mpsRoot, MpsBaseModuleName + "/mpsAppId");
+    // _mpsEnable           = IMpsBase::createInterface<ScalVal>(    _mpsRoot, MpsBaseModuleName + "/mpsEnable");
+    // _lcls1Mode           = IMpsBase::createInterface<ScalVal>(    _mpsRoot, MpsBaseModuleName + "/lcls1Mode");
+    // _byteCount           = IMpsBase::createInterface<ScalVal_RO>( _mpsRoot, MpsBaseModuleName + "/byteCount");
+    // _digitalEn           = IMpsBase::createInterface<ScalVal_RO>( _mpsRoot, MpsBaseModuleName + "/digitalEn");
+    // _beamDestMask        = IMpsBase::createInterface<ScalVal>(    _mpsRoot, MpsBaseModuleName + "/beamDestMask");
+    // _altDestMask         = IMpsBase::createInterface<ScalVal>(    _mpsRoot, MpsBaseModuleName + "/altDestMask");
+    // _mpsMsgCnt           = IMpsBase::createInterface<ScalVal_RO>( _mpsRoot, MpsBaseModuleName + "/mpsMsgCount");
+    // _mpsLastMsgAppId     = IMpsBase::createInterface<ScalVal_RO>( _mpsRoot, MpsBaseModuleName + "/lastMsgAppId");
+    // _mpsLastMsgLcls      = IMpsBase::createInterface<ScalVal_RO>( _mpsRoot, MpsBaseModuleName + "/lastMsgLcls");
+    // _mpsLastMsgTimestamp = IMpsBase::createInterface<ScalVal_RO>( _mpsRoot, MpsBaseModuleName + "/lastMsgTimeStamp");
+    // _mpsLastMsgByte      = IMpsBase::createInterface<ScalVal_RO>( _mpsRoot, MpsBaseModuleName + "/lastMsgByte");
 
-    if (_mpsLastMsgByte)
+    // if (_mpsLastMsgByte)
+    // {
+    //     try
+    //     {
+    //         _lastMsgByteSize = _mpsLastMsgByte->getNelms();
+    //     }
+    //     catch (CPSWError &e)
+    //     {
+    //         std::cout << "Couldn't read the number of elements from the last message: " << e.getInfo() << std::endl;
+    //     }
+    // }
+
+    // // MPS SALT interfaces
+    // _mpsTxLinkUpCnt      = IMpsBase::createInterface<ScalVal_RO>( _mpsRoot, MpsSaltModuleName + "/MpsTxLinkUpCnt");
+    // _mpsRxLinkUpCnt      = IMpsBase::createInterface<ScalVal_RO>( _mpsRoot, MpsSaltModuleName + "/MpsRxLinkUpCnt");
+    // _mpsTxLinkUP         = IMpsBase::createInterface<ScalVal_RO>( _mpsRoot, MpsSaltModuleName + "/MpsTxLinkUP");
+    // _mpsRxLinkUP         = IMpsBase::createInterface<ScalVal_RO>( _mpsRoot, MpsSaltModuleName + "/MpsRxLinkUP");
+    // _mpsSlotG            = IMpsBase::createInterface<ScalVal_RO>( _mpsRoot, MpsSaltModuleName + "/MPS_SLOT_G");
+    // _appTypeG            = IMpsBase::createInterface<ScalVal_RO>( _mpsRoot, MpsSaltModuleName + "/APP_TYPE_G");
+    // _mpsPllLocked        = IMpsBase::createInterface<ScalVal_RO>( _mpsRoot, MpsSaltModuleName + "/MpsPllLocked");
+    // _rollOverEn          = IMpsBase::createInterface<ScalVal>(    _mpsRoot, MpsSaltModuleName + "/RollOverEn");
+    // _mpsTxPktSentCnt     = IMpsBase::createInterface<ScalVal_RO>( _mpsRoot, MpsSaltModuleName + "/MpsTxPktSentCnt");
+    // _mpsRxPktRcvdSentCnt = IMpsBase::createInterface<ScalVal_RO>( _mpsRoot, MpsSaltModuleName + "/MpsRxPktRcvdCnt");
+    // _rstCnt              = IMpsBase::createInterface<Command>(    _mpsRoot, MpsSaltModuleName + "/RstCnt");
+    // _rstPll              = IMpsBase::createInterface<Command>(    _mpsRoot, MpsSaltModuleName + "/RstPll");
+
+    // MPS Base interfaces
+    scalvals.appId               = IMpsBase::createInterface<ScalVal>(    _mpsRoot, MpsBaseModuleName + "/mpsAppId");
+    scalvals.version             = IMpsBase::createInterface<ScalVal>(    _mpsRoot, MpsBaseModuleName + "/mpsVersion");
+    scalvals.enable              = IMpsBase::createInterface<ScalVal>(    _mpsRoot, MpsBaseModuleName + "/mpsEnable");
+    scalvals.lcls1Mode           = IMpsBase::createInterface<ScalVal>(    _mpsRoot, MpsBaseModuleName + "/lcls1Mode");
+    scalvals.byteCount           = IMpsBase::createInterface<ScalVal_RO>( _mpsRoot, MpsBaseModuleName + "/byteCount");
+    scalvals.digitalEn           = IMpsBase::createInterface<ScalVal_RO>( _mpsRoot, MpsBaseModuleName + "/digitalEn");
+    scalvals.beamDestMask        = IMpsBase::createInterface<ScalVal>(    _mpsRoot, MpsBaseModuleName + "/beamDestMask");
+    scalvals.altDestMask         = IMpsBase::createInterface<ScalVal>(    _mpsRoot, MpsBaseModuleName + "/altDestMask");
+    scalvals.msgCnt              = IMpsBase::createInterface<ScalVal_RO>( _mpsRoot, MpsBaseModuleName + "/mpsMsgCount");
+    scalvals.lastMsgAppId        = IMpsBase::createInterface<ScalVal_RO>( _mpsRoot, MpsBaseModuleName + "/lastMsgAppId");
+    scalvals.lastMsgLcls         = IMpsBase::createInterface<ScalVal_RO>( _mpsRoot, MpsBaseModuleName + "/lastMsgLcls");
+    scalvals.lastMsgTimestamp    = IMpsBase::createInterface<ScalVal_RO>( _mpsRoot, MpsBaseModuleName + "/lastMsgTimeStamp");
+    scalvals.lastMsgByte         = IMpsBase::createInterface<ScalVal_RO>( _mpsRoot, MpsBaseModuleName + "/lastMsgByte");
+
+    if (scalvals.lastMsgByte)
     {
         try
         {
-            _lastMsgByteSize = _mpsLastMsgByte->getNelms();
+            lastMsgByteSize = scalvals.lastMsgByte->getNelms();
         }
         catch (CPSWError &e)
         {
@@ -32,19 +73,46 @@ IMpsNode::IMpsNode(Path mpsRoot) :
     }
 
     // MPS SALT interfaces
-    _mpsTxLinkUpCnt      = IMpsBase::createInterface<ScalVal_RO>( _mpsRoot, MpsSaltModuleName + "/MpsTxLinkUpCnt");
-    _mpsRxLinkUpCnt      = IMpsBase::createInterface<ScalVal_RO>( _mpsRoot, MpsSaltModuleName + "/MpsRxLinkUpCnt");
-    _mpsTxLinkUP         = IMpsBase::createInterface<ScalVal_RO>( _mpsRoot, MpsSaltModuleName + "/MpsTxLinkUP");
-    _mpsRxLinkUP         = IMpsBase::createInterface<ScalVal_RO>( _mpsRoot, MpsSaltModuleName + "/MpsRxLinkUP");
-    _mpsSlotG            = IMpsBase::createInterface<ScalVal_RO>( _mpsRoot, MpsSaltModuleName + "/MPS_SLOT_G");
-    _appTypeG            = IMpsBase::createInterface<ScalVal_RO>( _mpsRoot, MpsSaltModuleName + "/APP_TYPE_G");
-    _mpsPllLocked        = IMpsBase::createInterface<ScalVal_RO>( _mpsRoot, MpsSaltModuleName + "/MpsPllLocked");
-    _rollOverEn          = IMpsBase::createInterface<ScalVal>(    _mpsRoot, MpsSaltModuleName + "/RollOverEn");
-    _mpsTxPktSentCnt     = IMpsBase::createInterface<ScalVal_RO>( _mpsRoot, MpsSaltModuleName + "/MpsTxPktSentCnt");
-    _mpsRxPktRcvdSentCnt = IMpsBase::createInterface<ScalVal_RO>( _mpsRoot, MpsSaltModuleName + "/MpsRxPktRcvdCnt");
-    _rstCnt              = IMpsBase::createInterface<Command>(    _mpsRoot, MpsSaltModuleName + "/RstCnt");
-    _rstPll              = IMpsBase::createInterface<Command>(    _mpsRoot, MpsSaltModuleName + "/RstPll");
-    
+    scalvals.txLinkUP        = IMpsBase::createInterface<ScalVal_RO>( _mpsRoot, MpsSaltModuleName + "/MpsTxLinkUP");
+    scalvals.txLinkUpCnt     = IMpsBase::createInterface<ScalVal_RO>( _mpsRoot, MpsSaltModuleName + "/MpsTxLinkUpCnt");
+    scalvals.rxLinkUP        = IMpsBase::createInterface<ScalVal_RO>( _mpsRoot, MpsSaltModuleName + "/MpsRxLinkUP");
+    scalvals.rxLinkUpCnt     = IMpsBase::createInterface<ScalVal_RO>( _mpsRoot, MpsSaltModuleName + "/MpsRxLinkUpCnt");
+    scalvals.mpsSlot         = IMpsBase::createInterface<ScalVal_RO>( _mpsRoot, MpsSaltModuleName + "/MPS_SLOT_G");
+    scalvals.appType         = IMpsBase::createInterface<ScalVal_RO>( _mpsRoot, MpsSaltModuleName + "/APP_TYPE_G");
+    scalvals.pllLocked       = IMpsBase::createInterface<ScalVal_RO>( _mpsRoot, MpsSaltModuleName + "/MpsPllLocked");
+    scalvals.rollOverEn      = IMpsBase::createInterface<ScalVal>(    _mpsRoot, MpsSaltModuleName + "/RollOverEn");
+    scalvals.txPktSentCnt    = IMpsBase::createInterface<ScalVal_RO>( _mpsRoot, MpsSaltModuleName + "/MpsTxPktSentCnt");
+    scalvals.rxPktRcvdCnt    = IMpsBase::createInterface<ScalVal_RO>( _mpsRoot, MpsSaltModuleName + "/MpsRxPktRcvdCnt");
+    scalvals.rstCnt          = IMpsBase::createInterface<Command>(    _mpsRoot, MpsSaltModuleName + "/RstCnt");
+    scalvals.rstPll          = IMpsBase::createInterface<Command>(    _mpsRoot, MpsSaltModuleName + "/RstPll");
+
+    if (scalvals.rxLinkUpCnt)
+    {
+        try
+        {
+            rxLinkUpCntSize = scalvals.rxLinkUpCnt->getNelms();
+        }
+        catch (CPSWError &e)
+        {
+            std::cout << "Couldn't read the number of RX link counters: " << e.getInfo() << std::endl;
+        }
+    }    
+
+    if (scalvals.rxPktRcvdCnt)
+    {
+        try
+        {
+            rxPktRcvdCntSize = scalvals.rxPktRcvdCnt->getNelms();
+        }
+        catch (CPSWError &e)
+        {
+            std::cout << "Couldn't read the number of RX packet counters: " << e.getInfo() << std::endl;
+        }
+    } 
+
+std::cout << "lastMsgByteSize " << lastMsgByteSize << std::endl;
+std::cout << "rxLinkUpCntSize " << rxLinkUpCntSize << std::endl;    
+std::cout << "rxPktRcvdCntSize " << rxPktRcvdCntSize << std::endl;
 }
 
 
@@ -53,123 +121,214 @@ IMpsNode::~IMpsNode()
     std::cout << "MPS node destroyed" << std::endl;
 }
 
+const void IMpsNode::readMpsInfo(mps_infoData_t& info) const
+{
+    scalvals.appId->getVal(             (uint16_t*)&info.appId              );
+    scalvals.version->getVal(           (uint8_t*)&info.version             );
+    scalvals.enable->getVal(            (uint8_t*)&info.enable              );
+    scalvals.lcls1Mode->getVal(         (uint8_t*)&info.lcls1Mode           );
+    scalvals.byteCount->getVal(         (uint8_t*)&info.byteCount          );
+    scalvals.digitalEn->getVal(         (uint8_t*)&info.digitalEn           );
+    scalvals.beamDestMask->getVal(      (uint16_t*)&info.beamDestMask       );
+    scalvals.altDestMask->getVal(       (uint16_t*)&info.altDestMask        );
+    scalvals.msgCnt->getVal(            (uint32_t*)&info.msgCnt             );
+    scalvals.lastMsgAppId->getVal(      (uint16_t*)&info.lastMsgAppId       );
+    scalvals.lastMsgLcls->getVal(       (uint8_t*)&info.lastMsgLcls         );
+    scalvals.lastMsgTimestamp->getVal(  (uint16_t*)&info.lastMsgTimestamp   );
+    
+    scalvals.txLinkUP->getVal(          (uint8_t*)&info.txLinkUP           );
+    scalvals.txLinkUpCnt->getVal(       (uint32_t*)&info.txLinkUpCnt        );
+    scalvals.rxLinkUP->getVal(          (uint32_t*)&info.rxLinkUP           );
+    scalvals.mpsSlot->getVal(           (uint8_t*)&info.mpsSlot            );
+    scalvals.pllLocked->getVal(         (uint8_t*)&info.pllLocked          );
+    scalvals.rollOverEn->getVal(        (uint16_t*)&info.rollOverEn         );
+    scalvals.txPktSentCnt->getVal(      (uint32_t*)&info.txPktSentCnt       );
+
+    uint8_t reg;
+    scalvals.appType->getVal(&reg);
+    std::map<int, std::string>::iterator it = appType.find(reg);
+    if (it != appType.end())
+        info.appType = it->second;
+    
+    if ((lastMsgByteSize > 0) && (scalvals.lastMsgByte))
+    {
+        info.lastMsgByte = (uint8_t*)malloc(lastMsgByteSize*sizeof(uint8_t));
+        scalvals.lastMsgByte->getVal((uint8_t*)info.lastMsgByte, lastMsgByteSize);
+        info.lastMsgByteSize = lastMsgByteSize;
+    }
+    else
+    {
+        info.lastMsgByteSize = 0;
+    }
+
+    if ((rxLinkUpCntSize > 0) && (scalvals.rxLinkUpCnt))
+    {
+        info.rxLinkUpCnt = (uint32_t*)malloc(rxLinkUpCntSize*sizeof(uint32_t));
+        scalvals.rxLinkUpCnt->getVal((uint32_t*)info.rxLinkUpCnt, rxLinkUpCntSize);
+        info.rxLinkUpCntSize = rxLinkUpCntSize;
+    }
+    else
+    {
+        info.rxLinkUpCntSize = 0;
+    }
+
+    if ((rxPktRcvdCntSize > 0) && (scalvals.rxPktRcvdCnt))
+    {
+        info.rxPktRcvdCnt = (uint32_t*)malloc(rxPktRcvdCntSize*sizeof(uint32_t));
+        scalvals.rxPktRcvdCnt->getVal((uint32_t*)info.rxPktRcvdCnt, rxPktRcvdCntSize);
+        info.rxPktRcvdCntSize = rxPktRcvdCntSize;
+    }
+    else
+    {
+        info.rxPktRcvdCntSize = 0;
+    }
+}
+
+const void IMpsNode::startPollThread(unsigned int poll, p_mpsCBFunc_t cbFunc)
+{
+    if (poll == 0)
+    {
+        std::cout << "Error creating poll thread: poll time must be greater than 0" << std::endl;
+        return;
+    }
+    pollCB  = poll;
+    mpsCB   = cbFunc;
+
+    std::cout << "  Starting MPS scan thread..." << std::endl;
+    pthread_create(&scanThread, NULL, createThread, this);
+    std::cout << "  MPS scan thread created succesfully." << std::endl;
+}
+
+
+
+void IMpsNode::pollThread()
+{
+    while(1)
+    {
+        mps_infoData_t info;
+        readMpsInfo(info);
+        mpsCB(info);
+        sleep(pollCB);
+    }
+}
+
 uint16_t const IMpsNode::getAppId(void) const
 {
-    if (!_mpsAppId)
+    if (!scalvals.appId)
         throw std::runtime_error("Register interface not implemented\n");
 
     uint32_t reg;
-    _mpsAppId->getVal(&reg);
+    scalvals.appId->getVal(&reg);
     return reg;
 }
 
 void IMpsNode::setAppId(const uint16_t id) const
 {
-    if (!_mpsAppId)
+    if (!scalvals.appId)
         throw std::runtime_error("Register interface not implemented\n");
 
-    _mpsAppId->setVal(id);
+    scalvals.appId->setVal(id);
 }
 
 bool const IMpsNode::getEnable() const
 {
-    if (!_mpsEnable)
+    if (!scalvals.enable)
         throw std::runtime_error("Register interface not implemented\n");
 
     uint8_t reg;
-    _mpsEnable->getVal(&reg);
+    scalvals.enable->getVal(&reg);
     return reg ? true : false;
 }
 
 void IMpsNode::setEnable(const bool en) const
 {
-    if (!_mpsEnable)
+    if (!scalvals.enable)
         throw std::runtime_error("Register interface not implemented\n");
 
-     _mpsEnable->setVal((uint8_t)en);
+     scalvals.enable->setVal((uint8_t)en);
 }
 
 bool const IMpsNode::getLcls1Mode(void) const
 { 
-    if (!_lcls1Mode)
+    if (!scalvals.lcls1Mode)
         throw std::runtime_error("Register interface not implemented\n");
 
     uint8_t reg;
-    _lcls1Mode->getVal(&reg);
+    scalvals.lcls1Mode->getVal(&reg);
     return reg ? true : false;
 }
 
 void IMpsNode::setLcls1Mode(const bool mode) const
 { 
-    if (!_lcls1Mode)
+    if (!scalvals.lcls1Mode)
         throw std::runtime_error("Register interface not implemented\n");
 
-    _lcls1Mode->setVal((uint8_t)mode);
+    scalvals.lcls1Mode->setVal((uint8_t)mode);
 }
 
 uint8_t const IMpsNode::getByteCount(void) const
 { 
-    if (!_byteCount)
+    if (!scalvals.byteCount)
         throw std::runtime_error("Register interface not implemented\n");
 
     uint8_t reg;
-    _byteCount->getVal(&reg);
+    scalvals.byteCount->getVal(&reg);
     return reg;
 }
 
 bool const IMpsNode::getDigitalEnable(void) const
 {
-    if (!_digitalEn)
+    if (!scalvals.digitalEn)
         throw std::runtime_error("Register interface not implemented\n");
 
     uint8_t reg;
-    _digitalEn->getVal(&reg);
+    scalvals.digitalEn->getVal(&reg);
     return reg ? true : false;
 }
 
 uint16_t const IMpsNode::getBeamDestMask(void) const
 {
-    if (!_beamDestMask)
+    if (!scalvals.beamDestMask)
         throw std::runtime_error("Register interface not implemented\n");
 
     uint16_t reg;
-    _beamDestMask->getVal(&reg);
+    scalvals.beamDestMask->getVal(&reg);
     return reg;
 }
 
 void IMpsNode::setBeamDestMask(const uint16_t mask) const
 {
-    if (!_beamDestMask)
+    if (!scalvals.beamDestMask)
         throw std::runtime_error("Register interface not implemented\n");
 
-    _beamDestMask->setVal(mask);
+    scalvals.beamDestMask->setVal(mask);
 }
 
 uint8_t const IMpsNode::getAltDestMask(void) const
 {
-    if (!_altDestMask)
+    if (!scalvals.altDestMask)
         throw std::runtime_error("Register interface not implemented\n");
 
     uint8_t reg;
-    _altDestMask->getVal(&reg);
+    scalvals.altDestMask->getVal(&reg);
     return reg;
 }
 
 void IMpsNode::setAltDestMask(const uint8_t mask) const
 {
-    if (!_altDestMask)
+    if (!scalvals.altDestMask)
         throw std::runtime_error("Register interface not implemented\n");
 
-    _altDestMask->setVal(mask);
+    scalvals.altDestMask->setVal(mask);
 }
 
 std::string const IMpsNode::getAppType(void) const
 {
-    if (!_appTypeG)
+    if (!scalvals.appType)
         throw std::runtime_error("Register interface not implemented\n");
 
     uint8_t reg;
-    _appTypeG->getVal(&reg);
+    scalvals.appType->getVal(&reg);
 
     std::map<int, std::string>::iterator it = appType.find(reg);
     if (it != appType.end())
@@ -182,174 +341,174 @@ std::string const IMpsNode::getAppType(void) const
 
 uint32_t const IMpsNode::getTxLinkUpCnt(void) const
 {
-    if (!_mpsTxLinkUpCnt)
+    if (!scalvals.txLinkUpCnt)
         throw std::runtime_error("Register interface not implemented\n");
 
     uint32_t reg;
-    _mpsTxLinkUpCnt->getVal(&reg);
+    scalvals.txLinkUpCnt->getVal(&reg);
     return reg;
 }
 
 uint32_t const IMpsNode::getRxLinkUpCnt(const uint8_t ch) const
 {
-    if (!_mpsRxLinkUpCnt)
+    if (!scalvals.rxLinkUpCnt)
         throw std::runtime_error("Register interface not implemented\n");
 
-    uint8_t n = _mpsRxLinkUpCnt->getNelms();
+    uint8_t n = scalvals.rxLinkUpCnt->getNelms();
 
     if (ch > n)
         throw std::runtime_error("Register index aout of range\n");
 
     uint32_t reg[n];
-    _mpsRxLinkUpCnt->getVal(reg, n);
+    scalvals.rxLinkUpCnt->getVal(reg, n);
     return reg[ch];
 }
 
 uint32_t const IMpsNode::getRollOverEn(void) const
 {
-    if (!_rollOverEn)
+    if (!scalvals.rollOverEn)
         throw std::runtime_error("Register interface not implemented\n");
 
     uint32_t reg;
-    _rollOverEn->getVal(&reg);
+    scalvals.rollOverEn->getVal(&reg);
     return reg;
 }
 
 bool const IMpsNode::getTxLinkUp(void) const
 {
-    if (!_mpsTxLinkUP)
+    if (!scalvals.txLinkUP)
         throw std::runtime_error("Register interface not implemented\n");
     
     uint8_t reg;
-    _mpsTxLinkUP->getVal(&reg);
+    scalvals.txLinkUP->getVal(&reg);
     return reg ? true : false;
 }
 
 bool const IMpsNode::getRxLinkUp(const uint8_t ch) const
 {
-    if (!_mpsRxLinkUP)
+    if (!scalvals.rxLinkUP)
         throw std::runtime_error("Register interface not implemented\n");
 
-    uint8_t n = _mpsRxLinkUP->getSizeBits();
+    uint8_t n = scalvals.rxLinkUP->getSizeBits();
     uint16_t mask = (1<<ch);
 
     if (ch > n)
         throw std::runtime_error("Register index aout of range\n");
 
     uint8_t reg;
-    _mpsRxLinkUP->getVal(&reg);
+    scalvals.rxLinkUP->getVal(&reg);
     return (reg & mask) ? true : false;
 }
 
 bool const IMpsNode::getMpsSlot(void) const
 {
-    if (!_mpsSlotG)
+    if (!scalvals.mpsSlot)
         throw std::runtime_error("Register interface not implemented\n");
     
     uint8_t reg;
-    _mpsSlotG->getVal(&reg);
+    scalvals.mpsSlot->getVal(&reg);
     return reg ? true : false;
 }
 
 bool const IMpsNode::getPllLocked(void) const
 {
-    if (!_mpsPllLocked)
+    if (!scalvals.pllLocked)
         throw std::runtime_error("Register interface not implemented\n");
     
     uint8_t reg;
-    _mpsPllLocked->getVal(&reg);
+    scalvals.pllLocked->getVal(&reg);
     return reg ? true : false;
 }
 
 uint32_t const IMpsNode::getTxPktSentCnt(void) const
 {
-    if (!_mpsTxPktSentCnt)
+    if (!scalvals.txPktSentCnt)
         throw std::runtime_error("Register interface not implemented\n");
 
     uint32_t reg;
-    _mpsTxPktSentCnt->getVal(&reg);
+    scalvals.txPktSentCnt->getVal(&reg);
     return reg;
 }
     
 uint32_t const IMpsNode::getRxPktRcvdSentCnt(const uint8_t ch) const
 {
-      if (!_mpsRxPktRcvdSentCnt)
+      if (!scalvals.rxPktRcvdCnt)
         throw std::runtime_error("Register interface not implemented\n");
     
-    uint8_t n = _mpsRxPktRcvdSentCnt->getNelms();
+    uint8_t n = scalvals.rxPktRcvdCnt->getNelms();
 
     if (ch > n)
         throw std::runtime_error("Register index aout of range\n");
 
     uint32_t reg[n];
-    _mpsRxPktRcvdSentCnt->getVal(reg, n);
+    scalvals.rxPktRcvdCnt->getVal(reg, n);
 
     return reg[ch];
 }
 
 uint32_t const IMpsNode::getMpsMsgCount(void) const
 {
-    if (!_mpsMsgCnt)
+    if (!scalvals.msgCnt)
         throw std::runtime_error("Register interface not implemented\n");
 
     uint32_t reg;
-    _mpsMsgCnt->getVal(&reg);
+    scalvals.msgCnt->getVal(&reg);
     return reg;
 }
 
 uint16_t const IMpsNode::getLastMsgAppId(void) const
 {
-    if (!_mpsLastMsgAppId)
+    if (!scalvals.lastMsgAppId)
         throw std::runtime_error("Register interface not implemented\n");
 
     uint16_t reg;
-    _mpsLastMsgAppId->getVal(&reg);
+    scalvals.lastMsgAppId->getVal(&reg);
     return reg;
 }
 
 bool const IMpsNode::getLastMsgLcls(void) const
 {
-    if (!_mpsLastMsgLcls)
+    if (!scalvals.lastMsgLcls)
         throw std::runtime_error("Register interface not implemented\n");
     uint8_t reg;
-    _mpsLastMsgLcls->getVal(&reg);
+    scalvals.lastMsgLcls->getVal(&reg);
     return reg ? true : false;
 }
 
 uint16_t const IMpsNode::getLastMsgTimeStamp(void) const
 {
-    if (!_mpsLastMsgTimestamp)
+    if (!scalvals.lastMsgTimestamp)
         throw std::runtime_error("Register interface not implemented\n");
     uint16_t reg;
-    _mpsLastMsgTimestamp->getVal(&reg);
+    scalvals.lastMsgTimestamp->getVal(&reg);
     return reg;
 }
 
 uint8_t const IMpsNode::getLastMsgByte(const uint8_t index) const
 {
-    if (!_mpsLastMsgByte)
+    if (!scalvals.lastMsgByte)
         throw std::runtime_error("Register interface not implemented\n");
 
-    if (index > _lastMsgByteSize)
+    if (index > lastMsgByteSize)
         throw std::runtime_error("LastMsgByte: request index is out of range \n");
 
-    uint8_t reg[_lastMsgByteSize];
-    _mpsLastMsgByte->getVal(reg, _lastMsgByteSize);
+    uint8_t reg[lastMsgByteSize];
+    scalvals.lastMsgByte->getVal(reg, lastMsgByteSize);
     return reg[index];
 }
 
 void const IMpsNode::resetSaltCnt(void) const
 {
-    if (!_rstCnt)
+    if (!scalvals.rstCnt)
         throw std::runtime_error("Command interface not implemented\n");
 
-    _rstCnt->execute();
+    scalvals.rstCnt->execute();
 }
 
 void const IMpsNode::resetSaltPll(void) const
 {
-    if (!_rstPll)
+    if (!scalvals.rstPll)
         throw std::runtime_error("Command interface not implemented\n");
 
-    _rstPll->execute();
+    scalvals.rstPll->execute();
 }

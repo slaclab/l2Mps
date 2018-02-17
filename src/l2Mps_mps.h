@@ -15,7 +15,7 @@
 
 class IMpsNode;
 
-typedef boost::shared_ptr<const IMpsNode>     MpsNode;
+typedef boost::shared_ptr<IMpsNode>     MpsNode;
 
 // Name of the Base MPS module 
 const std::string MpsBaseModuleName = "AppMpsRegBase";
@@ -38,6 +38,68 @@ static std::map<int, std::string> appType = {
     {121,   "MPS_6CH"}
 };
 
+struct mps_infoScalval_t
+{
+    ScalVal     appId;
+    ScalVal     version;
+    ScalVal     enable;
+    ScalVal     lcls1Mode;
+    ScalVal_RO  byteCount;
+    ScalVal_RO  digitalEn;
+    ScalVal     beamDestMask;
+    ScalVal     altDestMask;
+    ScalVal_RO  msgCnt;
+    ScalVal_RO  lastMsgAppId;
+    ScalVal_RO  lastMsgLcls;
+    ScalVal_RO  lastMsgTimestamp;
+    ScalVal_RO  lastMsgByte;
+
+    ScalVal_RO  txLinkUP;
+    ScalVal_RO  txLinkUpCnt;
+    ScalVal_RO  rxLinkUP;
+    ScalVal_RO  rxLinkUpCnt;
+    ScalVal_RO  mpsSlot;
+    ScalVal_RO  appType;
+    ScalVal_RO  pllLocked;
+    ScalVal     rollOverEn;
+    ScalVal_RO  txPktSentCnt;
+    ScalVal_RO  rxPktRcvdCnt;
+    Command     rstCnt;
+    Command     rstPll;
+};
+
+struct mps_infoData_t
+{
+    uint16_t    appId;
+    uint8_t     version;
+    bool        enable;
+    bool        lcls1Mode;
+    uint8_t     byteCount;
+    bool        digitalEn;
+    uint16_t    beamDestMask;
+    uint16_t    altDestMask;
+    uint32_t    msgCnt;
+    uint16_t    lastMsgAppId;
+    bool        lastMsgLcls;
+    uint16_t    lastMsgTimestamp;
+    std::size_t lastMsgByteSize;
+    uint8_t     *lastMsgByte;
+
+    bool        txLinkUP;
+    uint32_t    txLinkUpCnt;
+    uint32_t    rxLinkUP;
+    std::size_t rxLinkUpCntSize;
+    uint32_t    *rxLinkUpCnt;
+    bool        mpsSlot;
+    std::string appType;
+    bool        pllLocked;
+    uint16_t    rollOverEn;
+    uint32_t    txPktSentCnt;
+    std::size_t rxPktRcvdCntSize;
+    uint32_t    *rxPktRcvdCnt;
+};
+
+typedef void (*p_mpsCBFunc_t)(mps_infoData_t);
 
 class IMpsNode
 {
@@ -47,6 +109,12 @@ public:
 
     // Destructor
     ~IMpsNode();
+
+    const void readMpsInfo(mps_infoData_t& info) const;
+
+    const void startPollThread(unsigned int poll, p_mpsCBFunc_t cbFunc);
+
+
 
     // Mps Application ID
     uint16_t const getAppId(void) const;
@@ -118,7 +186,7 @@ public:
 
     // Bytes from the last message
     uint8_t  const getLastMsgByte(const uint8_t index) const;
-    std::size_t const getLastMsgByteSize(void) const { return _lastMsgByteSize; }
+    std::size_t const getLastMsgByteSize(void) const { return lastMsgByteSize; }
 
     // Reset the SALT conuters
     void const resetSaltCnt(void) const;
@@ -128,36 +196,47 @@ public:
 
 private:
     Path       _mpsRoot;
-    ScalVal    _mpsAppId;
-    ScalVal    _mpsEnable;
-    ScalVal    _lcls1Mode;
-    ScalVal_RO _byteCount;
-    ScalVal_RO _digitalEn;
-    ScalVal    _beamDestMask;
-    ScalVal    _altDestMask;
+    // ScalVal    _mpsAppId;
+    // ScalVal    _mpsEnable;
+    // ScalVal    _lcls1Mode;
+    // ScalVal_RO _byteCount;
+    // ScalVal_RO _digitalEn;
+    // ScalVal    _beamDestMask;
+    // ScalVal    _altDestMask;
 
-    ScalVal_RO _mpsTxLinkUpCnt;
-    ScalVal_RO _mpsRxLinkUpCnt;
-    ScalVal_RO _mpsTxLinkUP;
-    ScalVal_RO _mpsRxLinkUP;
-    ScalVal_RO _mpsSlotG;
-    ScalVal_RO _appTypeG;
-    ScalVal_RO _mpsPllLocked;
-    ScalVal    _rollOverEn;
+    // ScalVal_RO _mpsTxLinkUpCnt;
+    // ScalVal_RO _mpsRxLinkUpCnt;
+    // ScalVal_RO _mpsTxLinkUP;
+    // ScalVal_RO _mpsRxLinkUP;
+    // ScalVal_RO _mpsSlotG;
+    // ScalVal_RO _appTypeG;
+    // ScalVal_RO _mpsPllLocked;
+    // ScalVal    _rollOverEn;
 
-    ScalVal_RO _mpsTxPktSentCnt;
-    ScalVal_RO _mpsRxPktRcvdSentCnt;
+    // ScalVal_RO _mpsTxPktSentCnt;
+    // ScalVal_RO _mpsRxPktRcvdSentCnt;
 
-    ScalVal_RO _mpsMsgCnt;
-    ScalVal_RO _mpsLastMsgAppId;
-    ScalVal_RO _mpsLastMsgLcls;
-    ScalVal_RO _mpsLastMsgTimestamp;
-    ScalVal_RO _mpsLastMsgByte;
-    std::size_t _lastMsgByteSize;
+    // ScalVal_RO _mpsMsgCnt;
+    // ScalVal_RO _mpsLastMsgAppId;
+    // ScalVal_RO _mpsLastMsgLcls;
+    // ScalVal_RO _mpsLastMsgTimestamp;
+    // ScalVal_RO _mpsLastMsgByte;
+    // std::size_t _lastMsgByteSize;
     
-    Command    _rstCnt;
-    Command    _rstPll;
+    // Command    _rstCnt;
+    // Command    _rstPll;
 
+    mps_infoScalval_t scalvals;
+    std::size_t lastMsgByteSize;
+    std::size_t rxLinkUpCntSize;
+    std::size_t rxPktRcvdCntSize;
+
+    p_mpsCBFunc_t   mpsCB;
+    unsigned int    pollCB;
+    pthread_t       scanThread;
+
+    void pollThread();
+    static void *createThread(void* p) { static_cast<IMpsNode*>(p)->pollThread(); return NULL; };
 
 };
 
