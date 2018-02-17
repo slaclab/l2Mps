@@ -56,9 +56,9 @@ void mpsInfoReceiver(mps_infoData_t info)
         std::cout << std::setw(10) << unsigned(info.lastMsgByte[i]);
     std::cout << std::endl;
 
-    std::cout << "txLinkUP          = "  << std::boolalpha <<    info.txLinkUP                   << std::endl;
+    std::cout << "txLinkUp          = "  << std::boolalpha <<    info.txLinkUp                   << std::endl;
     std::cout << "txLinkUpCnt       = "  <<                      info.txLinkUpCnt                << std::endl;
-    std::cout << "rxLinkUP          = "  << "0x" << std::hex <<  info.rxLinkUP << std::dec       << std::endl;
+    std::cout << "rxLinkUp          = "  << "0x" << std::hex <<  info.rxLinkUp << std::dec       << std::endl;
     std::cout << "rxLinkUpCntSize   = "  <<                      info.rxLinkUpCntSize            << std::endl;
     
     std::cout << std::setw(15) << "rxLinkUpCnt:";

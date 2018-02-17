@@ -73,9 +73,9 @@ IMpsNode::IMpsNode(Path mpsRoot) :
     }
 
     // MPS SALT interfaces
-    scalvals.txLinkUP        = IMpsBase::createInterface<ScalVal_RO>( _mpsRoot, MpsSaltModuleName + "/MpsTxLinkUP");
+    scalvals.txLinkUp        = IMpsBase::createInterface<ScalVal_RO>( _mpsRoot, MpsSaltModuleName + "/MpsTxLinkUP");
     scalvals.txLinkUpCnt     = IMpsBase::createInterface<ScalVal_RO>( _mpsRoot, MpsSaltModuleName + "/MpsTxLinkUpCnt");
-    scalvals.rxLinkUP        = IMpsBase::createInterface<ScalVal_RO>( _mpsRoot, MpsSaltModuleName + "/MpsRxLinkUP");
+    scalvals.rxLinkUp        = IMpsBase::createInterface<ScalVal_RO>( _mpsRoot, MpsSaltModuleName + "/MpsRxLinkUP");
     scalvals.rxLinkUpCnt     = IMpsBase::createInterface<ScalVal_RO>( _mpsRoot, MpsSaltModuleName + "/MpsRxLinkUpCnt");
     scalvals.mpsSlot         = IMpsBase::createInterface<ScalVal_RO>( _mpsRoot, MpsSaltModuleName + "/MPS_SLOT_G");
     scalvals.appType         = IMpsBase::createInterface<ScalVal_RO>( _mpsRoot, MpsSaltModuleName + "/APP_TYPE_G");
@@ -136,9 +136,9 @@ const void IMpsNode::readMpsInfo(mps_infoData_t& info) const
     scalvals.lastMsgLcls->getVal(       (uint8_t*)&info.lastMsgLcls         );
     scalvals.lastMsgTimestamp->getVal(  (uint16_t*)&info.lastMsgTimestamp   );
     
-    scalvals.txLinkUP->getVal(          (uint8_t*)&info.txLinkUP           );
+    scalvals.txLinkUp->getVal(          (uint8_t*)&info.txLinkUp           );
     scalvals.txLinkUpCnt->getVal(       (uint32_t*)&info.txLinkUpCnt        );
-    scalvals.rxLinkUP->getVal(          (uint32_t*)&info.rxLinkUP           );
+    scalvals.rxLinkUp->getVal(          (uint32_t*)&info.rxLinkUp           );
     scalvals.mpsSlot->getVal(           (uint8_t*)&info.mpsSlot            );
     scalvals.pllLocked->getVal(         (uint8_t*)&info.pllLocked          );
     scalvals.rollOverEn->getVal(        (uint16_t*)&info.rollOverEn         );
@@ -376,27 +376,27 @@ uint32_t const IMpsNode::getRollOverEn(void) const
 
 bool const IMpsNode::getTxLinkUp(void) const
 {
-    if (!scalvals.txLinkUP)
+    if (!scalvals.txLinkUp)
         throw std::runtime_error("Register interface not implemented\n");
     
     uint8_t reg;
-    scalvals.txLinkUP->getVal(&reg);
+    scalvals.txLinkUp->getVal(&reg);
     return reg ? true : false;
 }
 
 bool const IMpsNode::getRxLinkUp(const uint8_t ch) const
 {
-    if (!scalvals.rxLinkUP)
+    if (!scalvals.rxLinkUp)
         throw std::runtime_error("Register interface not implemented\n");
 
-    uint8_t n = scalvals.rxLinkUP->getSizeBits();
+    uint8_t n = scalvals.rxLinkUp->getSizeBits();
     uint16_t mask = (1<<ch);
 
     if (ch > n)
         throw std::runtime_error("Register index aout of range\n");
 
     uint8_t reg;
-    scalvals.rxLinkUP->getVal(&reg);
+    scalvals.rxLinkUp->getVal(&reg);
     return (reg & mask) ? true : false;
 }
 

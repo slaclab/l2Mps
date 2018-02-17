@@ -54,9 +54,9 @@ struct mps_infoScalval_t
     ScalVal_RO  lastMsgTimestamp;
     ScalVal_RO  lastMsgByte;
 
-    ScalVal_RO  txLinkUP;
+    ScalVal_RO  txLinkUp;
     ScalVal_RO  txLinkUpCnt;
-    ScalVal_RO  rxLinkUP;
+    ScalVal_RO  rxLinkUp;
     ScalVal_RO  rxLinkUpCnt;
     ScalVal_RO  mpsSlot;
     ScalVal_RO  appType;
@@ -85,9 +85,9 @@ struct mps_infoData_t
     std::size_t lastMsgByteSize;
     uint8_t     *lastMsgByte;
 
-    bool        txLinkUP;
+    bool        txLinkUp;
     uint32_t    txLinkUpCnt;
-    uint32_t    rxLinkUP;
+    uint32_t    rxLinkUp;
     std::size_t rxLinkUpCntSize;
     uint32_t    *rxLinkUpCnt;
     bool        mpsSlot;
