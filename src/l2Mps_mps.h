@@ -7,6 +7,7 @@
 #include <iomanip>
 #include <inttypes.h>
 #include <map>
+#include <vector>
 #include <stdexcept>
 #include <boost/shared_ptr.hpp>
 #include <cpsw_api_user.h>
@@ -114,7 +115,9 @@ public:
 
     const void startPollThread(unsigned int poll, p_mpsCBFunc_t cbFunc);
 
-
+    const std::size_t getLastMsgByteSize()  const { return lastMsgByteSize;  };
+    const std::size_t getRxLinkUpCntSize()  const { return rxLinkUpCntSize;  };
+    const std::size_t getRxPktRcvdCntSize() const { return rxPktRcvdCntSize; };
 
     // Mps Application ID
     uint16_t const getAppId(void) const;
@@ -186,7 +189,7 @@ public:
 
     // Bytes from the last message
     uint8_t  const getLastMsgByte(const uint8_t index) const;
-    std::size_t const getLastMsgByteSize(void) const { return lastMsgByteSize; }
+    // std::size_t const getLastMsgByteSize(void) const { return lastMsgByteSize; }
 
     // Reset the SALT conuters
     void const resetSaltCnt(void) const;
