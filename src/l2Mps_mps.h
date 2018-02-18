@@ -196,35 +196,6 @@ public:
 
 private:
     Path       _mpsRoot;
-    // ScalVal    _mpsAppId;
-    // ScalVal    _mpsEnable;
-    // ScalVal    _lcls1Mode;
-    // ScalVal_RO _byteCount;
-    // ScalVal_RO _digitalEn;
-    // ScalVal    _beamDestMask;
-    // ScalVal    _altDestMask;
-
-    // ScalVal_RO _mpsTxLinkUpCnt;
-    // ScalVal_RO _mpsRxLinkUpCnt;
-    // ScalVal_RO _mpsTxLinkUP;
-    // ScalVal_RO _mpsRxLinkUP;
-    // ScalVal_RO _mpsSlotG;
-    // ScalVal_RO _appTypeG;
-    // ScalVal_RO _mpsPllLocked;
-    // ScalVal    _rollOverEn;
-
-    // ScalVal_RO _mpsTxPktSentCnt;
-    // ScalVal_RO _mpsRxPktRcvdSentCnt;
-
-    // ScalVal_RO _mpsMsgCnt;
-    // ScalVal_RO _mpsLastMsgAppId;
-    // ScalVal_RO _mpsLastMsgLcls;
-    // ScalVal_RO _mpsLastMsgTimestamp;
-    // ScalVal_RO _mpsLastMsgByte;
-    // std::size_t _lastMsgByteSize;
-    
-    // Command    _rstCnt;
-    // Command    _rstPll;
 
     mps_infoScalval_t scalvals;
     std::size_t lastMsgByteSize;

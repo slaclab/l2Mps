@@ -5,46 +5,6 @@ IMpsNode::IMpsNode(Path mpsRoot) :
     _mpsRoot             ( mpsRoot->clone())
 
 {
-    // // MPS Base interfaces
-    // _mpsAppId            = IMpsBase::createInterface<ScalVal>(    _mpsRoot, MpsBaseModuleName + "/mpsAppId");
-    // _mpsEnable           = IMpsBase::createInterface<ScalVal>(    _mpsRoot, MpsBaseModuleName + "/mpsEnable");
-    // _lcls1Mode           = IMpsBase::createInterface<ScalVal>(    _mpsRoot, MpsBaseModuleName + "/lcls1Mode");
-    // _byteCount           = IMpsBase::createInterface<ScalVal_RO>( _mpsRoot, MpsBaseModuleName + "/byteCount");
-    // _digitalEn           = IMpsBase::createInterface<ScalVal_RO>( _mpsRoot, MpsBaseModuleName + "/digitalEn");
-    // _beamDestMask        = IMpsBase::createInterface<ScalVal>(    _mpsRoot, MpsBaseModuleName + "/beamDestMask");
-    // _altDestMask         = IMpsBase::createInterface<ScalVal>(    _mpsRoot, MpsBaseModuleName + "/altDestMask");
-    // _mpsMsgCnt           = IMpsBase::createInterface<ScalVal_RO>( _mpsRoot, MpsBaseModuleName + "/mpsMsgCount");
-    // _mpsLastMsgAppId     = IMpsBase::createInterface<ScalVal_RO>( _mpsRoot, MpsBaseModuleName + "/lastMsgAppId");
-    // _mpsLastMsgLcls      = IMpsBase::createInterface<ScalVal_RO>( _mpsRoot, MpsBaseModuleName + "/lastMsgLcls");
-    // _mpsLastMsgTimestamp = IMpsBase::createInterface<ScalVal_RO>( _mpsRoot, MpsBaseModuleName + "/lastMsgTimeStamp");
-    // _mpsLastMsgByte      = IMpsBase::createInterface<ScalVal_RO>( _mpsRoot, MpsBaseModuleName + "/lastMsgByte");
-
-    // if (_mpsLastMsgByte)
-    // {
-    //     try
-    //     {
-    //         _lastMsgByteSize = _mpsLastMsgByte->getNelms();
-    //     }
-    //     catch (CPSWError &e)
-    //     {
-    //         std::cout << "Couldn't read the number of elements from the last message: " << e.getInfo() << std::endl;
-    //     }
-    // }
-
-    // // MPS SALT interfaces
-    // _mpsTxLinkUpCnt      = IMpsBase::createInterface<ScalVal_RO>( _mpsRoot, MpsSaltModuleName + "/MpsTxLinkUpCnt");
-    // _mpsRxLinkUpCnt      = IMpsBase::createInterface<ScalVal_RO>( _mpsRoot, MpsSaltModuleName + "/MpsRxLinkUpCnt");
-    // _mpsTxLinkUP         = IMpsBase::createInterface<ScalVal_RO>( _mpsRoot, MpsSaltModuleName + "/MpsTxLinkUP");
-    // _mpsRxLinkUP         = IMpsBase::createInterface<ScalVal_RO>( _mpsRoot, MpsSaltModuleName + "/MpsRxLinkUP");
-    // _mpsSlotG            = IMpsBase::createInterface<ScalVal_RO>( _mpsRoot, MpsSaltModuleName + "/MPS_SLOT_G");
-    // _appTypeG            = IMpsBase::createInterface<ScalVal_RO>( _mpsRoot, MpsSaltModuleName + "/APP_TYPE_G");
-    // _mpsPllLocked        = IMpsBase::createInterface<ScalVal_RO>( _mpsRoot, MpsSaltModuleName + "/MpsPllLocked");
-    // _rollOverEn          = IMpsBase::createInterface<ScalVal>(    _mpsRoot, MpsSaltModuleName + "/RollOverEn");
-    // _mpsTxPktSentCnt     = IMpsBase::createInterface<ScalVal_RO>( _mpsRoot, MpsSaltModuleName + "/MpsTxPktSentCnt");
-    // _mpsRxPktRcvdSentCnt = IMpsBase::createInterface<ScalVal_RO>( _mpsRoot, MpsSaltModuleName + "/MpsRxPktRcvdCnt");
-    // _rstCnt              = IMpsBase::createInterface<Command>(    _mpsRoot, MpsSaltModuleName + "/RstCnt");
-    // _rstPll              = IMpsBase::createInterface<Command>(    _mpsRoot, MpsSaltModuleName + "/RstPll");
-
     // MPS Base interfaces
     scalvals.appId               = IMpsBase::createInterface<ScalVal>(    _mpsRoot, MpsBaseModuleName + "/mpsAppId");
     scalvals.version             = IMpsBase::createInterface<ScalVal>(    _mpsRoot, MpsBaseModuleName + "/mpsVersion");
