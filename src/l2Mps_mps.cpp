@@ -69,12 +69,7 @@ IMpsNode::IMpsNode(Path mpsRoot) :
             std::cout << "Couldn't read the number of RX packet counters: " << e.getInfo() << std::endl;
         }
     } 
-
-std::cout << "lastMsgByteSize " << lastMsgByteSize << std::endl;
-std::cout << "rxLinkUpCntSize " << rxLinkUpCntSize << std::endl;    
-std::cout << "rxPktRcvdCntSize " << rxPktRcvdCntSize << std::endl;
 }
-
 
 IMpsNode::~IMpsNode()
 {
