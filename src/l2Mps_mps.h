@@ -83,21 +83,18 @@ struct mps_infoData_t
     uint16_t    lastMsgAppId;
     bool        lastMsgLcls;
     uint16_t    lastMsgTimestamp;
-    std::size_t lastMsgByteSize;
-    uint8_t     *lastMsgByte;
+    std::vector<uint8_t> lastMsgByte;
 
     bool        txLinkUp;
     uint32_t    txLinkUpCnt;
     uint32_t    rxLinkUp;
-    std::size_t rxLinkUpCntSize;
-    uint32_t    *rxLinkUpCnt;
+    std::vector<uint32_t> rxLinkUpCnt;
     bool        mpsSlot;
     std::string appType;
     bool        pllLocked;
     uint16_t    rollOverEn;
     uint32_t    txPktSentCnt;
-    std::size_t rxPktRcvdCntSize;
-    uint32_t    *rxPktRcvdCnt;
+    std::vector<uint32_t> rxPktRcvdCnt;
 };
 
 typedef void (*p_mpsCBFunc_t)(mps_infoData_t);

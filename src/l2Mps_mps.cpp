@@ -152,35 +152,20 @@ const void IMpsNode::readMpsInfo(mps_infoData_t& info) const
     
     if ((lastMsgByteSize > 0) && (scalvals.lastMsgByte))
     {
-        info.lastMsgByte = (uint8_t*)malloc(lastMsgByteSize*sizeof(uint8_t));
-        scalvals.lastMsgByte->getVal((uint8_t*)info.lastMsgByte, lastMsgByteSize);
-        info.lastMsgByteSize = lastMsgByteSize;
-    }
-    else
-    {
-        info.lastMsgByteSize = 0;
+        info.lastMsgByte.resize(lastMsgByteSize);
+        scalvals.lastMsgByte->getVal(&info.lastMsgByte[0], lastMsgByteSize);
     }
 
     if ((rxLinkUpCntSize > 0) && (scalvals.rxLinkUpCnt))
     {
-        info.rxLinkUpCnt = (uint32_t*)malloc(rxLinkUpCntSize*sizeof(uint32_t));
-        scalvals.rxLinkUpCnt->getVal((uint32_t*)info.rxLinkUpCnt, rxLinkUpCntSize);
-        info.rxLinkUpCntSize = rxLinkUpCntSize;
-    }
-    else
-    {
-        info.rxLinkUpCntSize = 0;
+        info.rxLinkUpCnt.resize(rxLinkUpCntSize);
+        scalvals.rxLinkUpCnt->getVal(&info.rxLinkUpCnt[0], rxLinkUpCntSize);
     }
 
     if ((rxPktRcvdCntSize > 0) && (scalvals.rxPktRcvdCnt))
     {
-        info.rxPktRcvdCnt = (uint32_t*)malloc(rxPktRcvdCntSize*sizeof(uint32_t));
-        scalvals.rxPktRcvdCnt->getVal((uint32_t*)info.rxPktRcvdCnt, rxPktRcvdCntSize);
-        info.rxPktRcvdCntSize = rxPktRcvdCntSize;
-    }
-    else
-    {
-        info.rxPktRcvdCntSize = 0;
+        info.rxPktRcvdCnt.resize(rxPktRcvdCntSize);
+        scalvals.rxPktRcvdCnt->getVal(&info.rxPktRcvdCnt[0], rxPktRcvdCntSize);
     }
 }
 

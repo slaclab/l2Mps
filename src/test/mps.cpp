@@ -46,26 +46,24 @@ void mpsInfoReceiver(mps_infoData_t info)
     std::cout << "lastMsgAppId      = "  <<                      info.lastMsgAppId               << std::endl;
     std::cout << "lastMsgLcls       = "  << std::boolalpha <<    info.lastMsgLcls                << std::endl;
     std::cout << "lastMsgTimestamp  = "  <<                      info.lastMsgTimestamp           << std::endl;
-    std::cout << "lastMsgByteSize   = "  <<                      info.lastMsgByteSize            << std::endl;
         
     std::cout << std::setw(15) << "lastMsgByte:";
-    for (std::size_t i{0}; i < info.lastMsgByteSize; ++i)
+    for (std::size_t i{0}; i < info.lastMsgByte.size(); ++i)
         std::cout << std::setw(10) << i;
     std::cout << std::endl << std::setw(15) << "";
-    for (std::size_t i{0}; i < info.lastMsgByteSize; ++i)
-        std::cout << std::setw(10) << unsigned(info.lastMsgByte[i]);
+    for (std::size_t i{0}; i < info.lastMsgByte.size(); ++i)
+        std::cout << std::setw(10) << unsigned(info.lastMsgByte.at(i));
     std::cout << std::endl;
 
     std::cout << "txLinkUp          = "  << std::boolalpha <<    info.txLinkUp                   << std::endl;
     std::cout << "txLinkUpCnt       = "  <<                      info.txLinkUpCnt                << std::endl;
     std::cout << "rxLinkUp          = "  << "0x" << std::hex <<  info.rxLinkUp << std::dec       << std::endl;
-    std::cout << "rxLinkUpCntSize   = "  <<                      info.rxLinkUpCntSize            << std::endl;
     
     std::cout << std::setw(15) << "rxLinkUpCnt:";
-    for (std::size_t i{0}; i < info.rxLinkUpCntSize; ++i)
+    for (std::size_t i{0}; i < info.rxLinkUpCnt.size(); ++i)
         std::cout << std::setw(10) << i;
     std::cout << std::endl << std::setw(15) << "";
-    for (std::size_t i{0}; i < info.rxLinkUpCntSize; ++i)
+    for (std::size_t i{0}; i < info.rxLinkUpCnt.size(); ++i)
         std::cout << std::setw(10) << info.rxLinkUpCnt[i];
     std::cout << std::endl;
 
@@ -74,13 +72,12 @@ void mpsInfoReceiver(mps_infoData_t info)
     std::cout << "pllLocked         = "  << std::boolalpha <<    info.pllLocked                  << std::endl;
     std::cout << "rollOverEn        = "  <<                      info.rollOverEn                 << std::endl;
     std::cout << "txPktSentCnt      = "  <<                      info.txPktSentCnt               << std::endl;
-    std::cout << "rxPktRcvdCntSize  = "  <<                      info.rxPktRcvdCntSize           << std::endl;
     
     std::cout << std::setw(15) << "rxPktRcvdCnt:";
-    for (std::size_t i{0}; i < info.rxPktRcvdCntSize; ++i)
+    for (std::size_t i{0}; i < info.rxPktRcvdCnt.size(); ++i)
         std::cout << std::setw(10) << i;
     std::cout << std::endl << std::setw(15) << "";
-    for (std::size_t i{0}; i < info.rxPktRcvdCntSize; ++i)
+    for (std::size_t i{0}; i < info.rxPktRcvdCnt.size(); ++i)
         std::cout << std::setw(10) << info.rxPktRcvdCnt[i];
     std::cout << std::endl;
 
