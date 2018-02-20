@@ -49,10 +49,10 @@ void mpsInfoReceiver(mps_infoData_t info)
 
     std::cout << std::setw(15) << "lastMsgByte:";
     for (std::size_t i{0}; i < info.lastMsgByte.size(); ++i)
-        std::cout << std::setw(10) << i;
+        std::cout << std::setw(15) << i;
     std::cout << std::endl << std::setw(15) << "";
     for (std::size_t i{0}; i < info.lastMsgByte.size(); ++i)
-        std::cout << std::setw(10) << unsigned(info.lastMsgByte.at(i));
+        std::cout << std::setw(15) << unsigned(info.lastMsgByte.at(i));
     std::cout << std::endl;
 
     std::cout << "txLinkUp          = "  << std::boolalpha <<    info.txLinkUp                   << std::endl;
@@ -60,13 +60,13 @@ void mpsInfoReceiver(mps_infoData_t info)
 
     std::cout << std::setw(15) << "rxLinkUp:";
     for (std::size_t i{0}; i < info.rxLinkUp.size(); ++i)
-        std::cout << std::setw(10) << i;
+        std::cout << std::setw(15) << i;
     std::cout << std::endl << std::setw(15) << "Status";
     for (std::size_t i{0}; i < info.rxLinkUp.size(); ++i)
-        std::cout << std::setw(10) << std::boolalpha << info.rxLinkUp.at(i);
+        std::cout << std::setw(15) << std::boolalpha << info.rxLinkUp.at(i);
     std::cout << std::endl << std::setw(15) << "Counter";
     for (std::size_t i{0}; i < info.rxLinkUpCnt.size(); ++i)
-        std::cout << std::setw(10) << info.rxLinkUpCnt.at(i);
+        std::cout << std::setw(15) << info.rxLinkUpCnt.at(i);
     std::cout << std::endl;
 
     std::cout << "mpsSlot           = "  << std::boolalpha <<    info.mpsSlot                    << std::endl;
@@ -77,10 +77,10 @@ void mpsInfoReceiver(mps_infoData_t info)
 
     std::cout << std::setw(15) << "rxPktRcvdCnt:";
     for (std::size_t i{0}; i < info.rxPktRcvdCnt.size(); ++i)
-        std::cout << std::setw(10) << i;
+        std::cout << std::setw(15) << i;
     std::cout << std::endl << std::setw(15) << "";
     for (std::size_t i{0}; i < info.rxPktRcvdCnt.size(); ++i)
-        std::cout << std::setw(10) << info.rxPktRcvdCnt[i];
+        std::cout << std::setw(15) << info.rxPktRcvdCnt[i];
     std::cout << std::endl;
 
     std::cout << "=============================" << std::endl;
@@ -163,10 +163,10 @@ int main(int argc, char **argv)
             std::size_t n = mpsNode->getLastMsgByteSize();
             std::cout << std::setw(15) << "lastMsgByte:";
             for (std::size_t i{0}; i < n; ++i)
-                std::cout << std::setw(10) << i;
+                std::cout << std::setw(15) << i;
             std::cout << std::endl << std::setw(15) << "";
             for (std::size_t i{0}; i < n; ++i)
-                std::cout << std::setw(10) << unsigned(mpsNode->getLastMsgByte(i));
+                std::cout << std::setw(15) << unsigned(mpsNode->getLastMsgByte(i));
             std::cout << std::endl;
         }
 
@@ -177,13 +177,13 @@ int main(int argc, char **argv)
             std::size_t n = mpsNode->getRxLinkUpCntSize();
             std::cout << std::setw(15) << "rxLinkUp:";
             for (std::size_t i{0}; i < n; ++i)
-                std::cout << std::setw(10) << i;
+                std::cout << std::setw(15) << i;
             std::cout << std::endl << std::setw(15) << "Status";
             for (std::size_t i{0}; i < n; ++i)
-                std::cout << std::setw(10) << std::boolalpha << mpsNode->getRxLinkUp(i);
+                std::cout << std::setw(15) << std::boolalpha << mpsNode->getRxLinkUp(i);
             std::cout << std::endl << std::setw(15) << "Counter";
             for (std::size_t i{0}; i < n; ++i)
-                std::cout << std::setw(10) << mpsNode->getRxLinkUpCnt(i);
+                std::cout << std::setw(15) << mpsNode->getRxLinkUpCnt(i);
             std::cout << std::endl;
         }
 
@@ -197,10 +197,10 @@ int main(int argc, char **argv)
             std::size_t n = mpsNode->getRxPktRcvdCntSize();
             std::cout << std::setw(15) << "rxPktRcvdCnt:";
             for (std::size_t i{0}; i < n; ++i)
-                std::cout << std::setw(10) << i;
+                std::cout << std::setw(15) << i;
             std::cout << std::endl << std::setw(15) << "";
             for (std::size_t i{0}; i < n; ++i)
-                std::cout << std::setw(10) << mpsNode->getRxPktRcvdCnt(i);
+                std::cout << std::setw(15) << mpsNode->getRxPktRcvdCnt(i);
             std::cout << std::endl;
         }
 
