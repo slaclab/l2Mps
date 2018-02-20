@@ -74,6 +74,36 @@ namespace IMpsBase
         return u32[index];
     }
 
+    // CPSW get function wrapper, for getting an array
+    template <typename T, typename U>
+    const void get(const T& reg, std::vector<U>& vals)
+    {
+        if (!reg)
+            throw std::runtime_error("Register interface not implemented\n");
+
+        std::size_t n;
+
+        try
+        {
+            n = reg->getNelms();
+        }
+        catch (CPSWError& e)
+        {
+            throw std::runtime_error("CPSW error found while trying to get the size of the register array\n");
+        }
+
+        vals.resize(n);
+
+        try
+        {
+            reg->getVal(&vals[0], n);
+        }
+        catch (CPSWError& e)
+        {
+            throw std::runtime_error("CPSW error found while reading the register array\n");
+        }
+    };
+
     // CPSW set function wrapper
     template <typename T>
     const void set(const T& reg, const uint32_t val)
