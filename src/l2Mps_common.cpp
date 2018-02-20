@@ -20,4 +20,13 @@ namespace IMpsBase
     {
         return ICommand::create(p->findByName(regName.c_str()));
     }
+
+    // CPSW command exevute wrapper
+    const void execute(const Command cmd)
+    {
+        if (!cmd)
+            throw std::runtime_error("Command interface not implemented\n");
+
+        cmd->execute();
+    };
 }
