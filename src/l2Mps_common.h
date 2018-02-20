@@ -43,7 +43,15 @@ namespace IMpsBase
             throw std::runtime_error("Register interface not implemented\n");
 
         uint32_t u32;
-        reg->getVal(&u32);
+        try
+        {
+            reg->getVal(&u32);
+        }
+        catch (CPSWError& e)
+        {
+            throw std::runtime_error("CPSW error found while reading register\n");
+        }
+
         return u32;
     };
 
@@ -70,7 +78,15 @@ namespace IMpsBase
             throw std::runtime_error("Register index aout of range\n");
 
         uint32_t u32[n];
-        reg->getVal(u32,n);
+        try
+        {
+            reg->getVal(u32,n);
+        }
+        catch (CPSWError& e)
+        {
+            throw std::runtime_error("CPSW error found while reading register\n");
+        }
+
         return u32[index];
     }
 
@@ -111,7 +127,14 @@ namespace IMpsBase
         if (!reg)
             throw std::runtime_error("Register interface not implemented\n");
 
-        reg->setVal(val);
+        try
+        {
+            reg->setVal(val);
+        }
+        catch (CPSWError& e)
+        {
+            throw std::runtime_error("CPSW error found while setting register\n");
+        }
     };
 
     // CPSW command exevute wrapper
