@@ -46,7 +46,7 @@ void mpsInfoReceiver(mps_infoData_t info)
     std::cout << "lastMsgAppId      = "  <<                      info.lastMsgAppId               << std::endl;
     std::cout << "lastMsgLcls       = "  << std::boolalpha <<    info.lastMsgLcls                << std::endl;
     std::cout << "lastMsgTimestamp  = "  <<                      info.lastMsgTimestamp           << std::endl;
-        
+
     std::cout << std::setw(15) << "lastMsgByte:";
     for (std::size_t i{0}; i < info.lastMsgByte.size(); ++i)
         std::cout << std::setw(10) << i;
@@ -58,7 +58,7 @@ void mpsInfoReceiver(mps_infoData_t info)
     std::cout << "txLinkUp          = "  << std::boolalpha <<    info.txLinkUp                   << std::endl;
     std::cout << "txLinkUpCnt       = "  <<                      info.txLinkUpCnt                << std::endl;
     std::cout << "rxLinkUp          = "  << "0x" << std::hex <<  info.rxLinkUp << std::dec       << std::endl;
-    
+
     std::cout << std::setw(15) << "rxLinkUpCnt:";
     for (std::size_t i{0}; i < info.rxLinkUpCnt.size(); ++i)
         std::cout << std::setw(10) << i;
@@ -72,7 +72,7 @@ void mpsInfoReceiver(mps_infoData_t info)
     std::cout << "pllLocked         = "  << std::boolalpha <<    info.pllLocked                  << std::endl;
     std::cout << "rollOverEn        = "  <<                      info.rollOverEn                 << std::endl;
     std::cout << "txPktSentCnt      = "  <<                      info.txPktSentCnt               << std::endl;
-    
+
     std::cout << std::setw(15) << "rxPktRcvdCnt:";
     for (std::size_t i{0}; i < info.rxPktRcvdCnt.size(); ++i)
         std::cout << std::setw(10) << i;
@@ -129,7 +129,7 @@ int main(int argc, char **argv)
     const char *mpsRootName = "mmio/AmcCarrierCore/AppMps";
 
     IYamlSetIP setIP(ipAddr);
-    Path root = IPath::loadYamlFile( yamlDoc.c_str(), "NetIODev", NULL, &setIP );    
+    Path root = IPath::loadYamlFile( yamlDoc.c_str(), "NetIODev", NULL, &setIP );
 
     try
     {
@@ -140,8 +140,76 @@ int main(int argc, char **argv)
         MpsNode mpsNode = MpsNodeFactory::create(mpsRoot);
         std::cout << "====================================================" << std::endl;
 
+        std::cout << std::endl;
+        std::cout << "====================================================" << std::endl;
+        std::cout << "Read all registers using the get functions" << std::endl;
+        std::cout << "====================================================" << std::endl;
+        std::cout << "appId             = "  <<                      mpsNode->getAppId()                      << std::endl;
+        std::cout << "version           = "  <<             unsigned(mpsNode->getVersion())                   << std::endl;
+        std::cout << "enable            = "  << std::boolalpha <<     mpsNode->getEnable()                     << std::endl;
+        std::cout << "lcls1Mode         = "  << std::boolalpha <<     mpsNode->getLcls1Mode()                  << std::endl;
+        std::cout << "byteCount         = "  <<             unsigned( mpsNode->getByteCount())                 << std::endl;
+        std::cout << "digitalEn         = "  << std::boolalpha <<     mpsNode->getDigitalEnable()                  << std::endl;
+        std::cout << "beamDestMask      = "  << "0x" << std::hex <<   mpsNode->getBeamDestMask() << std::dec   << std::endl;
+        std::cout << "altDestMask       = "  << "0x" << std::hex <<   mpsNode->getAltDestMask() << std::dec    << std::endl;
+        std::cout << "msgCnt            = "  <<                       mpsNode->getMsgCount()                     << std::endl;
+        std::cout << "lastMsgAppId      = "  <<                       mpsNode->getLastMsgAppId()               << std::endl;
+        std::cout << "lastMsgLcls       = "  << std::boolalpha <<     mpsNode->getLastMsgLcls()                << std::endl;
+        std::cout << "lastMsgTimestamp  = "  <<                       mpsNode->getLastMsgTimeStamp()           << std::endl;
+
+        {
+            std::size_t n = mpsNode->getLastMsgByteSize();
+            std::cout << std::setw(15) << "lastMsgByte:";
+            for (std::size_t i{0}; i < n; ++i)
+                std::cout << std::setw(10) << i;
+            std::cout << std::endl << std::setw(15) << "";
+            for (std::size_t i{0}; i < n; ++i)
+                std::cout << std::setw(10) << unsigned(mpsNode->getLastMsgByte(i));
+            std::cout << std::endl;
+        }
+
+        std::cout << "txLinkUp          = "  << std::boolalpha <<    mpsNode->getTxLinkUp()                   << std::endl;
+        std::cout << "txLinkUpCnt       = "  <<                      mpsNode->getTxLinkUpCnt()                << std::endl;
+
+        {
+            std::size_t n = mpsNode->getRxLinkUpCntSize();
+            std::cout << std::setw(15) << "rxLinkUp:";
+            for (std::size_t i{0}; i < n; ++i)
+                std::cout << std::setw(10) << i;
+            std::cout << std::endl << std::setw(15) << "Status";
+            for (std::size_t i{0}; i < n; ++i)
+                std::cout << std::setw(10) << std::boolalpha << mpsNode->getRxLinkUp(i);
+            std::cout << std::endl << std::setw(15) << "Counter";
+            for (std::size_t i{0}; i < n; ++i)
+                std::cout << std::setw(10) << mpsNode->getRxLinkUpCnt(i);
+            std::cout << std::endl;
+        }
+
+        std::cout << "mpsSlot           = "  << std::boolalpha <<    mpsNode->getMpsSlot()                    << std::endl;
+        std::cout << "appType           = "  <<                      mpsNode->getAppType()                    << std::endl;
+        std::cout << "pllLocked         = "  << std::boolalpha <<    mpsNode->getPllLocked()                  << std::endl;
+        std::cout << "rollOverEn        = "  <<                      mpsNode->getRollOverEn()                 << std::endl;
+        std::cout << "txPktSentCnt      = "  <<                      mpsNode->getTxPktSentCnt()               << std::endl;
+
+        {
+            std::size_t n = mpsNode->getRxPktRcvdCntSize();
+            std::cout << std::setw(15) << "rxPktRcvdCnt:";
+            for (std::size_t i{0}; i < n; ++i)
+                std::cout << std::setw(10) << i;
+            std::cout << std::endl << std::setw(15) << "";
+            for (std::size_t i{0}; i < n; ++i)
+                std::cout << std::setw(10) << mpsNode->getRxPktRcvdCnt(i);
+            std::cout << std::endl;
+        }
+
+
+        std::cout << "====================================================" << std::endl;
+        std::cout << "Done!"<< std::endl;
+        std::cout << std::endl;
+
         std::cout << "Starting MPS polling thread at 1Hz" << std::endl;
         mpsNode->startPollThread(1, &mpsInfoReceiver);
+
 
         while(1)
             sleep(10);
