@@ -78,24 +78,24 @@ IMpsNode::~IMpsNode()
 
 const void IMpsNode::readMpsInfo(mps_infoData_t& info) const
 {
-    scalvals.appId->getVal(            (uint16_t*)&info.appId            );
-    scalvals.version->getVal(          (uint8_t*)&info.version           );
-    scalvals.enable->getVal(           (uint8_t*)&info.enable            );
-    scalvals.lcls1Mode->getVal(        (uint8_t*)&info.lcls1Mode         );
-    scalvals.byteCount->getVal(        (uint8_t*)&info.byteCount         );
-    scalvals.digitalEn->getVal(        (uint8_t*)&info.digitalEn         );
-    scalvals.beamDestMask->getVal(     (uint16_t*)&info.beamDestMask     );
-    scalvals.altDestMask->getVal(      (uint16_t*)&info.altDestMask      );
-    scalvals.msgCnt->getVal(           (uint32_t*)&info.msgCnt           );
-    scalvals.lastMsgAppId->getVal(     (uint16_t*)&info.lastMsgAppId     );
-    scalvals.lastMsgLcls->getVal(      (uint8_t*)&info.lastMsgLcls       );
-    scalvals.lastMsgTimestamp->getVal( (uint16_t*)&info.lastMsgTimestamp );
-    scalvals.txLinkUp->getVal(         (uint8_t*)&info.txLinkUp          );
-    scalvals.txLinkUpCnt->getVal(      (uint32_t*)&info.txLinkUpCnt      );
-    scalvals.mpsSlot->getVal(          (uint8_t*)&info.mpsSlot           );
-    scalvals.pllLocked->getVal(        (uint8_t*)&info.pllLocked         );
-    scalvals.rollOverEn->getVal(       (uint16_t*)&info.rollOverEn       );
-    scalvals.txPktSentCnt->getVal(     (uint32_t*)&info.txPktSentCnt     );
+    info.appId              = IMpsBase::get( scalvals.appId             );
+    info.version            = IMpsBase::get( scalvals.version           );
+    info.enable             = IMpsBase::get( scalvals.enable            );
+    info.lcls1Mode          = IMpsBase::get( scalvals.lcls1Mode         );
+    info.byteCount          = IMpsBase::get( scalvals.byteCount         );
+    info.digitalEn          = IMpsBase::get( scalvals.digitalEn         );
+    info.beamDestMask       = IMpsBase::get( scalvals.beamDestMask      );
+    info.altDestMask        = IMpsBase::get( scalvals.altDestMask       );
+    info.msgCnt             = IMpsBase::get( scalvals.msgCnt            );
+    info.lastMsgAppId       = IMpsBase::get( scalvals.lastMsgAppId      );
+    info.lastMsgLcls        = IMpsBase::get( scalvals.lastMsgLcls       );
+    info.lastMsgTimestamp   = IMpsBase::get( scalvals.lastMsgTimestamp  );
+    info.txLinkUp           = IMpsBase::get( scalvals.txLinkUp          );
+    info.txLinkUpCnt        = IMpsBase::get( scalvals.txLinkUpCnt       );
+    info.mpsSlot            = IMpsBase::get( scalvals.mpsSlot           );
+    info.pllLocked          = IMpsBase::get( scalvals.pllLocked         );
+    info.rollOverEn         = IMpsBase::get( scalvals.rollOverEn        );
+    info.txPktSentCnt       = IMpsBase::get( scalvals.txPktSentCnt      );
 
     uint8_t reg;
     scalvals.appType->getVal(&reg);
@@ -103,34 +103,27 @@ const void IMpsNode::readMpsInfo(mps_infoData_t& info) const
     if (it != appType.end())
         info.appType = it->second;
 
-    if ((lastMsgByteSize > 0) && (scalvals.lastMsgByte))
+    IMpsBase::get(scalvals.lastMsgByte, info.lastMsgByte);
+    IMpsBase::get(scalvals.rxPktRcvdCnt, info.rxPktRcvdCnt);
+    IMpsBase::get(scalvals.rxLinkUpCnt, info.rxLinkUpCnt);
+
+    // Convert the rxLnkUp status from register bit to a std::vector<bool>
+    std::size_t n = 0;
+    try
     {
-        info.lastMsgByte.resize(lastMsgByteSize);
-        scalvals.lastMsgByte->getVal(&info.lastMsgByte[0], lastMsgByteSize);
+        n = scalvals.rxLinkUp->getSizeBits();
+    }
+    catch (CPSWError& e)
+    {
+        throw std::runtime_error("CPSW error found while trying to get the bit size of the register\n");
     }
 
-    if ((rxLinkUpCntSize > 0) && (scalvals.rxLinkUpCnt))
+    if ((n > 0))
     {
-        info.rxLinkUpCnt.resize(rxLinkUpCntSize);
-        info.rxLinkUp.resize(rxLinkUpCntSize);
-        scalvals.rxLinkUpCnt->getVal(&info.rxLinkUpCnt[0], rxLinkUpCntSize);
-
-        if (scalvals.rxLinkUp)
-        {
-            uint32_t u32, mask;
-            scalvals.rxLinkUp->getVal(&u32);
-            for (std::size_t i{0}; i < rxLinkUpCntSize; ++i)
-            {
-                mask = (1 << i);
-                info.rxLinkUp.at(i) = (u32 & mask);
-            }
-        }
-    }
-
-    if ((rxPktRcvdCntSize > 0) && (scalvals.rxPktRcvdCnt))
-    {
-        info.rxPktRcvdCnt.resize(rxPktRcvdCntSize);
-        scalvals.rxPktRcvdCnt->getVal(&info.rxPktRcvdCnt[0], rxPktRcvdCntSize);
+        info.rxLinkUp.resize(n);
+        uint32_t u32 = IMpsBase::get(scalvals.rxLinkUp);
+        for (std::size_t i{0}; i < n; ++i)
+            info.rxLinkUp.at(i) = (u32 & (1 << i));
     }
 }
 
