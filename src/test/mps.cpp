@@ -57,14 +57,16 @@ void mpsInfoReceiver(mps_infoData_t info)
 
     std::cout << "txLinkUp          = "  << std::boolalpha <<    info.txLinkUp                   << std::endl;
     std::cout << "txLinkUpCnt       = "  <<                      info.txLinkUpCnt                << std::endl;
-    std::cout << "rxLinkUp          = "  << "0x" << std::hex <<  info.rxLinkUp << std::dec       << std::endl;
 
-    std::cout << std::setw(15) << "rxLinkUpCnt:";
-    for (std::size_t i{0}; i < info.rxLinkUpCnt.size(); ++i)
+    std::cout << std::setw(15) << "rxLinkUp:";
+    for (std::size_t i{0}; i < info.rxLinkUp.size(); ++i)
         std::cout << std::setw(10) << i;
-    std::cout << std::endl << std::setw(15) << "";
+    std::cout << std::endl << std::setw(15) << "Status";
+    for (std::size_t i{0}; i < info.rxLinkUp.size(); ++i)
+        std::cout << std::setw(10) << std::boolalpha << info.rxLinkUp.at(i);
+    std::cout << std::endl << std::setw(15) << "Counter";
     for (std::size_t i{0}; i < info.rxLinkUpCnt.size(); ++i)
-        std::cout << std::setw(10) << info.rxLinkUpCnt[i];
+        std::cout << std::setw(10) << info.rxLinkUpCnt.at(i);
     std::cout << std::endl;
 
     std::cout << "mpsSlot           = "  << std::boolalpha <<    info.mpsSlot                    << std::endl;

@@ -92,7 +92,6 @@ const void IMpsNode::readMpsInfo(mps_infoData_t& info) const
     scalvals.lastMsgTimestamp->getVal( (uint16_t*)&info.lastMsgTimestamp );
     scalvals.txLinkUp->getVal(         (uint8_t*)&info.txLinkUp          );
     scalvals.txLinkUpCnt->getVal(      (uint32_t*)&info.txLinkUpCnt      );
-    scalvals.rxLinkUp->getVal(         (uint32_t*)&info.rxLinkUp         );
     scalvals.mpsSlot->getVal(          (uint8_t*)&info.mpsSlot           );
     scalvals.pllLocked->getVal(        (uint8_t*)&info.pllLocked         );
     scalvals.rollOverEn->getVal(       (uint16_t*)&info.rollOverEn       );
@@ -113,7 +112,19 @@ const void IMpsNode::readMpsInfo(mps_infoData_t& info) const
     if ((rxLinkUpCntSize > 0) && (scalvals.rxLinkUpCnt))
     {
         info.rxLinkUpCnt.resize(rxLinkUpCntSize);
+        info.rxLinkUp.resize(rxLinkUpCntSize);
         scalvals.rxLinkUpCnt->getVal(&info.rxLinkUpCnt[0], rxLinkUpCntSize);
+
+        if (scalvals.rxLinkUp)
+        {
+            uint32_t u32, mask;
+            scalvals.rxLinkUp->getVal(&u32);
+            for (std::size_t i{0}; i < rxLinkUpCntSize; ++i)
+            {
+                mask = (1 << i);
+                info.rxLinkUp.at(i) = (u32 & mask);
+            }
+        }
     }
 
     if ((rxPktRcvdCntSize > 0) && (scalvals.rxPktRcvdCnt))

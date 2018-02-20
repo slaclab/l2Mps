@@ -91,7 +91,8 @@ struct mps_infoData_t
     // From AppMpsSalt
     bool        txLinkUp;
     uint32_t    txLinkUpCnt;
-    uint32_t    rxLinkUp;
+    // uint32_t    rxLinkUp;
+    std::vector<bool> rxLinkUp;
     std::vector<uint32_t> rxLinkUpCnt;
     bool        mpsSlot;
     std::string appType;
