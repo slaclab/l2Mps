@@ -75,31 +75,31 @@ struct mps_infoScalval_t
 struct mps_infoData_t
 {
     // From AppMpsRegAppCh
-    uint16_t    appId;
-    uint8_t     version;
-    bool        enable;
-    bool        lcls1Mode;
-    uint8_t     byteCount;
-    bool        digitalEn;
-    uint16_t    beamDestMask;
-    uint16_t    altDestMask;
-    uint32_t    msgCnt;
-    uint16_t    lastMsgAppId;
-    bool        lastMsgLcls;
-    uint16_t    lastMsgTimestamp;
-    std::vector<uint8_t> lastMsgByte;
+    uint16_t                appId;
+    uint8_t                 version;
+    bool                    enable;
+    bool                    lcls1Mode;
+    uint8_t                 byteCount;
+    bool                    digitalEn;
+    uint16_t                beamDestMask;
+    uint16_t                altDestMask;
+    uint32_t                msgCnt;
+    uint16_t                lastMsgAppId;
+    bool                    lastMsgLcls;
+    uint16_t                lastMsgTimestamp;
+    std::vector<uint8_t>    lastMsgByte;
+
     // From AppMpsSalt
-    bool        txLinkUp;
-    uint32_t    txLinkUpCnt;
-    // uint32_t    rxLinkUp;
-    std::vector<bool> rxLinkUp;
-    std::vector<uint32_t> rxLinkUpCnt;
-    bool        mpsSlot;
-    std::string appType;
-    bool        pllLocked;
-    uint16_t    rollOverEn;
-    uint32_t    txPktSentCnt;
-    std::vector<uint32_t> rxPktRcvdCnt;
+    bool                    txLinkUp;
+    uint32_t                txLinkUpCnt;
+    std::vector<bool>       rxLinkUp;
+    std::vector<uint32_t>   rxLinkUpCnt;
+    bool                    mpsSlot;
+    std::string             appType;
+    bool                    pllLocked;
+    uint16_t                rollOverEn;
+    uint32_t                txPktSentCnt;
+    std::vector<uint32_t>   rxPktRcvdCnt;
 };
 
 typedef void (*p_mpsCBFunc_t)(mps_infoData_t);
