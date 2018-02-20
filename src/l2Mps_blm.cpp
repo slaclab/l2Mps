@@ -16,7 +16,7 @@ IMpsBlm::IMpsBlm(Path mpsRoot, const uint8_t amc)
                 {
                     for (int j = 0 ; j < numBlmIntChs; ++j)
                     {
-                        if (aThr->getByteMap() == blmChByteMap[_amc][i][j])        
+                        if (aThr->getByteMap() == blmChByteMap[_amc][i][j])
                         {
                             _appThrMap.insert( std::make_pair( blm_channel_t{{i,j}}, aThr ) );
                         }
@@ -38,7 +38,7 @@ IMpsBlm::~IMpsBlm()
     std::cout << "    > A BLM was destroyed (AMC = " << unsigned(_amc) << ")" << std::endl;
 }
 
-// Print BLM channel information    
+// Print BLM channel information
 void IMpsBlm::printChInfo(void) const
 {
     for (int i {0}; i < numBlmChs; ++i)

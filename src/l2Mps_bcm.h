@@ -39,7 +39,7 @@ public:
     IMpsBcm(Path mpsRoot, const uint8_t amc);
     ~IMpsBcm();
 
-    virtual void printChInfo(void) const;   
+    virtual void printChInfo(void) const;
 };
 
 class MpsBcmFactory

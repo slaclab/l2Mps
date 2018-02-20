@@ -56,7 +56,7 @@ IMpsNode::IMpsNode(Path mpsRoot) :
         {
             std::cout << "Couldn't read the number of RX link counters: " << e.getInfo() << std::endl;
         }
-    }    
+    }
 
     if (scalvals.rxPktRcvdCnt)
     {
@@ -68,7 +68,7 @@ IMpsNode::IMpsNode(Path mpsRoot) :
         {
             std::cout << "Couldn't read the number of RX packet counters: " << e.getInfo() << std::endl;
         }
-    } 
+    }
 }
 
 IMpsNode::~IMpsNode()
@@ -78,33 +78,32 @@ IMpsNode::~IMpsNode()
 
 const void IMpsNode::readMpsInfo(mps_infoData_t& info) const
 {
-    scalvals.appId->getVal(             (uint16_t*)&info.appId              );
-    scalvals.version->getVal(           (uint8_t*)&info.version             );
-    scalvals.enable->getVal(            (uint8_t*)&info.enable              );
-    scalvals.lcls1Mode->getVal(         (uint8_t*)&info.lcls1Mode           );
-    scalvals.byteCount->getVal(         (uint8_t*)&info.byteCount          );
-    scalvals.digitalEn->getVal(         (uint8_t*)&info.digitalEn           );
-    scalvals.beamDestMask->getVal(      (uint16_t*)&info.beamDestMask       );
-    scalvals.altDestMask->getVal(       (uint16_t*)&info.altDestMask        );
-    scalvals.msgCnt->getVal(            (uint32_t*)&info.msgCnt             );
-    scalvals.lastMsgAppId->getVal(      (uint16_t*)&info.lastMsgAppId       );
-    scalvals.lastMsgLcls->getVal(       (uint8_t*)&info.lastMsgLcls         );
-    scalvals.lastMsgTimestamp->getVal(  (uint16_t*)&info.lastMsgTimestamp   );
-    
-    scalvals.txLinkUp->getVal(          (uint8_t*)&info.txLinkUp           );
-    scalvals.txLinkUpCnt->getVal(       (uint32_t*)&info.txLinkUpCnt        );
-    scalvals.rxLinkUp->getVal(          (uint32_t*)&info.rxLinkUp           );
-    scalvals.mpsSlot->getVal(           (uint8_t*)&info.mpsSlot            );
-    scalvals.pllLocked->getVal(         (uint8_t*)&info.pllLocked          );
-    scalvals.rollOverEn->getVal(        (uint16_t*)&info.rollOverEn         );
-    scalvals.txPktSentCnt->getVal(      (uint32_t*)&info.txPktSentCnt       );
+    scalvals.appId->getVal(            (uint16_t*)&info.appId            );
+    scalvals.version->getVal(          (uint8_t*)&info.version           );
+    scalvals.enable->getVal(           (uint8_t*)&info.enable            );
+    scalvals.lcls1Mode->getVal(        (uint8_t*)&info.lcls1Mode         );
+    scalvals.byteCount->getVal(        (uint8_t*)&info.byteCount         );
+    scalvals.digitalEn->getVal(        (uint8_t*)&info.digitalEn         );
+    scalvals.beamDestMask->getVal(     (uint16_t*)&info.beamDestMask     );
+    scalvals.altDestMask->getVal(      (uint16_t*)&info.altDestMask      );
+    scalvals.msgCnt->getVal(           (uint32_t*)&info.msgCnt           );
+    scalvals.lastMsgAppId->getVal(     (uint16_t*)&info.lastMsgAppId     );
+    scalvals.lastMsgLcls->getVal(      (uint8_t*)&info.lastMsgLcls       );
+    scalvals.lastMsgTimestamp->getVal( (uint16_t*)&info.lastMsgTimestamp );
+    scalvals.txLinkUp->getVal(         (uint8_t*)&info.txLinkUp          );
+    scalvals.txLinkUpCnt->getVal(      (uint32_t*)&info.txLinkUpCnt      );
+    scalvals.rxLinkUp->getVal(         (uint32_t*)&info.rxLinkUp         );
+    scalvals.mpsSlot->getVal(          (uint8_t*)&info.mpsSlot           );
+    scalvals.pllLocked->getVal(        (uint8_t*)&info.pllLocked         );
+    scalvals.rollOverEn->getVal(       (uint16_t*)&info.rollOverEn       );
+    scalvals.txPktSentCnt->getVal(     (uint32_t*)&info.txPktSentCnt     );
 
     uint8_t reg;
     scalvals.appType->getVal(&reg);
     std::map<int, std::string>::iterator it = appType.find(reg);
     if (it != appType.end())
         info.appType = it->second;
-    
+
     if ((lastMsgByteSize > 0) && (scalvals.lastMsgByte))
     {
         info.lastMsgByte.resize(lastMsgByteSize);
@@ -138,8 +137,6 @@ const void IMpsNode::startPollThread(unsigned int poll, p_mpsCBFunc_t cbFunc)
     pthread_create(&scanThread, NULL, createThread, this);
     std::cout << "  MPS scan thread created succesfully." << std::endl;
 }
-
-
 
 void IMpsNode::pollThread()
 {
@@ -189,7 +186,7 @@ void IMpsNode::setEnable(const bool en) const
 }
 
 bool const IMpsNode::getLcls1Mode(void) const
-{ 
+{
     if (!scalvals.lcls1Mode)
         throw std::runtime_error("Register interface not implemented\n");
 
@@ -199,7 +196,7 @@ bool const IMpsNode::getLcls1Mode(void) const
 }
 
 void IMpsNode::setLcls1Mode(const bool mode) const
-{ 
+{
     if (!scalvals.lcls1Mode)
         throw std::runtime_error("Register interface not implemented\n");
 
@@ -207,7 +204,7 @@ void IMpsNode::setLcls1Mode(const bool mode) const
 }
 
 uint8_t const IMpsNode::getByteCount(void) const
-{ 
+{
     if (!scalvals.byteCount)
         throw std::runtime_error("Register interface not implemented\n");
 
@@ -277,8 +274,6 @@ std::string const IMpsNode::getAppType(void) const
         return std::string();
 }
 
-///////////////////////////
-
 uint32_t const IMpsNode::getTxLinkUpCnt(void) const
 {
     if (!scalvals.txLinkUpCnt)
@@ -318,7 +313,7 @@ bool const IMpsNode::getTxLinkUp(void) const
 {
     if (!scalvals.txLinkUp)
         throw std::runtime_error("Register interface not implemented\n");
-    
+
     uint8_t reg;
     scalvals.txLinkUp->getVal(&reg);
     return reg ? true : false;
@@ -344,7 +339,7 @@ bool const IMpsNode::getMpsSlot(void) const
 {
     if (!scalvals.mpsSlot)
         throw std::runtime_error("Register interface not implemented\n");
-    
+
     uint8_t reg;
     scalvals.mpsSlot->getVal(&reg);
     return reg ? true : false;
@@ -354,7 +349,7 @@ bool const IMpsNode::getPllLocked(void) const
 {
     if (!scalvals.pllLocked)
         throw std::runtime_error("Register interface not implemented\n");
-    
+
     uint8_t reg;
     scalvals.pllLocked->getVal(&reg);
     return reg ? true : false;
@@ -369,12 +364,12 @@ uint32_t const IMpsNode::getTxPktSentCnt(void) const
     scalvals.txPktSentCnt->getVal(&reg);
     return reg;
 }
-    
+
 uint32_t const IMpsNode::getRxPktRcvdSentCnt(const uint8_t ch) const
 {
       if (!scalvals.rxPktRcvdCnt)
         throw std::runtime_error("Register interface not implemented\n");
-    
+
     uint8_t n = scalvals.rxPktRcvdCnt->getNelms();
 
     if (ch > n)

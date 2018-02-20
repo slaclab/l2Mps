@@ -18,7 +18,7 @@ class IMpsNode;
 
 typedef boost::shared_ptr<IMpsNode>     MpsNode;
 
-// Name of the Base MPS module 
+// Name of the Base MPS module
 const std::string MpsBaseModuleName = "AppMpsRegBase";
 
 // Name of the SALT MPS module
@@ -26,7 +26,7 @@ const std::string MpsSaltModuleName = "AppMpsSalt";
 
 // Application type
 static std::map<int, std::string> appType = {
-    {0,     "NONE"},  
+    {0,     "NONE"},
     {1,     "DEDBUG"},
     {10,    "TIME_GEN"},
     {11,    "BCM"},
@@ -39,8 +39,10 @@ static std::map<int, std::string> appType = {
     {121,   "MPS_6CH"}
 };
 
+// CPSW interfaces
 struct mps_infoScalval_t
 {
+    // From AppMpsRegAppCh
     ScalVal     appId;
     ScalVal     version;
     ScalVal     enable;
@@ -54,7 +56,7 @@ struct mps_infoScalval_t
     ScalVal_RO  lastMsgLcls;
     ScalVal_RO  lastMsgTimestamp;
     ScalVal_RO  lastMsgByte;
-
+    // From AppMpsSalt
     ScalVal_RO  txLinkUp;
     ScalVal_RO  txLinkUpCnt;
     ScalVal_RO  rxLinkUp;
@@ -69,8 +71,10 @@ struct mps_infoScalval_t
     Command     rstPll;
 };
 
+// Data
 struct mps_infoData_t
 {
+    // From AppMpsRegAppCh
     uint16_t    appId;
     uint8_t     version;
     bool        enable;
@@ -84,7 +88,7 @@ struct mps_infoData_t
     bool        lastMsgLcls;
     uint16_t    lastMsgTimestamp;
     std::vector<uint8_t> lastMsgByte;
-
+    // From AppMpsSalt
     bool        txLinkUp;
     uint32_t    txLinkUpCnt;
     uint32_t    rxLinkUp;
@@ -147,28 +151,28 @@ public:
 
     // MPS Tx Link Up counter
     uint32_t const getTxLinkUpCnt(void) const;
-    
+
     // MPS Rx Link Up counter
     uint32_t const getRxLinkUpCnt(const uint8_t ch) const;
-    
+
     // Status Counter Roll Over Enable
     uint32_t const getRollOverEn(void) const;
 
     // Mps Tx LinkUp status
     bool     const getTxLinkUp(void) const;
-    
+
     // Mps Rx LinkUp status
     bool     const getRxLinkUp(const uint8_t ch) const;
-    
+
     // Mps Slot
     bool     const getMpsSlot(void) const;
-    
+
     // MPS PLL Lock Status
     bool     const getPllLocked(void) const;
 
     // Mps TX Packet Sent Counter
     uint32_t const getTxPktSentCnt(void) const;
-    
+
     // MPS RX Packet Received Counter
     uint32_t const getRxPktRcvdSentCnt(const uint8_t ch) const;
 
@@ -195,16 +199,14 @@ public:
     void const resetSaltPll(void) const;
 
 private:
-    Path       _mpsRoot;
-
-    mps_infoScalval_t scalvals;
-    std::size_t lastMsgByteSize;
-    std::size_t rxLinkUpCntSize;
-    std::size_t rxPktRcvdCntSize;
-
-    p_mpsCBFunc_t   mpsCB;
-    unsigned int    pollCB;
-    pthread_t       scanThread;
+    Path                _mpsRoot;
+    std::size_t         lastMsgByteSize;
+    std::size_t         rxLinkUpCntSize;
+    std::size_t         rxPktRcvdCntSize;
+    mps_infoScalval_t   scalvals;
+    p_mpsCBFunc_t       mpsCB;
+    unsigned int        pollCB;
+    pthread_t           scanThread;
 
     void pollThread();
     static void *createThread(void* p) { static_cast<IMpsNode*>(p)->pollThread(); return NULL; };

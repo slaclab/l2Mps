@@ -37,7 +37,7 @@ IMpsBpm::~IMpsBpm()
     std::cout << "    > A BPM was destroyed (AMC = " << unsigned(_amc) << ")" << std::endl;
 }
 
-// Print BPM channel information    
+// Print BPM channel information
 void IMpsBpm::printChInfo(void) const
 {
     for (int i {0}; i < numBpmChs; ++i)

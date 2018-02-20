@@ -23,7 +23,7 @@ typedef boost::shared_ptr<IThrChannel>    ThrChannel;
 // Threshod table arrays:
 //   - Indexes:
 //       [table=0..numThrTables] [threshold=0..maxThrCount]
-//       - Table index: 
+//       - Table index:
 //           - 0: Lcls1
 //           - 1: Idle
 //           - 2: Std
@@ -65,7 +65,7 @@ struct thr_chInfoData_t
     bool lcls1En;
 };
 
-// Threshold channel information scalval interfaces 
+// Threshold channel information scalval interfaces
 struct thr_chInfoScalval_t
 {
     ScalVal_RO count;
@@ -76,7 +76,7 @@ struct thr_chInfoScalval_t
 };
 
 // Threhold data (information + table data)
-struct thr_ch_t 
+struct thr_ch_t
 {
     thr_chInfoData_t info;
     thr_chData_t data;
@@ -101,7 +101,7 @@ const uint8_t numThrLimits = 2;
 
 // Number of threshold in each table
 const uint8_t numThrCounts[numThrTables] = {1, 1, 8, 8};
-const uint8_t maxThrCount = 8; // Maxium 
+const uint8_t maxThrCount = 8; // Maxium
 
 // Name of the MPS module where the threshold channels are defined
 const std::string MpsThrModuleName = "AppMpsRegAppCh";
@@ -113,7 +113,7 @@ public:
     ~IThrChannel();
 
     // Channel header
-    uint8_t getChannel()             const   { return ch; } 
+    uint8_t getChannel()             const   { return ch; }
     uint8_t getThrCount()            const;
     bool    getIdleEn()              const;
     void    setIdleEn(const bool en) const;
@@ -121,7 +121,7 @@ public:
     bool    getLcls1En()             const;
     uint8_t getByteMap()             const;
 
-    
+
     // Read threshold register
     const float getThresholdMin(thr_table_t ch) const;
     const float getThresholdMax(thr_table_t ch) const;
@@ -139,7 +139,7 @@ public:
     void setThresholdMaxEn(thr_table_t ch, const bool val) const;
 
     // Set/get scale factor
-    void        setScaleFactor(const float sf);       
+    void        setScaleFactor(const float sf);
     const float getScaleFactor() const;
 
     void readAll(thr_ch_t& data) const;

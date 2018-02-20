@@ -35,7 +35,7 @@ IThrChannel::IThrChannel(Path mpsRoot, uint8_t channel) : scaleFactor(1.0)
 
     thr_chInfoData_t thrChInfo;
     readThrChInfo(thrChInfo);
-    
+
     if (thrChInfo.lcls1En)
     {
         thr_tableScalval_t tableScalVal;
@@ -65,7 +65,7 @@ IThrChannel::IThrChannel(Path mpsRoot, uint8_t channel) : scaleFactor(1.0)
     for (int i=0; i<thrChInfo.count; ++i)
     {
         thr_tableScalval_t tableScalVal;
-        
+
         regName.str("");
         regName << "stdThr[" << unsigned(i) << "]/";
 
@@ -82,7 +82,7 @@ IThrChannel::IThrChannel(Path mpsRoot, uint8_t channel) : scaleFactor(1.0)
         for (int i=0; i<thrChInfo.count; ++i)
         {
             thr_tableScalval_t tableScalVal;
-        
+
             regName.str("");
             regName << "altThr[" << unsigned(i) << "]/";
 
@@ -104,10 +104,10 @@ IThrChannel::~IThrChannel()
 void IThrChannel::readThrChInfo(thr_chInfoData_t& info) const
 {
     uint32_t u32;
-    
+
     thrScalvals.info.count->getVal(&u32);
     info.count = u32;
-    
+
     thrScalvals.info.byteMap->getVal(&u32);
     info.byteMap = u32;
 
@@ -130,13 +130,13 @@ void IThrChannel::readThrChData(thr_chData_t& data) const
         thr_tableData_t tableData;
 
         uint32_t reg;
-        
+
         (it->second).minEn->getVal(&reg);
         tableData.minEn = reg?true:false;
 
         (it->second).maxEn->getVal(&reg);
         tableData.maxEn = reg?true:false;
-        
+
         (it->second).min->getVal(&reg);
         tableData.min = reg*scaleFactor;
 
@@ -182,7 +182,7 @@ void IThrChannel::setIdleEn(const bool en) const
 }
 
 bool IThrChannel::getAltEn() const
-{ 
+{
     if (!thrScalvals.info.altEn)
         throw std::runtime_error("Register interface not implemented\n");
 
@@ -214,7 +214,7 @@ uint8_t IThrChannel::getByteMap() const
 
 // Read threshold register
 const float IThrChannel::getThresholdMin(thr_table_t ch) const
-{  
+{
     thr_chScalval_t::const_iterator it;
     it = thrScalvals.data.find(ch);
     if (it != thrScalvals.data.end())
@@ -228,7 +228,7 @@ const float IThrChannel::getThresholdMin(thr_table_t ch) const
 }
 
 const float IThrChannel::getThresholdMax(thr_table_t ch) const
-{  
+{
     thr_chScalval_t::const_iterator it;
     it = thrScalvals.data.find(ch);
     if (it != thrScalvals.data.end())
@@ -243,7 +243,7 @@ const float IThrChannel::getThresholdMax(thr_table_t ch) const
 
 // Read threshold enable register
 const bool IThrChannel::getThresholdMinEn(thr_table_t ch) const
-{  
+{
     thr_chScalval_t::const_iterator it;
     it = thrScalvals.data.find(ch);
     if (it != thrScalvals.data.end())
@@ -257,7 +257,7 @@ const bool IThrChannel::getThresholdMinEn(thr_table_t ch) const
 }
 
 const bool IThrChannel::getThresholdMaxEn(thr_table_t ch) const
-{  
+{
     thr_chScalval_t::const_iterator it;
     it = thrScalvals.data.find(ch);
     if (it != thrScalvals.data.end())
@@ -323,13 +323,13 @@ void IThrChannel::setThresholdMaxEn(thr_table_t ch, const bool val) const
 
 // Set the scale factor
 void IThrChannel::setScaleFactor(const float sf)
-{ 
+{
     if (sf != 0)
-        scaleFactor = sf;    
+        scaleFactor = sf;
 }
 
 // Get the scale factor
 const float IThrChannel::getScaleFactor() const
-{ 
-    return scaleFactor;   
+{
+    return scaleFactor;
 }

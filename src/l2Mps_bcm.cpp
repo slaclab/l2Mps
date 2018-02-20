@@ -8,7 +8,7 @@ IMpsBcm::IMpsBcm(Path mpsRoot, const uint8_t amc)
         try
         {
             ThrChannel aThr(ThrChannelFactory::create(mpsRoot, ch));
-            
+
             if (aThr->getThrCount())
             {
                 for (int i = 0; i < numBcmChs; ++i)
@@ -35,7 +35,7 @@ IMpsBcm::~IMpsBcm()
     std::cout << "    > A BCM was destroyed (AMC = " << unsigned(_amc) << ")" << std::endl;
 }
 
-// Print BCM channel information    
+// Print BCM channel information
 void IMpsBcm::printChInfo(void) const
 {
     for (int i {0}; i < numBcmChs; ++i)

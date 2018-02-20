@@ -24,18 +24,8 @@ const uint8_t numBlmIntChs = 4;
 //    - Fisrt index is the AMC number (0 or 1)
 //    - The second index is the channel (0 to 5)
 //    - Teh third index is the integration channel (0 to 3)
-const uint8_t blmChByteMap[2][numBlmChs][numBlmIntChs] = 
+const uint8_t blmChByteMap[2][numBlmChs][numBlmIntChs] =
 {
-    // {
-    //     {  0,  1,  2,  3 },
-    //     {  4,  5,  6,  7 },
-    //     {  8,  9, 10, 11 },
-    // },
-    // {
-    //     { 12, 13, 14, 15 },
-    //     { 16, 17, 18, 19 },
-    //     { 20, 21, 22, 23 },
-    // }
     {
         {  0,  6, 12, 18 },
         {  1,  7, 13, 19 },
@@ -45,7 +35,7 @@ const uint8_t blmChByteMap[2][numBlmChs][numBlmIntChs] =
         {  3,  9, 15, 21 },
         {  4, 10, 16, 22 },
         {  5, 11, 17, 23 },
-    }    
+    }
 };
 
 class IMpsBlm;
@@ -58,7 +48,7 @@ typedef std::map<blm_channel_t, ThrChannel> blm_thrMap_t;
 typedef appThr_channel_t<blm_channel_t>     blmThr_channel_t;
 
 
-class IMpsBlm : public IMpsAppBase<blm_channel_t> 
+class IMpsBlm : public IMpsAppBase<blm_channel_t>
 {
 public:
     IMpsBlm(Path mpsRoot, const uint8_t amc);

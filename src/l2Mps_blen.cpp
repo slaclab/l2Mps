@@ -8,7 +8,7 @@ IMpsBlen::IMpsBlen(Path mpsRoot, const uint8_t amc)
         try
         {
             ThrChannel aThr(ThrChannelFactory::create(mpsRoot, ch));
-            
+
             if (aThr->getThrCount())
             {
                 for (int i = 0; i < numBlenChs; ++i)
@@ -35,7 +35,7 @@ IMpsBlen::~IMpsBlen()
     std::cout << "    > A BLEN was destroyed (AMC = " << unsigned(_amc) << ")" << std::endl;
 }
 
-// Print BLEN channel information    
+// Print BLEN channel information
 void IMpsBlen::printChInfo(void) const
 {
     for (int i {0}; i < numBlenChs; ++i)

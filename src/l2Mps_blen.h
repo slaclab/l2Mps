@@ -32,7 +32,7 @@ typedef std::map<blen_channel_t, thr_ch_t>   blen_dataMap_t;
 typedef std::map<blen_channel_t, ThrChannel> blen_thrMap_t;
 typedef appThr_channel_t<blen_channel_t>     blenThr_channel_t;
 
-class IMpsBlen : public IMpsAppBase<blen_channel_t> 
+class IMpsBlen : public IMpsAppBase<blen_channel_t>
 {
 public:
     IMpsBlen(Path mpsRoot, uint8_t amc);
