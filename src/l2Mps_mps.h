@@ -124,6 +124,10 @@ public:
     uint16_t const getAppId(void) const                         { return IMpsBase::get(scalvals.appId);                     };
     void setAppId(const uint16_t id) const                      { IMpsBase::set(scalvals.appId, id);                        };
 
+    // Mps version
+    uint8_t const getVersion(void) const                        { return IMpsBase::get(scalvals.version);                   };
+    void setVersion(uint8_t ver) const                          {IMpsBase::set(scalvals.version, ver);                      };
+
     // Mps Enable
     bool const getEnable(void) const                            { return IMpsBase::get(scalvals.enable)?true:false;         };
     void setEnable(const bool en) const                         { IMpsBase::set(scalvals.enable, en);                       };
