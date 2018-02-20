@@ -121,82 +121,81 @@ public:
     const std::size_t getRxPktRcvdCntSize() const { return rxPktRcvdCntSize; };
 
     // Mps Application ID
-    uint16_t const getAppId(void) const;
-    void setAppId(const uint16_t id) const;
+    uint16_t const getAppId(void) const                         { return IMpsBase::get(scalvals.appId);                     };
+    void setAppId(const uint16_t id) const                      { IMpsBase::set(scalvals.appId, id);                        };
 
     // Mps Enable
-    bool const getEnable() const;
-    void setEnable(const bool en) const;
+    bool const getEnable(void) const                            { return IMpsBase::get(scalvals.enable)?true:false;         };
+    void setEnable(const bool en) const                         { IMpsBase::set(scalvals.enable, en);                       };
 
     // Lcls1 Mode (true = LCLS1 mode; false = LCLS2 Mode)
-    bool const getLcls1Mode(void) const;
-    void setLcls1Mode(const bool mode) const;
+    bool const getLcls1Mode(void) const                         { return IMpsBase::get(scalvals.lcls1Mode)?true:false;      };
+    void setLcls1Mode(const bool mode) const                    { IMpsBase::set(scalvals.lcls1Mode, mode);                  };
 
     // Number ofbytes in the MPS message
-    uint8_t const getByteCount(void) const;
+    uint8_t const getByteCount(void) const                      { return IMpsBase::get(scalvals.byteCount);                 };
 
     // Application generates digital messages
-    bool const getDigitalEnable(void) const;
+    bool const getDigitalEnable(void) const                     { return IMpsBase::get(scalvals.digitalEn)?true:false;      };
 
     // Beam destination mask
-    uint16_t const getBeamDestMask(void) const;
-    void setBeamDestMask(const uint16_t mask) const;
+    uint16_t const getBeamDestMask(void) const                  { return IMpsBase::get(scalvals.beamDestMask);              };
+    void setBeamDestMask(const uint16_t mask) const             { IMpsBase::set(scalvals.beamDestMask, mask);               };
 
     // Alt destination mask
-    uint8_t const getAltDestMask(void) const;
-    void setAltDestMask(const uint8_t mask) const;
+    uint8_t const getAltDestMask(void) const                    { return IMpsBase::get(scalvals.altDestMask);               };
+    void setAltDestMask(const uint8_t mask) const               { IMpsBase::set(scalvals.altDestMask, mask);                };
 
     // Application type
     std::string const getAppType(void) const;
 
     // MPS Tx Link Up counter
-    uint32_t const getTxLinkUpCnt(void) const;
+    uint32_t const getTxLinkUpCnt(void) const                   { return IMpsBase::get(scalvals.txLinkUpCnt);               };
 
     // MPS Rx Link Up counter
-    uint32_t const getRxLinkUpCnt(const uint8_t ch) const;
+    uint32_t const getRxLinkUpCnt(const uint8_t ch) const       { return IMpsBase::get(scalvals.rxLinkUpCnt, ch);           };
 
     // Status Counter Roll Over Enable
-    uint32_t const getRollOverEn(void) const;
+    uint32_t const getRollOverEn(void) const                    { return IMpsBase::get(scalvals.rollOverEn);                };
 
     // Mps Tx LinkUp status
-    bool     const getTxLinkUp(void) const;
+    bool     const getTxLinkUp(void) const                      { return IMpsBase::get(scalvals.txLinkUp)?true:false;       };
 
     // Mps Rx LinkUp status
     bool     const getRxLinkUp(const uint8_t ch) const;
 
     // Mps Slot
-    bool     const getMpsSlot(void) const;
+    bool     const getMpsSlot(void) const                       { return IMpsBase::get(scalvals.mpsSlot)?true:false;        };
 
     // MPS PLL Lock Status
-    bool     const getPllLocked(void) const;
+    bool     const getPllLocked(void) const                     { return IMpsBase::get(scalvals.pllLocked)?true:false;      };
 
     // Mps TX Packet Sent Counter
-    uint32_t const getTxPktSentCnt(void) const;
+    uint32_t const getTxPktSentCnt(void) const                  { return IMpsBase::get(scalvals.txPktSentCnt);              };
 
     // MPS RX Packet Received Counter
-    uint32_t const getRxPktRcvdSentCnt(const uint8_t ch) const;
+    uint32_t const getRxPktRcvdCnt(const uint8_t ch) const      { return IMpsBase::get(scalvals.rxPktRcvdCnt, ch);          };
 
     // MpsMessage counter
-    uint32_t const getMpsMsgCount(void) const;
+    uint32_t const getMsgCount(void) const                      { return IMpsBase::get(scalvals.msgCnt);                    };
 
     // App ID in the last message
-    uint16_t const getLastMsgAppId(void) const;
+    uint16_t const getLastMsgAppId(void) const                  { return IMpsBase::get(scalvals.lastMsgAppId);              };
 
     // LCLS flag in the last message
-    bool     const getLastMsgLcls(void) const;
+    bool     const getLastMsgLcls(void) const                   { return IMpsBase::get(scalvals.lastMsgLcls)?true:false;    };
 
     // Timestamp in the last message
-    uint16_t const getLastMsgTimeStamp(void) const;
+    uint16_t const getLastMsgTimeStamp(void) const              { return IMpsBase::get(scalvals.lastMsgTimestamp);          };
 
     // Bytes from the last message
-    uint8_t  const getLastMsgByte(const uint8_t index) const;
-    // std::size_t const getLastMsgByteSize(void) const { return lastMsgByteSize; }
+    uint8_t  const getLastMsgByte(const uint8_t index) const    { return IMpsBase::get(scalvals.lastMsgByte, index);        };
 
     // Reset the SALT conuters
-    void const resetSaltCnt(void) const;
+    void const resetSaltCnt(void) const                         { return IMpsBase::execute(scalvals.rstCnt);                };
 
     // Reset the SALT PLL
-    void const resetSaltPll(void) const;
+    void const resetSaltPll(void) const                         { return IMpsBase::execute(scalvals.rstPll);                };
 
 private:
     Path                _mpsRoot;
