@@ -5,4 +5,4 @@ This driver depends on the following external packages:
 - BOOST
 - YAML-CPP
 
-Their location must be defined in *config.mak*
+Their location must be defined in **config.mak**.
