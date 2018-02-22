@@ -57,12 +57,13 @@ typedef std::map<thr_table_t, thr_tableScalval_t>   thr_chScalval_t;
 // Threhold channel information data
 struct thr_chInfoData_t
 {
-    int  ch;
-    int  count;
-    int  byteMap;
-    bool idleEn;
-    bool altEn;
-    bool lcls1En;
+    int   ch;
+    int   count;
+    int   byteMap;
+    bool  idleEn;
+    bool  altEn;
+    bool  lcls1En;
+    float scaleFactor;
 };
 
 // Threshold channel information scalval interfaces

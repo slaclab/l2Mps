@@ -121,6 +121,7 @@ void IThrChannel::readThrChInfo(thr_chInfoData_t& info) const
     info.altEn = (u32?true:false);
 
     info.ch = ch;
+    info.scaleFactor = scaleFactor;
 }
 
 void IThrChannel::readThrChData(thr_chData_t& data) const
