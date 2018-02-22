@@ -16,9 +16,9 @@ IMpsBlm::IMpsBlm(Path mpsRoot, const uint8_t amc)
                 {
                     for (int j = 0 ; j < numBlmIntChs; ++j)
                     {
-                        if (aThr->getByteMap() == blmChByteMap[_amc][i][j])
+                        if (aThr->getByteMap() == blmChByteMap[amc][i][j])
                         {
-                            _appThrMap.insert( std::make_pair( blm_channel_t{{i,j}}, aThr ) );
+                            appThrMap.insert( std::make_pair( blm_channel_t{{i,j}}, aThr ) );
                         }
 
                     }
@@ -29,13 +29,13 @@ IMpsBlm::IMpsBlm(Path mpsRoot, const uint8_t amc)
         {
         }
     }
-    std::cout << "    > A BLM was created (AMC = " << unsigned(_amc) << ")" << std::endl;
+    std::cout << "    > A BLM was created (AMC = " << unsigned(amc) << ")" << std::endl;
     printChInfo();
 }
 
 IMpsBlm::~IMpsBlm()
 {
-    std::cout << "    > A BLM was destroyed (AMC = " << unsigned(_amc) << ")" << std::endl;
+    std::cout << "    > A BLM was destroyed (AMC = " << unsigned(amc) << ")" << std::endl;
 }
 
 // Print BLM channel information
@@ -48,8 +48,8 @@ void IMpsBlm::printChInfo(void) const
         {
             std::cout << "            Integration channel = " << j << ": Threshold channel = ";
 
-            blm_thrMap_t::const_iterator it = _appThrMap.find(blm_channel_t{{i,j}});
-            if (it != _appThrMap.end())
+            blm_thrMap_t::const_iterator it = appThrMap.find(blm_channel_t{{i,j}});
+            if (it != appThrMap.end())
                 std::cout << unsigned((it->second)->getChannel()) << std::endl;
             else
                 std::cout << "Not implemented" << std::endl;

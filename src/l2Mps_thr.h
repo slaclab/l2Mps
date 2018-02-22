@@ -149,7 +149,7 @@ public:
 
 
 private:
-    Path            _chRoot;        // Root path to the channel register space
+    Path            chRoot;        // Root path to the channel register space
     int             ch;             // Threhold channel number
     thr_scalval_t   thrScalvals;    // Threshold scalval interfaces
     float           scaleFactor;    // Scale factor (egu/raw)

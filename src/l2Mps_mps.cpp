@@ -2,23 +2,23 @@
 
 IMpsNode::IMpsNode(Path mpsRoot) :
     // MPS root path
-    _mpsRoot             ( mpsRoot->clone())
+    mpsRoot             ( mpsRoot->clone())
 
 {
     // MPS Base interfaces
-    scalvals.appId               = IMpsBase::createInterface<ScalVal>(    _mpsRoot, MpsBaseModuleName + "/mpsAppId");
-    scalvals.version             = IMpsBase::createInterface<ScalVal>(    _mpsRoot, MpsBaseModuleName + "/mpsVersion");
-    scalvals.enable              = IMpsBase::createInterface<ScalVal>(    _mpsRoot, MpsBaseModuleName + "/mpsEnable");
-    scalvals.lcls1Mode           = IMpsBase::createInterface<ScalVal>(    _mpsRoot, MpsBaseModuleName + "/lcls1Mode");
-    scalvals.byteCount           = IMpsBase::createInterface<ScalVal_RO>( _mpsRoot, MpsBaseModuleName + "/byteCount");
-    scalvals.digitalEn           = IMpsBase::createInterface<ScalVal_RO>( _mpsRoot, MpsBaseModuleName + "/digitalEn");
-    scalvals.beamDestMask        = IMpsBase::createInterface<ScalVal>(    _mpsRoot, MpsBaseModuleName + "/beamDestMask");
-    scalvals.altDestMask         = IMpsBase::createInterface<ScalVal>(    _mpsRoot, MpsBaseModuleName + "/altDestMask");
-    scalvals.msgCnt              = IMpsBase::createInterface<ScalVal_RO>( _mpsRoot, MpsBaseModuleName + "/mpsMsgCount");
-    scalvals.lastMsgAppId        = IMpsBase::createInterface<ScalVal_RO>( _mpsRoot, MpsBaseModuleName + "/lastMsgAppId");
-    scalvals.lastMsgLcls         = IMpsBase::createInterface<ScalVal_RO>( _mpsRoot, MpsBaseModuleName + "/lastMsgLcls");
-    scalvals.lastMsgTimestamp    = IMpsBase::createInterface<ScalVal_RO>( _mpsRoot, MpsBaseModuleName + "/lastMsgTimeStamp");
-    scalvals.lastMsgByte         = IMpsBase::createInterface<ScalVal_RO>( _mpsRoot, MpsBaseModuleName + "/lastMsgByte");
+    scalvals.appId               = IMpsBase::createInterface<ScalVal>(    mpsRoot, MpsBaseModuleName + "/mpsAppId");
+    scalvals.version             = IMpsBase::createInterface<ScalVal>(    mpsRoot, MpsBaseModuleName + "/mpsVersion");
+    scalvals.enable              = IMpsBase::createInterface<ScalVal>(    mpsRoot, MpsBaseModuleName + "/mpsEnable");
+    scalvals.lcls1Mode           = IMpsBase::createInterface<ScalVal>(    mpsRoot, MpsBaseModuleName + "/lcls1Mode");
+    scalvals.byteCount           = IMpsBase::createInterface<ScalVal_RO>( mpsRoot, MpsBaseModuleName + "/byteCount");
+    scalvals.digitalEn           = IMpsBase::createInterface<ScalVal_RO>( mpsRoot, MpsBaseModuleName + "/digitalEn");
+    scalvals.beamDestMask        = IMpsBase::createInterface<ScalVal>(    mpsRoot, MpsBaseModuleName + "/beamDestMask");
+    scalvals.altDestMask         = IMpsBase::createInterface<ScalVal>(    mpsRoot, MpsBaseModuleName + "/altDestMask");
+    scalvals.msgCnt              = IMpsBase::createInterface<ScalVal_RO>( mpsRoot, MpsBaseModuleName + "/mpsMsgCount");
+    scalvals.lastMsgAppId        = IMpsBase::createInterface<ScalVal_RO>( mpsRoot, MpsBaseModuleName + "/lastMsgAppId");
+    scalvals.lastMsgLcls         = IMpsBase::createInterface<ScalVal_RO>( mpsRoot, MpsBaseModuleName + "/lastMsgLcls");
+    scalvals.lastMsgTimestamp    = IMpsBase::createInterface<ScalVal_RO>( mpsRoot, MpsBaseModuleName + "/lastMsgTimeStamp");
+    scalvals.lastMsgByte         = IMpsBase::createInterface<ScalVal_RO>( mpsRoot, MpsBaseModuleName + "/lastMsgByte");
 
     if (scalvals.lastMsgByte)
     {
@@ -33,18 +33,18 @@ IMpsNode::IMpsNode(Path mpsRoot) :
     }
 
     // MPS SALT interfaces
-    scalvals.txLinkUp        = IMpsBase::createInterface<ScalVal_RO>( _mpsRoot, MpsSaltModuleName + "/MpsTxLinkUP");
-    scalvals.txLinkUpCnt     = IMpsBase::createInterface<ScalVal_RO>( _mpsRoot, MpsSaltModuleName + "/MpsTxLinkUpCnt");
-    scalvals.rxLinkUp        = IMpsBase::createInterface<ScalVal_RO>( _mpsRoot, MpsSaltModuleName + "/MpsRxLinkUP");
-    scalvals.rxLinkUpCnt     = IMpsBase::createInterface<ScalVal_RO>( _mpsRoot, MpsSaltModuleName + "/MpsRxLinkUpCnt");
-    scalvals.mpsSlot         = IMpsBase::createInterface<ScalVal_RO>( _mpsRoot, MpsSaltModuleName + "/MPS_SLOT_G");
-    scalvals.appType         = IMpsBase::createInterface<ScalVal_RO>( _mpsRoot, MpsSaltModuleName + "/APP_TYPE_G");
-    scalvals.pllLocked       = IMpsBase::createInterface<ScalVal_RO>( _mpsRoot, MpsSaltModuleName + "/MpsPllLocked");
-    scalvals.rollOverEn      = IMpsBase::createInterface<ScalVal>(    _mpsRoot, MpsSaltModuleName + "/RollOverEn");
-    scalvals.txPktSentCnt    = IMpsBase::createInterface<ScalVal_RO>( _mpsRoot, MpsSaltModuleName + "/MpsTxPktSentCnt");
-    scalvals.rxPktRcvdCnt    = IMpsBase::createInterface<ScalVal_RO>( _mpsRoot, MpsSaltModuleName + "/MpsRxPktRcvdCnt");
-    scalvals.rstCnt          = IMpsBase::createInterface<Command>(    _mpsRoot, MpsSaltModuleName + "/RstCnt");
-    scalvals.rstPll          = IMpsBase::createInterface<Command>(    _mpsRoot, MpsSaltModuleName + "/RstPll");
+    scalvals.txLinkUp        = IMpsBase::createInterface<ScalVal_RO>( mpsRoot, MpsSaltModuleName + "/MpsTxLinkUP");
+    scalvals.txLinkUpCnt     = IMpsBase::createInterface<ScalVal_RO>( mpsRoot, MpsSaltModuleName + "/MpsTxLinkUpCnt");
+    scalvals.rxLinkUp        = IMpsBase::createInterface<ScalVal_RO>( mpsRoot, MpsSaltModuleName + "/MpsRxLinkUP");
+    scalvals.rxLinkUpCnt     = IMpsBase::createInterface<ScalVal_RO>( mpsRoot, MpsSaltModuleName + "/MpsRxLinkUpCnt");
+    scalvals.mpsSlot         = IMpsBase::createInterface<ScalVal_RO>( mpsRoot, MpsSaltModuleName + "/MPS_SLOT_G");
+    scalvals.appType         = IMpsBase::createInterface<ScalVal_RO>( mpsRoot, MpsSaltModuleName + "/APP_TYPE_G");
+    scalvals.pllLocked       = IMpsBase::createInterface<ScalVal_RO>( mpsRoot, MpsSaltModuleName + "/MpsPllLocked");
+    scalvals.rollOverEn      = IMpsBase::createInterface<ScalVal>(    mpsRoot, MpsSaltModuleName + "/RollOverEn");
+    scalvals.txPktSentCnt    = IMpsBase::createInterface<ScalVal_RO>( mpsRoot, MpsSaltModuleName + "/MpsTxPktSentCnt");
+    scalvals.rxPktRcvdCnt    = IMpsBase::createInterface<ScalVal_RO>( mpsRoot, MpsSaltModuleName + "/MpsRxPktRcvdCnt");
+    scalvals.rstCnt          = IMpsBase::createInterface<Command>(    mpsRoot, MpsSaltModuleName + "/RstCnt");
+    scalvals.rstPll          = IMpsBase::createInterface<Command>(    mpsRoot, MpsSaltModuleName + "/RstPll");
 
     if (scalvals.rxLinkUpCnt)
     {

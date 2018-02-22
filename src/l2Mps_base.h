@@ -25,7 +25,7 @@ template <typename T>
 class IMpsAppBase
 {
 public:
-    IMpsAppBase(const uint8_t amc) : _amc(amc) {};
+    IMpsAppBase(const uint8_t amc) : amc(amc) {};
     ~IMpsAppBase() {};
 
     // Threhold channel information
@@ -65,11 +65,11 @@ public:
             std::cout << "Error creating poll thread: poll time must be greater than 0" << std::endl;
             return;
         }
-        _poll   = poll;
-        _appCB  = callBack;
+        poll   = poll;
+        appCB  = callBack;
 
         std::cout << "      Starting scan thread..." << std::endl;
-        pthread_create(&_scanThread, NULL, createThread, this);
+        pthread_create(&scanThread, NULL, createThread, this);
         std::cout << "      Scan thread created succesfully." << std::endl;
     };
 
@@ -77,9 +77,9 @@ public:
     ThrChannel      findThrChannel(const T& appCh) const
     {
         typename std::map<T, ThrChannel>::const_iterator it;
-        it = _appThrMap.find(appCh);
+        it = appThrMap.find(appCh);
 
-        if (it == _appThrMap.end())
+        if (it == appThrMap.end())
             throw std::runtime_error("Channel not defined\n");
 
         return it->second;
@@ -89,11 +89,11 @@ public:
     virtual void            printChInfo     ( void ) const = 0;
 
 protected:
-    std::map<T, ThrChannel>    _appThrMap;
-    uint8_t                     _amc;
-    unsigned int                _poll;
-    void (*_appCB)(int, std::map<T, thr_ch_t>);
-    pthread_t                   _scanThread;
+    std::map<T, ThrChannel>    appThrMap;
+    uint8_t                     amc;
+    unsigned int                poll;
+    void (*appCB)(int, std::map<T, thr_ch_t>);
+    pthread_t                   scanThread;
 
     // Polling functions
     void        pollThread()
@@ -102,7 +102,7 @@ protected:
         {
              std::map<T, thr_ch_t> dataMap;
              typename std::map<T, ThrChannel>::const_iterator it;
-            for (it = _appThrMap.begin() ; it != _appThrMap.end(); ++it)
+            for (it = appThrMap.begin() ; it != appThrMap.end(); ++it)
             {
                 thr_ch_t data;
                 (it->second)->readAll(data);
@@ -110,9 +110,9 @@ protected:
                 dataMap.insert(std::make_pair(it->first, data));
             }
 
-            _appCB(_amc, dataMap);
+            appCB(amc, dataMap);
             dataMap.clear();
-            sleep(_poll);
+            sleep(poll);
         }
     };
 

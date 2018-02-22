@@ -18,7 +18,7 @@ IThrChannel::IThrChannel(Path mpsRoot, uint8_t channel) : scaleFactor(1.0)
 
     try
     {
-        _chRoot = mpsRoot->findByName(chStr.str().c_str());
+        chRoot = mpsRoot->findByName(chStr.str().c_str());
     }
     catch (CPSWError &e)
     {
@@ -27,11 +27,11 @@ IThrChannel::IThrChannel(Path mpsRoot, uint8_t channel) : scaleFactor(1.0)
     }
 
     // Get Channel header information register
-    thrScalvals.info.count   = IMpsBase::createInterface<ScalVal_RO>( _chRoot, "thresholdCount" );
-    thrScalvals.info.idleEn  = IMpsBase::createInterface<ScalVal>(    _chRoot, "idleEn"         );
-    thrScalvals.info.altEn   = IMpsBase::createInterface<ScalVal_RO>( _chRoot, "altEn"          );
-    thrScalvals.info.lcls1En = IMpsBase::createInterface<ScalVal_RO>( _chRoot, "lcls1En"        );
-    thrScalvals.info.byteMap = IMpsBase::createInterface<ScalVal_RO>( _chRoot, "byteMap"        );
+    thrScalvals.info.count   = IMpsBase::createInterface<ScalVal_RO>( chRoot, "thresholdCount" );
+    thrScalvals.info.idleEn  = IMpsBase::createInterface<ScalVal>(    chRoot, "idleEn"         );
+    thrScalvals.info.altEn   = IMpsBase::createInterface<ScalVal_RO>( chRoot, "altEn"          );
+    thrScalvals.info.lcls1En = IMpsBase::createInterface<ScalVal_RO>( chRoot, "lcls1En"        );
+    thrScalvals.info.byteMap = IMpsBase::createInterface<ScalVal_RO>( chRoot, "byteMap"        );
 
     thr_chInfoData_t thrChInfo;
     readThrChInfo(thrChInfo);
@@ -40,10 +40,10 @@ IThrChannel::IThrChannel(Path mpsRoot, uint8_t channel) : scaleFactor(1.0)
     {
         thr_tableScalval_t tableScalVal;
 
-        tableScalVal.minEn = IMpsBase::createInterface<ScalVal>( _chRoot, "lcls1Thr/minEn" );
-        tableScalVal.maxEn = IMpsBase::createInterface<ScalVal>( _chRoot, "lcls1Thr/maxEn" );
-        tableScalVal.min   = IMpsBase::createInterface<ScalVal>( _chRoot, "lcls1Thr/min" );
-        tableScalVal.max   = IMpsBase::createInterface<ScalVal>( _chRoot, "lcls1Thr/max" );
+        tableScalVal.minEn = IMpsBase::createInterface<ScalVal>( chRoot, "lcls1Thr/minEn" );
+        tableScalVal.maxEn = IMpsBase::createInterface<ScalVal>( chRoot, "lcls1Thr/maxEn" );
+        tableScalVal.min   = IMpsBase::createInterface<ScalVal>( chRoot, "lcls1Thr/min" );
+        tableScalVal.max   = IMpsBase::createInterface<ScalVal>( chRoot, "lcls1Thr/max" );
 
         thrScalvals.data.insert( std::make_pair( thr_table_t{{0,0}}, tableScalVal) );
     }
@@ -52,10 +52,10 @@ IThrChannel::IThrChannel(Path mpsRoot, uint8_t channel) : scaleFactor(1.0)
     {
         thr_tableScalval_t tableScalVal;
 
-        tableScalVal.minEn = IMpsBase::createInterface<ScalVal>( _chRoot, "idleThr/minEn" );
-        tableScalVal.maxEn = IMpsBase::createInterface<ScalVal>( _chRoot, "idleThr/maxEn" );
-        tableScalVal.min   = IMpsBase::createInterface<ScalVal>( _chRoot, "idleThr/min" );
-        tableScalVal.max   = IMpsBase::createInterface<ScalVal>( _chRoot, "idleThr/max" );
+        tableScalVal.minEn = IMpsBase::createInterface<ScalVal>( chRoot, "idleThr/minEn" );
+        tableScalVal.maxEn = IMpsBase::createInterface<ScalVal>( chRoot, "idleThr/maxEn" );
+        tableScalVal.min   = IMpsBase::createInterface<ScalVal>( chRoot, "idleThr/min" );
+        tableScalVal.max   = IMpsBase::createInterface<ScalVal>( chRoot, "idleThr/max" );
 
         thrScalvals.data.insert( std::make_pair( thr_table_t{{1,0}}, tableScalVal) );
     }
@@ -69,10 +69,10 @@ IThrChannel::IThrChannel(Path mpsRoot, uint8_t channel) : scaleFactor(1.0)
         regName.str("");
         regName << "stdThr[" << unsigned(i) << "]/";
 
-        tableScalVal.minEn = IMpsBase::createInterface<ScalVal>( _chRoot, regName.str() + "minEn" );
-        tableScalVal.maxEn = IMpsBase::createInterface<ScalVal>( _chRoot, regName.str() + "maxEn" );
-        tableScalVal.min   = IMpsBase::createInterface<ScalVal>( _chRoot, regName.str() + "min" );
-        tableScalVal.max   = IMpsBase::createInterface<ScalVal>( _chRoot, regName.str() + "max" );
+        tableScalVal.minEn = IMpsBase::createInterface<ScalVal>( chRoot, regName.str() + "minEn" );
+        tableScalVal.maxEn = IMpsBase::createInterface<ScalVal>( chRoot, regName.str() + "maxEn" );
+        tableScalVal.min   = IMpsBase::createInterface<ScalVal>( chRoot, regName.str() + "min" );
+        tableScalVal.max   = IMpsBase::createInterface<ScalVal>( chRoot, regName.str() + "max" );
 
         thrScalvals.data.insert( std::make_pair( thr_table_t{{2,i}}, tableScalVal) );
     }
@@ -86,10 +86,10 @@ IThrChannel::IThrChannel(Path mpsRoot, uint8_t channel) : scaleFactor(1.0)
             regName.str("");
             regName << "altThr[" << unsigned(i) << "]/";
 
-            tableScalVal.minEn = IMpsBase::createInterface<ScalVal>( _chRoot, regName.str() + "minEn" );
-            tableScalVal.maxEn = IMpsBase::createInterface<ScalVal>( _chRoot, regName.str() + "maxEn" );
-            tableScalVal.min   = IMpsBase::createInterface<ScalVal>( _chRoot, regName.str() + "min" );
-            tableScalVal.max   = IMpsBase::createInterface<ScalVal>( _chRoot, regName.str() + "max" );
+            tableScalVal.minEn = IMpsBase::createInterface<ScalVal>( chRoot, regName.str() + "minEn" );
+            tableScalVal.maxEn = IMpsBase::createInterface<ScalVal>( chRoot, regName.str() + "maxEn" );
+            tableScalVal.min   = IMpsBase::createInterface<ScalVal>( chRoot, regName.str() + "min" );
+            tableScalVal.max   = IMpsBase::createInterface<ScalVal>( chRoot, regName.str() + "max" );
 
             thrScalvals.data.insert( std::make_pair( thr_table_t{{3,i}}, tableScalVal) );
         }

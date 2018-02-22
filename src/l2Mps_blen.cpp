@@ -15,7 +15,7 @@ IMpsBlen::IMpsBlen(Path mpsRoot, const uint8_t amc)
                 {
                     if (aThr->getByteMap() == blenChByteMap[amc][i])
                     {
-                        _appThrMap.insert( std::make_pair( i, aThr ) );
+                        appThrMap.insert( std::make_pair( i, aThr ) );
                         break;
                     }
                 }
@@ -26,13 +26,13 @@ IMpsBlen::IMpsBlen(Path mpsRoot, const uint8_t amc)
         }
     }
 
-    std::cout << "    > A BLEN was created (AMC = " << unsigned(_amc) << ")" << std::endl;
+    std::cout << "    > A BLEN was created (AMC = " << unsigned(amc) << ")" << std::endl;
     printChInfo();
 }
 
 IMpsBlen::~IMpsBlen()
 {
-    std::cout << "    > A BLEN was destroyed (AMC = " << unsigned(_amc) << ")" << std::endl;
+    std::cout << "    > A BLEN was destroyed (AMC = " << unsigned(amc) << ")" << std::endl;
 }
 
 // Print BLEN channel information
@@ -42,9 +42,9 @@ void IMpsBlen::printChInfo(void) const
     {
         std::cout << "        Channel = " << i << ": Threshold channel = ";
 
-        blen_thrMap_t::const_iterator it = _appThrMap.find(i);
+        blen_thrMap_t::const_iterator it = appThrMap.find(i);
 
-        if (it != _appThrMap.end())
+        if (it != appThrMap.end())
             std::cout << unsigned((it->second)->getChannel()) << std::endl;
         else
             std::cout << "Not implemented" << std::endl;

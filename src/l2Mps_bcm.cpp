@@ -15,7 +15,7 @@ IMpsBcm::IMpsBcm(Path mpsRoot, const uint8_t amc)
                 {
                     if (aThr->getByteMap() == bcmChByteMap[amc][i])
                     {
-                        _appThrMap.insert( std::make_pair( i, aThr ) );
+                        appThrMap.insert( std::make_pair( i, aThr ) );
                         break;
                     }
                 }
@@ -26,13 +26,13 @@ IMpsBcm::IMpsBcm(Path mpsRoot, const uint8_t amc)
         }
     }
 
-    std::cout << "    > A BCM was created (AMC = " << unsigned(_amc) << ")" << std::endl;
+    std::cout << "    > A BCM was created (AMC = " << unsigned(amc) << ")" << std::endl;
     printChInfo();
 }
 
 IMpsBcm::~IMpsBcm()
 {
-    std::cout << "    > A BCM was destroyed (AMC = " << unsigned(_amc) << ")" << std::endl;
+    std::cout << "    > A BCM was destroyed (AMC = " << unsigned(amc) << ")" << std::endl;
 }
 
 // Print BCM channel information
@@ -42,9 +42,9 @@ void IMpsBcm::printChInfo(void) const
     {
         std::cout << "        Channel = " << i << ": Threshold channel = ";
 
-        bcm_thrMap_t::const_iterator it = _appThrMap.find(i);
+        bcm_thrMap_t::const_iterator it = appThrMap.find(i);
 
-        if (it != _appThrMap.end())
+        if (it != appThrMap.end())
             std::cout << unsigned((it->second)->getChannel()) << std::endl;
         else
             std::cout << "Not implemented" << std::endl;

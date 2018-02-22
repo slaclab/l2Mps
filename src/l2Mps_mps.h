@@ -203,7 +203,7 @@ public:
     void const resetSaltPll(void) const                         { return IMpsBase::execute(scalvals.rstPll);                };
 
 private:
-    Path                _mpsRoot;
+    Path                mpsRoot;
     std::size_t         lastMsgByteSize;
     std::size_t         rxLinkUpCntSize;
     std::size_t         rxPktRcvdCntSize;
