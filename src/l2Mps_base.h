@@ -29,12 +29,13 @@ public:
     ~IMpsAppBase() {};
 
     // Threhold channel information
-    uint32_t const  getChannel          ( const T& ch) const { return findThrChannel(ch)->getChannel();     };
-    bool     const  getIdleEn           ( const T& ch) const { return findThrChannel(ch)->getIdleEn();      };
-    bool     const  getAltEn            ( const T& ch) const { return findThrChannel(ch)->getAltEn();       };
-    bool     const  getLcls1En          ( const T& ch) const { return findThrChannel(ch)->getLcls1En();     };
-    uint32_t const  getByteMap          ( const T& ch) const { return findThrChannel(ch)->getByteMap();     };
-    uint32_t const  getThrCount         ( const T& ch) const { return findThrChannel(ch)->getThrCount();    };
+    uint32_t const  getChannel  ( const T& ch) const                { return findThrChannel(ch)->getChannel();  };
+    bool     const  getIdleEn   ( const T& ch) const                { return findThrChannel(ch)->getIdleEn();   };
+    void            setIdleEn   ( const T& ch, const bool en) const { findThrChannel(ch)->setIdleEn(en);        };
+    bool     const  getAltEn    ( const T& ch) const                { return findThrChannel(ch)->getAltEn();    };
+    bool     const  getLcls1En  ( const T& ch) const                { return findThrChannel(ch)->getLcls1En();  };
+    uint32_t const  getByteMap  ( const T& ch) const                { return findThrChannel(ch)->getByteMap();  };
+    uint32_t const  getThrCount ( const T& ch) const                { return findThrChannel(ch)->getThrCount(); };
 
 
     // Threshold set enable methods
