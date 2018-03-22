@@ -139,10 +139,10 @@ void IThrChannel::readThrChData(thr_chData_t& data) const
         tableData.maxEn = reg?true:false;
 
         (it->second).min->getVal(&reg);
-        tableData.min = reg*scaleFactor;
+        tableData.min = ((int32_t)reg)*scaleFactor;
 
         (it->second).max->getVal(&reg);
-        tableData.max = reg*scaleFactor;
+        tableData.max = ((int32_t)reg)*scaleFactor;
 
         data.insert( std::make_pair(it->first, tableData) );
     }
@@ -222,7 +222,7 @@ const float IThrChannel::getThresholdMin(thr_table_t ch) const
     {
         uint32_t reg;
         (it->second).min->getVal(&reg, 1);
-        return reg * scaleFactor;
+        return ((int32_t)reg) * scaleFactor;
     }
     else
         throw std::runtime_error("Threshold not defined\n");
@@ -236,7 +236,7 @@ const float IThrChannel::getThresholdMax(thr_table_t ch) const
     {
         uint32_t reg;
         (it->second).max->getVal(&reg, 1);
-        return reg * scaleFactor;
+        return ((int32_t)reg) * scaleFactor;
     }
     else
         throw std::runtime_error("Threshold not defined\n");
