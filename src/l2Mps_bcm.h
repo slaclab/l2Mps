@@ -1,17 +1,6 @@
 #ifndef L2MPS_BCM_H
 #define L2MPS_BCM_H
 
-#include <stdio.h>
-#include <iostream>
-#include <string.h>
-#include <iomanip>
-#include <inttypes.h>
-#include <vector>
-#include <map>
-#include <array>
-#include <boost/shared_ptr.hpp>
-#include <cpsw_api_user.h>
-
 #include "l2Mps_base.h"
 
 //Number of Threshold channels for BCM is 1 per bay: BCM, DIFF

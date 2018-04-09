@@ -1,14 +1,8 @@
 #ifndef L2MPS_COMMON_H
 #define L2MPS_COMMON_H
 
-#include <stdio.h>
 #include <iostream>
-#include <string.h>
-#include <iomanip>
-#include <inttypes.h>
-#include <map>
 #include <stdexcept>
-#include <boost/shared_ptr.hpp>
 #include <cpsw_api_user.h>
 
 namespace IMpsBase

@@ -1,15 +1,5 @@
-#include <stdio.h>
-#include <iostream>
-#include <string.h>
 #include <iomanip>
-#include <vector>
-#include <inttypes.h>
-#include <boost/shared_ptr.hpp>
-#include <cpsw_api_user.h>
-#include <stdexcept>
 #include <yaml-cpp/yaml.h>
-#include <getopt.h>
-#include <stdexcept>
 #include <arpa/inet.h>
 
 #include "l2Mps_base.h"

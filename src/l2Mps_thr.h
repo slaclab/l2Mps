@@ -1,18 +1,10 @@
 #ifndef LCLS2MPSLN_THR_H
 #define LCLS2MPSLN_THR_H
 
-#include <stdio.h>
-#include <iostream>
-#include <vector>
 #include <sstream>
-#include <string.h>
-#include <iomanip>
-#include <inttypes.h>
-#include <stdexcept>
 #include <array>
 #include <map>
 #include <boost/shared_ptr.hpp>
-#include <cpsw_api_user.h>
 
 #include "l2Mps_common.h"
 

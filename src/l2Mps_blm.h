@@ -1,18 +1,6 @@
 #ifndef LCLS2MPSLN_BLM_H
 #define LCLS2MPSLN_BLM_H
 
-#include <stdio.h>
-#include <iostream>
-#include <string.h>
-#include <iomanip>
-#include <inttypes.h>
-#include <vector>
-#include <map>
-#include <array>
-#include <boost/shared_ptr.hpp>
-#include <cpsw_api_user.h>
-#include <pthread.h>
-
 #include "l2Mps_base.h"
 
 // Number of Channel for BLM is 3 (per AMC)

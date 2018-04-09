@@ -1,17 +1,6 @@
 #ifndef L2MPS_BASE_H
 #define L2MPS_BASE_H
 
-#include <stdio.h>
-#include <iostream>
-#include <string.h>
-#include <iomanip>
-#include <inttypes.h>
-#include <map>
-#include <array>
-#include <stdexcept>
-#include <boost/shared_ptr.hpp>
-#include <cpsw_api_user.h>
-
 #include "l2Mps_thr.h"
 
 template <typename T>
