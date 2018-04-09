@@ -33,11 +33,6 @@ IMpsBlm::IMpsBlm(Path mpsRoot, const uint8_t amc)
     printChInfo();
 }
 
-IMpsBlm::~IMpsBlm()
-{
-    std::cout << "    > A BLM was destroyed (AMC = " << unsigned(amc) << ")" << std::endl;
-}
-
 // Print BLM channel information
 void IMpsBlm::printChInfo(void) const
 {

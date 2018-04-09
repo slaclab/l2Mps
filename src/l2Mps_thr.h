@@ -111,7 +111,7 @@ class IThrChannel
 {
 public:
     IThrChannel(Path mpsRoot, uint8_t channel);
-    ~IThrChannel();
+    ~IThrChannel() {}
 
     // Channel header
     uint8_t getChannel()             const   { return ch; }

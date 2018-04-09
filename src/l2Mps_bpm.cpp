@@ -32,11 +32,6 @@ IMpsBpm::IMpsBpm(Path mpsRoot, uint8_t amc)
     printChInfo();
 }
 
-IMpsBpm::~IMpsBpm()
-{
-    std::cout << "    > A BPM was destroyed (AMC = " << unsigned(amc) << ")" << std::endl;
-}
-
 // Print BPM channel information
 void IMpsBpm::printChInfo(void) const
 {

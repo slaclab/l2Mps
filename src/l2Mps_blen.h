@@ -36,7 +36,7 @@ class IMpsBlen : public IMpsAppBase<blen_channel_t>
 {
 public:
     IMpsBlen(Path mpsRoot, uint8_t amc);
-    ~IMpsBlen();
+    ~IMpsBlen() {};
 
     virtual void printChInfo(void) const;
 

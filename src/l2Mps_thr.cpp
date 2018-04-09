@@ -97,10 +97,6 @@ IThrChannel::IThrChannel(Path mpsRoot, uint8_t channel) : scaleFactor(1.0)
 
 }
 
-IThrChannel::~IThrChannel()
-{
-}
-
 void IThrChannel::readThrChInfo(thr_chInfoData_t& info) const
 {
     uint32_t u32;

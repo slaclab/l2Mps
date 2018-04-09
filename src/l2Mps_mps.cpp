@@ -71,11 +71,6 @@ IMpsNode::IMpsNode(Path mpsRoot) :
     }
 }
 
-IMpsNode::~IMpsNode()
-{
-    std::cout << "MPS node destroyed" << std::endl;
-}
-
 const void IMpsNode::readMpsInfo(mps_infoData_t& info) const
 {
     info.appId              = IMpsBase::get( scalvals.appId             );

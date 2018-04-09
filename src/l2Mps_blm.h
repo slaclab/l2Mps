@@ -52,7 +52,7 @@ class IMpsBlm : public IMpsAppBase<blm_channel_t>
 {
 public:
     IMpsBlm(Path mpsRoot, const uint8_t amc);
-    ~IMpsBlm();
+    ~IMpsBlm() {};
 
     virtual void printChInfo(void) const;
 };

@@ -30,11 +30,6 @@ IMpsBcm::IMpsBcm(Path mpsRoot, const uint8_t amc)
     printChInfo();
 }
 
-IMpsBcm::~IMpsBcm()
-{
-    std::cout << "    > A BCM was destroyed (AMC = " << unsigned(amc) << ")" << std::endl;
-}
-
 // Print BCM channel information
 void IMpsBcm::printChInfo(void) const
 {

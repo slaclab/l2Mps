@@ -30,11 +30,6 @@ IMpsBlen::IMpsBlen(Path mpsRoot, const uint8_t amc)
     printChInfo();
 }
 
-IMpsBlen::~IMpsBlen()
-{
-    std::cout << "    > A BLEN was destroyed (AMC = " << unsigned(amc) << ")" << std::endl;
-}
-
 // Print BLEN channel information
 void IMpsBlen::printChInfo(void) const
 {

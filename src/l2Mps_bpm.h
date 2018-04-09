@@ -36,7 +36,7 @@ class IMpsBpm : public IMpsAppBase<bpm_channel_t>
 public:
     //Constructor
     IMpsBpm(Path mpsRoot, uint8_t amc);
-    ~IMpsBpm();
+    ~IMpsBpm() {};
 
     virtual void printChInfo(void) const;
 };

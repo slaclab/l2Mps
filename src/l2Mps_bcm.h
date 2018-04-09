@@ -37,7 +37,7 @@ class IMpsBcm : public IMpsAppBase<bcm_channel_t>
 public:
     // Constructor
     IMpsBcm(Path mpsRoot, const uint8_t amc);
-    ~IMpsBcm();
+    ~IMpsBcm() {};
 
     virtual void printChInfo(void) const;
 };

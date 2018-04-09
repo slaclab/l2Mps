@@ -111,7 +111,7 @@ public:
     IMpsNode(Path mpsRoot);
 
     // Destructor
-    ~IMpsNode();
+    ~IMpsNode() {};
 
     const void readMpsInfo(mps_infoData_t& info) const;
 
