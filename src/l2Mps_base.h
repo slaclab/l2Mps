@@ -26,7 +26,7 @@ class IMpsAppBase
 {
 public:
     IMpsAppBase(const uint8_t amc) : amc(amc) {};
-    ~IMpsAppBase() {};
+    virtual ~IMpsAppBase() {};
 
     // Threhold channel information
     uint32_t const  getChannel  ( const T& ch) const                { return findThrChannel(ch)->getChannel();  };
