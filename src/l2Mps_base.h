@@ -1,6 +1,7 @@
 #ifndef L2MPS_BASE_H
 #define L2MPS_BASE_H
 
+#include <boost/thread/thread.hpp>
 #include "l2Mps_thr.h"
 
 template <typename T>
@@ -59,7 +60,7 @@ public:
         appCB  = callBack;
 
         std::cout << "      Starting scan thread..." << std::endl;
-        pthread_create(&scanThread, NULL, createThread, this);
+        scanThread = boost::thread(&IMpsAppBase::pollThread, this); 
         std::cout << "      Scan thread created succesfully." << std::endl;
     };
 
@@ -83,7 +84,7 @@ protected:
     uint8_t                     amc;
     unsigned int                poll;
     void (*appCB)(int, std::map<T, thr_ch_t>);
-    pthread_t                   scanThread;
+    boost::thread               scanThread;
 
     // Polling functions
     void        pollThread()
@@ -105,8 +106,6 @@ protected:
             sleep(poll);
         }
     };
-
-    static void *createThread(void* p) { static_cast<IMpsAppBase*>(p)->pollThread(); return NULL; };
 };
 
 #endif
