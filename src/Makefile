@@ -26,12 +26,9 @@ TESTSRCS    = $(wildcard $(TESTDIR)/*.cpp)
 TEST_TARGET = $(patsubst $(TESTDIR)/%.cpp, $(TESTBINDIR)/%, $(TESTSRCS))
 
 CXXFLAGS  = -g -std=c++0x -fPIC
-CXXFLAGS += -I. 
-CXXFLAGS += -I$(CPSW_DIR)/include
-CXXFLAGS += -I$(BOOST_DIR)/include
-CXXFLAGS += -I$(YAML_CPP_DIR)/include
+CXXFLAGS += $(addprefix -I,. $(CPSW_DIR)/include $(BOOST_DIR)/include $(YAML_CPP_DIR)/include) 
 
-LIBS_EXT = -l$(LIB_NAME) -lcpsw -lyaml-cpp -lboost_system -lpthread -lrt -ldl
+LIBS_EXT = $(addprefix -l,$(LIB_NAME) cpsw yaml-cpp boost_system pthread rt dl)
 
 LDIR  = -L. 
 LDIR += -L$(CPSW_DIR)/lib
