@@ -31,7 +31,7 @@ CXXFLAGS += -I$(CPSW_DIR)/include
 CXXFLAGS += -I$(BOOST_DIR)/include
 CXXFLAGS += -I$(YAML_CPP_DIR)/include
 
-LIBS_EXT = -lcpsw -lyaml-cpp -lboost_system -lpthread -lrt -ldl -l$(LIB_NAME)
+LIBS_EXT = -l$(LIB_NAME) -lcpsw -lyaml-cpp -lboost_system -lpthread -lrt -ldl
 
 LDIR  = -L. 
 LDIR += -L$(CPSW_DIR)/lib
