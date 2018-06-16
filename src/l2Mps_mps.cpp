@@ -157,7 +157,7 @@ void IMpsNode::pollThread()
     {
         if (!run)
         {
-            std::cout << "MPS node scan thread interrupted" << std::endl;
+            std::cout << "  MPS node scan thread interrupted" << std::endl;
             return;
         }
         mps_infoData_t info;
