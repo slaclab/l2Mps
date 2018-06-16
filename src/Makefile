@@ -28,7 +28,7 @@ TEST_TARGET = $(patsubst $(TESTDIR)/%.cpp, $(TESTBINDIR)/%, $(TESTSRCS))
 CXXFLAGS  = -g -std=c++0x -fPIC
 CXXFLAGS += $(addprefix -I,. $(CPSW_DIR)/include $(BOOST_DIR)/include $(YAML_CPP_DIR)/include) 
 
-LIBS_EXT = $(addprefix -l,$(LIB_NAME) cpsw yaml-cpp boost_system boost_thread pthread rt dl)
+LIBS_EXT = $(addprefix -l,$(LIB_NAME) cpsw yaml-cpp boost_system pthread rt dl)
 
 LDIR  = -L. 
 LDIR += -L$(CPSW_DIR)/lib
