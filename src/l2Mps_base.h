@@ -1,7 +1,11 @@
 #ifndef L2MPS_BASE_H
 #define L2MPS_BASE_H
 
-#include <boost/thread/thread.hpp>
+#define _GLIBCXX_USE_NANOSLEEP    // Workaround to use std::this_thread::sleep_for
+
+#include <thread>
+#include <chrono>
+#include <boost/atomic.hpp>
 #include "l2Mps_thr.h"
 
 template <typename T>
@@ -15,8 +19,15 @@ template <typename T>
 class IMpsAppBase
 {
 public:
-    IMpsAppBase(const uint8_t amc) : amc(amc) {};
-    virtual ~IMpsAppBase() {};
+    IMpsAppBase(const uint8_t amc) : amc(amc), run(false) {};
+    virtual ~IMpsAppBase() 
+    {
+        if (run)
+        {
+            run = false;
+            scanThread.join();
+        }
+    };
 
     // Threhold channel information
     uint32_t const  getChannel  ( const T& ch) const                { return findThrChannel(ch)->getChannel();  };
@@ -59,9 +70,11 @@ public:
         poll   = poll;
         appCB  = callBack;
 
-        std::cout << "      Starting scan thread..." << std::endl;
-        scanThread = boost::thread(&IMpsAppBase::pollThread, this); 
-        std::cout << "      Scan thread created succesfully." << std::endl;
+        std::cout << "      Starting MPS app scan thread..." << std::endl;
+        run = true;
+        scanThread = std::thread( &IMpsAppBase::pollThread, this );
+        if ( pthread_setname_np( scanThread.native_handle(), "mpsAppScan" ) )
+            perror( "pthread_setname_np failed for MpsApp scanThread" );
     };
 
     // Find ThrChannel in the App-ThrChannel map
@@ -80,17 +93,26 @@ public:
     virtual void            printChInfo     ( void ) const = 0;
 
 protected:
-    std::map<T, ThrChannel>    appThrMap;
-    uint8_t                     amc;
-    unsigned int                poll;
+    std::map<T, ThrChannel>  appThrMap;
+    uint8_t                  amc;
+    unsigned int             poll;
     void (*appCB)(int, std::map<T, thr_ch_t>);
-    boost::thread               scanThread;
+    std::thread              scanThread;
+    boost::atomic<bool>      run;
 
     // Polling functions
     void        pollThread()
     {
-        while(1)
+        std::cout << "      MPS app scan thread created succesfully." << std::endl;
+
+        for(;;)
         {
+             if (!run)
+             {
+                 std::cout << "      Mps app scan thread interrupted." << std::endl;
+                 return;
+             }
+
              std::map<T, thr_ch_t> dataMap;
              typename std::map<T, ThrChannel>::const_iterator it;
             for (it = appThrMap.begin() ; it != appThrMap.end(); ++it)
@@ -103,7 +125,8 @@ protected:
 
             appCB(amc, dataMap);
             dataMap.clear();
-            sleep(poll);
+
+            std::this_thread::sleep_for( std::chrono::seconds( poll ) );
         }
     };
 };
