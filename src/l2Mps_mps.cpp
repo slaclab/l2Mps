@@ -146,7 +146,7 @@ const void IMpsNode::startPollThread(unsigned int poll, p_mpsCBFunc_t cbFunc)
     run = true;
     scanThread = std::thread( &IMpsNode::pollThread, this ); 
     if ( pthread_setname_np( scanThread.native_handle(), "mpsNodeScan" ) )
-      perror( "pthread_setname_np failed for updateInputThread" );
+      perror( "pthread_setname_np failed for for MpsNode scanThread" );
 }
 
 void IMpsNode::pollThread()
