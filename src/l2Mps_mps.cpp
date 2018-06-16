@@ -1,9 +1,9 @@
 #include "l2Mps_mps.h"
 
-IMpsNode::IMpsNode(Path mpsRoot) :
-    // MPS root path
-    mpsRoot             ( mpsRoot->clone())
-
+IMpsNode::IMpsNode(Path mpsRoot)
+:
+    mpsRoot ( mpsRoot->clone() ),
+    run     ( false )
 {
     // MPS Base interfaces
     scalvals.appId               = IMpsBase::createInterface<ScalVal>(    mpsRoot, MpsBaseModuleName + "/mpsAppId");
@@ -71,6 +71,16 @@ IMpsNode::IMpsNode(Path mpsRoot) :
     }
 }
 
+IMpsNode::~IMpsNode()
+{
+    // Stop the thread if it was running
+    if(run)
+    {   
+        run = false;
+        scanThread.join();
+    }
+}
+
 const void IMpsNode::readMpsInfo(mps_infoData_t& info) const
 {
     info.appId              = IMpsBase::get( scalvals.appId             );
@@ -132,19 +142,28 @@ const void IMpsNode::startPollThread(unsigned int poll, p_mpsCBFunc_t cbFunc)
     pollCB  = poll;
     mpsCB   = cbFunc;
 
-    std::cout << "  Starting MPS scan thread..." << std::endl;
-    pthread_create(&scanThread, NULL, createThread, this);
-    std::cout << "  MPS scan thread created succesfully." << std::endl;
+    std::cout << "  Starting MPS node scan thread..." << std::endl;
+    run = true;
+    scanThread = std::thread( &IMpsNode::pollThread, this ); 
+    if ( pthread_setname_np( scanThread.native_handle(), "mpsNodeScan" ) )
+      perror( "pthread_setname_np failed for updateInputThread" );
 }
 
 void IMpsNode::pollThread()
 {
-    while(1)
+    std::cout << "  MPS node scan thread created succesfully." << std::endl;
+
+    for(;;)
     {
+        if (!run)
+        {
+            std::cout << "MPS node scan thread interrupted" << std::endl;
+            return;
+        }
         mps_infoData_t info;
         readMpsInfo(info);
         mpsCB(info);
-        sleep(pollCB);
+        std::this_thread::sleep_for( std::chrono::seconds( pollCB ) );
     }
 }
 

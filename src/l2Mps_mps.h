@@ -1,6 +1,8 @@
 #ifndef LCLS2MPSLN_MPS_H
 #define LCLS2MPSLN_MPS_H
 
+#define _GLIBCXX_USE_NANOSLEEP    // Workaround to use std::this_thread::sleep_for
+
 #include <stdio.h>
 #include <iostream>
 #include <string.h>
@@ -9,6 +11,9 @@
 #include <map>
 #include <vector>
 #include <stdexcept>
+#include <thread>
+#include <chrono>
+#include <boost/atomic.hpp>
 #include <boost/shared_ptr.hpp>
 #include <cpsw_api_user.h>
 
@@ -111,7 +116,7 @@ public:
     IMpsNode(Path mpsRoot);
 
     // Destructor
-    ~IMpsNode() {};
+    ~IMpsNode();
 
     const void readMpsInfo(mps_infoData_t& info) const;
 
@@ -210,11 +215,10 @@ private:
     mps_infoScalval_t   scalvals;
     p_mpsCBFunc_t       mpsCB;
     unsigned int        pollCB;
-    pthread_t           scanThread;
+    std::thread         scanThread;
+    boost::atomic<bool> run;
 
     void pollThread();
-    static void *createThread(void* p) { static_cast<IMpsNode*>(p)->pollThread(); return NULL; };
-
 };
 
 class MpsNodeFactory
