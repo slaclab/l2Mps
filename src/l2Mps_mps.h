@@ -15,6 +15,7 @@
 #include <chrono>
 #include <boost/atomic.hpp>
 #include <boost/shared_ptr.hpp>
+#include <boost/make_shared.hpp>
 #include <cpsw_api_user.h>
 
 #include "l2Mps_base.h"
@@ -225,7 +226,7 @@ class MpsNodeFactory
 {
 public:
     // Mps node factory function
-    static MpsNode create(Path mpsRoot)     { return MpsNode(new IMpsNode(mpsRoot)); }
+    static MpsNode create(Path mpsRoot)     { return boost::make_shared<IMpsNode>(mpsRoot); }
 };
 
 #endif

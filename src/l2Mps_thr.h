@@ -5,6 +5,7 @@
 #include <array>
 #include <map>
 #include <boost/shared_ptr.hpp>
+#include <boost/make_shared.hpp>
 
 #include "l2Mps_common.h"
 
@@ -153,7 +154,7 @@ class ThrChannelFactory
 public:
     static ThrChannel create(Path mpsRoot, uint8_t channel)
     {
-        return ThrChannel(new IThrChannel(mpsRoot, channel));
+        return boost::make_shared<IThrChannel>(mpsRoot, channel);
     }
 };
 

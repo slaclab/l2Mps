@@ -36,7 +36,7 @@ class MpsBcmFactory
 public:
     static MpsBcm create(Path mpsRoot, uint8_t amc)
     {
-        return MpsBcm(new IMpsBcm(mpsRoot, amc));
+        return boost::make_shared<IMpsBcm>(mpsRoot, amc);
     }
 };
 

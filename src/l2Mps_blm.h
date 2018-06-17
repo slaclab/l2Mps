@@ -51,7 +51,7 @@ class MpsBlmFactory
 public:
     static MpsBlm create(Path mpsRoot, const uint8_t amc)
     {
-        return MpsBlm(new IMpsBlm(mpsRoot, amc));
+        return boost::make_shared<IMpsBlm>(mpsRoot, amc);
     }
 };
 

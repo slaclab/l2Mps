@@ -36,7 +36,7 @@ class MpsBlenFactory
 public:
     static MpsBlen create(Path mpsRoot, uint8_t amc)
     {
-        return MpsBlen(new IMpsBlen(mpsRoot, amc));
+        return boost::make_shared<IMpsBlen>(mpsRoot, amc);
     }
 };
 

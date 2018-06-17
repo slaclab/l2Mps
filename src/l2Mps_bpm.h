@@ -35,7 +35,7 @@ class MpsBpmFactory
 public:
     static MpsBpm create(Path mpsRoot, uint8_t amc)
     {
-        return MpsBpm(new IMpsBpm(mpsRoot, amc));
+        return boost::make_shared<IMpsBpm>(mpsRoot, amc);
     }
 };
 
