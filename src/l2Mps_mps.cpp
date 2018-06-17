@@ -142,7 +142,7 @@ const void IMpsNode::startPollThread(unsigned int poll, p_mpsCBFunc_t cbFunc)
     pollCB  = poll;
     mpsCB   = cbFunc;
 
-    std::cout << "  Starting MPS node scan thread..." << std::endl;
+    std::cout << "    Starting MPS node scan thread..." << std::endl;
     run = true;
     scanThread = std::thread( &IMpsNode::pollThread, this ); 
     if ( pthread_setname_np( scanThread.native_handle(), "mpsNodeScan" ) )
@@ -151,13 +151,13 @@ const void IMpsNode::startPollThread(unsigned int poll, p_mpsCBFunc_t cbFunc)
 
 void IMpsNode::pollThread()
 {
-    std::cout << "  MPS node scan thread created succesfully." << std::endl;
+    std::cout << "    MPS node scan thread created succesfully." << std::endl;
 
     for(;;)
     {
         if (!run)
         {
-            std::cout << "  MPS node scan thread interrupted" << std::endl;
+            std::cout << "    MPS node scan thread interrupted" << std::endl;
             return;
         }
         mps_infoData_t info;

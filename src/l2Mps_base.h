@@ -73,7 +73,7 @@ public:
         poll   = poll;
         appCB  = callBack;
 
-        std::cout << "      Starting MPS app scan thread..." << std::endl;
+        std::cout << "    Starting MPS app scan thread..." << std::endl;
         run = true;
         scanThread = std::thread( &IMpsAppBase::pollThread, this );
         if ( pthread_setname_np( scanThread.native_handle(), "mpsAppScan" ) )
@@ -106,13 +106,13 @@ protected:
     // Polling functions
     void        pollThread()
     {
-        std::cout << "      MPS app scan thread created succesfully." << std::endl;
+        std::cout << "    MPS app scan thread created succesfully." << std::endl;
 
         for(;;)
         {
              if (!run)
              {
-                 std::cout << "      Mps app scan thread interrupted." << std::endl;
+                 std::cout << "    Mps app scan thread interrupted." << std::endl;
                  return;
              }
 
