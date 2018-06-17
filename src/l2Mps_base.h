@@ -18,6 +18,9 @@ struct appThr_channel_t
 template <typename T>
 class IMpsAppBase
 {
+private:
+    typedef std::function<void(int, std::map<T, thr_ch_t>)> p_appCBFunc_t;
+ 
 public:
     IMpsAppBase(const uint8_t amc) : amc(amc), run(false) {};
     virtual ~IMpsAppBase() 
@@ -60,7 +63,7 @@ public:
     const float     getScaleFactor      ( const T& ch) const                 { return findThrChannel(ch)->getScaleFactor();     };
 
     // Set polling thread with callback function
-    const void      startPollThread     ( unsigned int poll, void (*callBack)(int, std::map<T, thr_ch_t>))
+    const void      startPollThread     ( unsigned int poll, p_appCBFunc_t callBack)
     {
         if (poll == 0)
         {
@@ -96,7 +99,7 @@ protected:
     std::map<T, ThrChannel>  appThrMap;
     uint8_t                  amc;
     unsigned int             poll;
-    void (*appCB)(int, std::map<T, thr_ch_t>);
+    p_appCBFunc_t            appCB;
     std::thread              scanThread;
     boost::atomic<bool>      run;
 

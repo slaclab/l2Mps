@@ -107,7 +107,7 @@ struct mps_infoData_t
     std::vector<uint32_t>   rxPktRcvdCnt;
 };
 
-typedef void (*p_mpsCBFunc_t)(mps_infoData_t);
+typedef std::function<void(mps_infoData_t)> p_mpsCBFunc_t;
 
 class IMpsNode
 {
