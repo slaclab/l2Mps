@@ -209,15 +209,14 @@ public:
     void const resetSaltPll(void) const                         { return IMpsBase::execute(scalvals.rstPll);                };
 
 private:
-    Path                mpsRoot;
     std::size_t         lastMsgByteSize;
     std::size_t         rxLinkUpCntSize;
     std::size_t         rxPktRcvdCntSize;
     mps_infoScalval_t   scalvals;
     p_mpsCBFunc_t       mpsCB;
     unsigned int        pollCB;
-    std::thread         scanThread;
     boost::atomic<bool> run;
+    std::thread         scanThread;
 
     void pollThread();
 };

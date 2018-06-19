@@ -2,8 +2,7 @@
 
 IMpsNode::IMpsNode(Path mpsRoot)
 :
-    mpsRoot ( mpsRoot->clone() ),
-    run     ( false )
+    run ( false )
 {
     // MPS Base interfaces
     scalvals.appId               = IMpsBase::createInterface<ScalVal>(    mpsRoot, MpsBaseModuleName + "/mpsAppId");
