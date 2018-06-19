@@ -91,7 +91,6 @@ void Tester::mpsInfoReceiver(mps_infoData_t info)
         std::cout << std::setw(12) << i;
     std::cout << std::endl << std::setw(10) << "Status:";
     for (std::size_t i{0}; i < info.lastMsgByte.size(); ++i)
-        //std::cout << std::setw(12) << "0x" << std::hex << unsigned(info.lastMsgByte.at(i)) << std::dec;
         std::cout << std::setw(10) << "0x" << std::setfill('0') << std::setw(2) << std::hex <<  unsigned(info.lastMsgByte.at(i)) << std::setfill(' ') << std::dec;
     std::cout << std::endl;
 
