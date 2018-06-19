@@ -28,7 +28,8 @@ TEST_TARGET = $(patsubst $(TESTDIR)/%.cpp, $(TESTBINDIR)/%, $(TESTSRCS))
 CXXFLAGS  = -g -std=c++0x -fPIC
 CXXFLAGS += $(addprefix -I,. $(CPSW_DIR)/include $(BOOST_DIR)/include $(YAML_CPP_DIR)/include) 
 
-LIBS_EXT = $(addprefix -l,$(LIB_NAME) cpsw yaml-cpp boost_system pthread rt dl)
+LIBS_EXT = $(addprefix -l,$(LIB_NAME) cpsw yaml-cpp boost_system rt dl)
+LIBS_SYS = -Wl,--whole-archive -lpthread -Wl,--no-whole-archive -lrt -ldl
 
 LDIR  = -L. 
 LDIR += -L$(CPSW_DIR)/lib
@@ -60,7 +61,7 @@ $(TESTBINDIR):
 	@mkdir -p $@
 
 $(TESTBINDIR)/%: $(TESTDIR)/%.cpp
-	$(CXX) -o $@ $^ -static $(CXXFLAGS) $(LDIR) $(LIBS_EXT)
+	$(CXX) -o $@ $^ -static $(CXXFLAGS) $(LDIR) $(LIBS_EXT) $(LIBS_SYS)
 
 clean:
 	$(RM) -rf $(OBJDIR)
