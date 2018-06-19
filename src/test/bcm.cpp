@@ -2,6 +2,7 @@
 #include <yaml-cpp/yaml.h>
 #include <arpa/inet.h>
 
+#include "l2Mps_mps.h"
 #include "l2Mps_bcm.h"
 
 class IYamlSetIP : public IYamlFixup
@@ -66,10 +67,21 @@ int main(int argc, char **argv)
     IYamlSetIP setIP(ipAddr);
     Path root = IPath::loadYamlFile( yamlDoc.c_str(), "NetIODev", NULL, &setIP );    
 
-    Path mpsRoot;
     try
     {
-        mpsRoot = root->findByName(mpsRootName);
+        Path mpsRoot = root->findByName(mpsRootName);
+
+        {
+            MpsNode mpsNode = MpsNodeFactory::create(mpsRoot);
+
+            std::string appType(mpsNode->getAppType());
+            std::cout << "This application type is " << appType << std::endl;
+            if ( appType.compare("BCM") )
+            {
+                std::cout << "ERROR: This is not a BCM application. Aborting." << std::endl;
+                return 1;
+            }
+        }
 
         std::array<MpsBcm, 2> myMpsBcm;
 
