@@ -27,17 +27,11 @@ public:
     IMpsBlen(Path mpsRoot, uint8_t amc);
     ~IMpsBlen() {};
 
+    // Factory method, which returns an smart pointer
+    static MpsBlen create(Path mpsRoot, uint8_t amc);
+
     virtual void printChInfo(void) const;
 
-};
-
-class MpsBlenFactory
-{
-public:
-    static MpsBlen create(Path mpsRoot, uint8_t amc)
-    {
-        return boost::make_shared<IMpsBlen>(mpsRoot, amc);
-    }
 };
 
 #endif

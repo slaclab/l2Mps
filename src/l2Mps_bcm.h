@@ -28,16 +28,10 @@ public:
     IMpsBcm(Path mpsRoot, const uint8_t amc);
     ~IMpsBcm() {};
 
-    virtual void printChInfo(void) const;
-};
+    // Factory method, which returns an smart pointer
+    static MpsBcm create(Path mpsRoot, uint8_t amc);
 
-class MpsBcmFactory
-{
-public:
-    static MpsBcm create(Path mpsRoot, uint8_t amc)
-    {
-        return boost::make_shared<IMpsBcm>(mpsRoot, amc);
-    }
+    virtual void printChInfo(void) const;
 };
 
 #endif

@@ -81,7 +81,7 @@ int main(int argc, char **argv)
 
     try
     {
-        MpsNode aMpsNode(MpsNodeFactory::create(mpsRoot));
+        MpsNode aMpsNode(IMpsNode::create(mpsRoot));
 
         std::cout << std::endl;
         std::cout << "MPS application information:"<< std::endl;
@@ -152,7 +152,7 @@ int main(int argc, char **argv)
             std::cout << std::setw(2) << unsigned(ch) << std::string(8, ' ');
             try
             {
-                ThrChannel aThr(ThrChannelFactory::create(mpsRoot, ch));
+                ThrChannel aThr(IThrChannel::create(mpsRoot, ch));
 
                 std::cout << std::setw(2) << unsigned(aThr->getByteMap()) << std::string(8, ' ');
                 std::cout << std::setw(2) << unsigned(aThr->getThrCount()) << std::string(8, ' ');

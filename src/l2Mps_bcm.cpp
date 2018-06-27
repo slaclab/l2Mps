@@ -7,7 +7,7 @@ IMpsBcm::IMpsBcm(Path mpsRoot, const uint8_t amc)
     {
         try
         {
-            ThrChannel aThr(ThrChannelFactory::create(mpsRoot, ch));
+            ThrChannel aThr(IThrChannel::create(mpsRoot, ch));
 
             if (aThr->getThrCount())
             {
@@ -28,6 +28,11 @@ IMpsBcm::IMpsBcm(Path mpsRoot, const uint8_t amc)
 
     std::cout << "    > A BCM was created (AMC = " << unsigned(amc) << ")" << std::endl;
     printChInfo();
+}
+
+MpsBcm IMpsBcm::create(Path mpsRoot, uint8_t amc)
+{
+    return boost::make_shared<IMpsBcm>(mpsRoot, amc);
 }
 
 // Print BCM channel information

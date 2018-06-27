@@ -42,17 +42,10 @@ public:
     IMpsBlm(Path mpsRoot, const uint8_t amc);
     ~IMpsBlm() {};
 
+    // Factory method, which reurns an smart pointers
+    static MpsBlm create(Path mpsRoot, const uint8_t amc);
+
     virtual void printChInfo(void) const;
-};
-
-
-class MpsBlmFactory
-{
-public:
-    static MpsBlm create(Path mpsRoot, const uint8_t amc)
-    {
-        return boost::make_shared<IMpsBlm>(mpsRoot, amc);
-    }
 };
 
 #endif

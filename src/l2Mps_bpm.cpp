@@ -8,7 +8,7 @@ IMpsBpm::IMpsBpm(Path mpsRoot, uint8_t amc)
     {
         try
         {
-            ThrChannel aThr(ThrChannelFactory::create(mpsRoot, ch));
+            ThrChannel aThr(IThrChannel::create(mpsRoot, ch));
 
             if (aThr->getThrCount())
             {
@@ -30,6 +30,11 @@ IMpsBpm::IMpsBpm(Path mpsRoot, uint8_t amc)
 
     std::cout << "    > A BPM was created (AMC = " << unsigned(amc) << ")" << std::endl;
     printChInfo();
+}
+
+MpsBpm IMpsBpm::create(Path mpsRoot, uint8_t amc)
+{
+    return boost::make_shared<IMpsBpm>(mpsRoot, amc);
 }
 
 // Print BPM channel information

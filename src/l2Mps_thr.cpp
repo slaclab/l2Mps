@@ -97,6 +97,11 @@ IThrChannel::IThrChannel(Path mpsRoot, uint8_t channel) : scaleFactor(1.0)
 
 }
 
+ThrChannel IThrChannel::create(Path mpsRoot, uint8_t channel)
+{
+    return boost::make_shared<IThrChannel>(mpsRoot, channel);
+}
+
 void IThrChannel::readThrChInfo(thr_chInfoData_t& info) const
 {
     uint32_t u32;

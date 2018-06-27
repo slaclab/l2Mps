@@ -72,7 +72,7 @@ int main(int argc, char **argv)
         Path mpsRoot = root->findByName(mpsRootName);
 
         {
-            MpsNode mpsNode = MpsNodeFactory::create(mpsRoot);
+            MpsNode mpsNode = IMpsNode::create(mpsRoot);
 
             std::string appType(mpsNode->getAppType().second);
             std::cout << "This application type is " << appType << std::endl;
@@ -89,7 +89,7 @@ int main(int argc, char **argv)
         {
             std::cout << "BCM for AMC[" << i << "]: BCM[" << i << "]" << std::endl;
             std::cout << "====================================================" << std::endl;
-            myMpsBcm[i] = MpsBcmFactory::create(mpsRoot, i);
+            myMpsBcm[i] = IMpsBcm::create(mpsRoot, i);
             std::cout << "====================================================" << std::endl;
 
             std::cout << std::endl;

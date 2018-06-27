@@ -84,6 +84,9 @@ public:
     IMpsNode(Path mpsRoot);
     ~IMpsNode();
 
+    // Factory method, which returns a smart pointer
+    static MpsNode create(Path mpsRoot) { return boost::make_shared<IMpsNode>(mpsRoot); }
+ 
     const void readMpsInfo(mps_infoData_t& info) const;
 
     const void startPollThread(unsigned int poll, p_mpsCBFunc_t cbFunc);
@@ -209,13 +212,6 @@ private:
 
     void                        pollThread();
     std::pair<bool,std::string> getConvertedAppType() const;
-};
-
-class MpsNodeFactory
-{
-public:
-    // Mps node factory function
-    static MpsNode create(Path mpsRoot)     { return boost::make_shared<IMpsNode>(mpsRoot); }
 };
 
 #endif

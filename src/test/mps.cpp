@@ -128,7 +128,7 @@ Tester::Tester(Path mpsRoot)
 :
     polling ( false ),
     msgCnt  ( 0 ),
-    mpsNode ( MpsNodeFactory::create(mpsRoot) )
+    mpsNode ( IMpsNode::create(mpsRoot) )
 {
     std::cout << "Tester object created" << std::endl;
 }

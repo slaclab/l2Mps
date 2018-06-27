@@ -106,6 +106,9 @@ public:
     IThrChannel(Path mpsRoot, uint8_t channel);
     ~IThrChannel() {}
 
+    // Factory method, which returns an smart pointer
+    static ThrChannel create(Path mpsRoot, uint8_t channel);
+
     // Channel header
     uint8_t getChannel()             const   { return ch; }
     uint8_t getThrCount()            const;
@@ -146,16 +149,6 @@ private:
     int             ch;             // Threhold channel number
     thr_scalval_t   thrScalvals;    // Threshold scalval interfaces
     float           scaleFactor;    // Scale factor (egu/raw)
-};
-
-// Factory class
-class ThrChannelFactory
-{
-public:
-    static ThrChannel create(Path mpsRoot, uint8_t channel)
-    {
-        return boost::make_shared<IThrChannel>(mpsRoot, channel);
-    }
 };
 
 #endif

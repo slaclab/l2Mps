@@ -7,7 +7,7 @@ IMpsBlen::IMpsBlen(Path mpsRoot, const uint8_t amc)
     {
         try
         {
-            ThrChannel aThr(ThrChannelFactory::create(mpsRoot, ch));
+            ThrChannel aThr(IThrChannel::create(mpsRoot, ch));
 
             if (aThr->getThrCount())
             {
@@ -28,6 +28,11 @@ IMpsBlen::IMpsBlen(Path mpsRoot, const uint8_t amc)
 
     std::cout << "    > A BLEN was created (AMC = " << unsigned(amc) << ")" << std::endl;
     printChInfo();
+}
+
+MpsBlen IMpsBlen::create(Path mpsRoot, uint8_t amc)
+{
+    return boost::make_shared<IMpsBlen>(mpsRoot, amc);
 }
 
 // Print BLEN channel information

@@ -8,7 +8,7 @@ IMpsBlm::IMpsBlm(Path mpsRoot, const uint8_t amc)
     {
         try
         {
-            ThrChannel aThr(ThrChannelFactory::create(mpsRoot, ch));
+            ThrChannel aThr(IThrChannel::create(mpsRoot, ch));
 
             if (aThr->getThrCount())
             {
@@ -31,6 +31,11 @@ IMpsBlm::IMpsBlm(Path mpsRoot, const uint8_t amc)
     }
     std::cout << "    > A BLM was created (AMC = " << unsigned(amc) << ")" << std::endl;
     printChInfo();
+}
+
+MpsBlm IMpsBlm::create(Path mpsRoot, const uint8_t amc)
+{
+    return boost::make_shared<IMpsBlm>(mpsRoot, amc);
 }
 
 // Print BLM channel information
