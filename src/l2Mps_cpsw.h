@@ -40,6 +40,7 @@ class CpswRegBase
 public:
     CpswRegBase(const Path& root, const std::string& name)
     :
+        root(root),
         name(name),
         nElms(0),
         nBits(0)
@@ -52,9 +53,22 @@ public:
         }
         catch(CPSWError& e)
         {
-            std::cout << "Failed to created " << name << std::endl;
+            //std::cout << "Failed to created " << name << std::endl;
         }
     };
+
+    CpswRegBase() : name(), nElms(0), nBits(0) {};
+
+    CpswRegBase& operator=(const CpswRegBase& rhs)
+    {
+        root  = rhs.root;
+        reg   = rhs.reg;
+        name  = rhs.name;
+        nElms = rhs.nElms;
+        nBits = rhs.nBits;  
+        return *this;
+    };
+
     virtual ~CpswRegBase() {};
 
     std::pair<bool, U> get() const
@@ -78,8 +92,8 @@ public:
  
     std::pair<bool, U> get(const size_t& index) const
     {
-        bool     valid = false;
-        U val  = 0;
+        bool valid = false;
+        U    val   = 0;
     
         if (nElms > index)
         {
@@ -98,7 +112,7 @@ public:
  
     std::pair< bool, std::vector<U> > getArray() const
     {
-        bool     valid = false;
+        bool           valid = false;
         std::vector<U> vals(nElms);
     
         if (nElms > 1)
@@ -120,6 +134,7 @@ public:
     size_t      getSizeBits() const { return nBits; };
 
 protected:
+    Path        root;
     T           reg;
     std::string name;
     size_t      nElms;
@@ -132,6 +147,12 @@ class CpswRegRO : public CpswRegBase<ScalVal_RO, T>
 {
 public:
     CpswRegRO(const Path& root, const std::string& name) : CpswRegBase<ScalVal_RO, T>(root, name) {};
+    CpswRegRO() : CpswRegBase<ScalVal_RO, T>() {};
+    CpswRegRO& operator=(const CpswRegRO& rhs)
+    {
+        CpswRegBase<ScalVal_RO, T>::operator=(rhs);
+        return *this;
+    }; 
     virtual ~CpswRegRO() {};
 };
 
@@ -141,6 +162,12 @@ class CpswRegRW : public CpswRegBase<ScalVal, T>
 {
 public:
     CpswRegRW(const Path& root, const std::string& name) : CpswRegBase<ScalVal, T>(root, name) {};
+    CpswRegRW() : CpswRegBase<ScalVal, T>() {};
+    CpswRegRW& operator=(const CpswRegRW& rhs)
+    {
+        CpswRegBase<ScalVal, T>::operator=(rhs);
+        return *this;
+    };
     virtual ~CpswRegRW() {};
 
     bool set(const T& val) const
