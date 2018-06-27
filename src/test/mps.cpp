@@ -34,6 +34,79 @@ class IYamlSetIP : public IYamlFixup
         std::string ip_addr_;
 };
 
+template<typename T>
+inline
+void printVal(const T& v)
+{
+    std::cout << v;
+}
+
+template<>
+inline
+void printVal(const bool& v)
+{
+    std::cout << std::boolalpha << v;
+}
+
+template<>
+inline
+void printVal(const uint8_t& v)
+{
+    std::cout << unsigned(v);
+}
+
+template<typename T>
+void printPair(const std::string& name, const std::pair<bool, T>& v, bool useHex = false )
+{
+    size_t w = 8;
+
+    std::cout << std::left << std::setw(17) << name; 
+    std::cout << "= ";
+
+    if (useHex)
+    {
+        std::cout << "0x" << std::hex;
+        w -= 2;
+    }
+    std::cout << std::setw(w);
+    printVal(v.second);
+
+    std::cout << std::dec;
+    std::cout << " [";
+    std::cout << std::string(v.first?"valid":"non-valid");
+    std::cout << "]";
+    std::cout << std::right;
+    std::cout << std::endl;
+}
+
+template<typename T>
+void printArray(const std::string& regName, const std::string& varName, const T& p, bool useHex = false, size_t hexW = 2)
+{
+    std::cout << regName << ": [" << std::string(p.first?"valid":"non-valid") << "]" << std::endl;
+    
+    std::cout << std::setw(10) << "Index:";
+    for (std::size_t i{0}; i < p.second.size(); ++i)
+        std::cout << std::setw(12) << i;
+
+    std::cout << std::endl << std::setw(9) << varName << ":";
+
+    size_t w = 12;
+    if (useHex)
+        w -= hexW;
+
+    for (std::size_t i{0}; i < p.second.size(); ++i)
+    {
+        std::cout << std::setw(w);
+        if (useHex)
+            std::cout << "0x" << std::setfill('0') << std::setw(hexW) << std::hex;
+
+         printVal(p.second.at(i)); 
+
+         std::cout << std::dec << std::setfill(' ');;
+    }
+    std::cout << std::endl;
+} 
+
 class Tester
 {
 public: 
@@ -72,61 +145,38 @@ void Tester::mpsInfoReceiver(mps_infoData_t info)
 {
     std::cout << "MPS message received!. Message # " << ++msgCnt << std::endl;
     std::cout << "=============================" << std::endl;
-    std::cout << "appId             = "  <<                      info.appId                      << std::endl;
-    std::cout << "version           = "  <<             unsigned(info.version)                   << std::endl;
-    std::cout << "enable            = "  << std::boolalpha <<    info.enable                     << std::endl;
-    std::cout << "lcls1Mode         = "  << std::boolalpha <<    info.lcls1Mode                  << std::endl;
-    std::cout << "byteCount         = "  <<             unsigned(info.byteCount)                 << std::endl;
-    std::cout << "digitalEn         = "  << std::boolalpha <<    info.digitalEn                  << std::endl;
-    std::cout << "beamDestMask      = "  << "0x" << std::hex <<  info.beamDestMask << std::dec   << std::endl;
-    std::cout << "altDestMask       = "  << "0x" << std::hex <<  info.altDestMask << std::dec    << std::endl;
-    std::cout << "msgCnt            = "  <<                      info.msgCnt                     << std::endl;
-    std::cout << "lastMsgAppId      = "  <<                      info.lastMsgAppId               << std::endl;
-    std::cout << "lastMsgLcls       = "  << std::boolalpha <<    info.lastMsgLcls                << std::endl;
-    std::cout << "lastMsgTimestamp  = "  <<                      info.lastMsgTimestamp           << std::endl;
+    printPair( "appId",            info.appId                    );
+    printPair( "version",          info.version                  );
+    printPair( "enable",           info.enable                   );
+    printPair( "lcls1Mode",        info.lcls1Mode                );
+    printPair( "byteCount",        info.byteCount                );
+    printPair( "digitalEn",        info.digitalEn                );
+    printPair( "beamDestMask",     info.beamDestMask,     true   );
+    printPair( "altDestMask",      info.altDestMask,      true   );
+    printPair( "msgCnt",           info.msgCnt                   );
+    printPair( "lastMsgAppId",     info.lastMsgAppId             );
+    printPair( "lastMsgLcls",      info.lastMsgLcls              );
+    printPair( "lastMsgTimestamp", info.lastMsgTimestamp         );
 
-    std::cout << "lastMsgByte =" << std::endl;
-    std::cout << std::setw(10) << "Index:";
-    for (std::size_t i{0}; i < info.lastMsgByte.size(); ++i)
-        std::cout << std::setw(12) << i;
-    std::cout << std::endl << std::setw(10) << "Status:";
-    for (std::size_t i{0}; i < info.lastMsgByte.size(); ++i)
-        std::cout << std::setw(10) << "0x" << std::setfill('0') << std::setw(2) << std::hex <<  unsigned(info.lastMsgByte.at(i)) << std::setfill(' ') << std::dec;
-    std::cout << std::endl;
+    printArray( "lastMsgByte", "Status", info.lastMsgByte, true );
 
-    std::cout << "txLinkUp          = "  << std::boolalpha <<    info.txLinkUp                   << std::endl;
-    std::cout << "txLinkUpCnt       = "  <<                      info.txLinkUpCnt                << std::endl;
+    printPair( "txLinkUp",            info.txLinkUp              );
+    printPair( "txLinkUpCnt",         info.txLinkUpCnt           );
 
-    std::cout << "rxLinkUp =" << std::endl;
-    std::cout << std::setw(10) << "Index:";
-    for (std::size_t i{0}; i < info.rxLinkUp.size(); ++i)
-        std::cout << std::setw(12) << i;
-    std::cout << std::endl << std::setw(10) << "Status:";
-    for (std::size_t i{0}; i < info.rxLinkUp.size(); ++i)
-        std::cout << std::setw(12) << std::boolalpha << info.rxLinkUp.at(i);
-    std::cout << std::endl << std::setw(10) << "Counters:";
-    for (std::size_t i{0}; i < info.rxLinkUpCnt.size(); ++i)
-        std::cout << std::setw(12) << info.rxLinkUpCnt.at(i);
-    std::cout << std::endl;
+    printArray( "rxLinkUp",    "Status",   info.rxLinkUp    );
+    printArray( "rxLinkUpCnt", "Counters", info.rxLinkUpCnt );
 
-    std::cout << "mpsSlot           = "  << std::boolalpha <<    info.mpsSlot                    << std::endl;
-    std::cout << "appType           = "  <<                      info.appType                    << std::endl;
-    std::cout << "pllLocked         = "  << std::boolalpha <<    info.pllLocked                  << std::endl;
-    std::cout << "rollOverEn        = "  <<                      info.rollOverEn                 << std::endl;
-    std::cout << "txPktSentCnt      = "  <<                      info.txPktSentCnt               << std::endl;
+    printPair( "mpsSlot",            info.mpsSlot                );
+    printPair( "appType",            info.appType                );
+    printPair( "pllLocked",          info.pllLocked              );
+    printPair( "rollOverEn",         info.rollOverEn             );
+    printPair( "txPktSentCnt",       info.txPktSentCnt           );
 
-    std::cout << "rxPktRcvd =" << std::endl;
-    std::cout << std::setw(10) << "Index:";
-    for (std::size_t i{0}; i < info.rxPktRcvdCnt.size(); ++i)
-        std::cout << std::setw(12) << i;
-    std::cout << std::endl << std::setw(10) << "Counters:";
-    for (std::size_t i{0}; i < info.rxPktRcvdCnt.size(); ++i)
-        std::cout << std::setw(12) << info.rxPktRcvdCnt[i];
-    std::cout << std::endl;
+    printArray( "rxPktRcvd", "Counters", info.rxPktRcvdCnt );
 
     std::cout << "=============================" << std::endl;
 
-    std::cout << "\033[32A\r";
+    std::cout << "\033[34A\r";
 }
 
 void Tester::printInfo()
@@ -135,66 +185,61 @@ void Tester::printInfo()
     std::cout << "====================================================" << std::endl;
     std::cout << "Read all registers using the get functions" << std::endl;
     std::cout << "====================================================" << std::endl;
-    std::cout << "appId             = "  <<                       mpsNode->getAppId()                      << std::endl;
-    std::cout << "version           = "  <<              unsigned(mpsNode->getVersion())                   << std::endl;
-    std::cout << "enable            = "  << std::boolalpha <<     mpsNode->getEnable()                     << std::endl;
-    std::cout << "lcls1Mode         = "  << std::boolalpha <<     mpsNode->getLcls1Mode()                  << std::endl;
-    std::cout << "byteCount         = "  <<             unsigned( mpsNode->getByteCount())                 << std::endl;
-    std::cout << "digitalEn         = "  << std::boolalpha <<     mpsNode->getDigitalEnable()              << std::endl;
-    std::cout << "beamDestMask      = "  << "0x" << std::hex <<   mpsNode->getBeamDestMask() << std::dec   << std::endl;
-    std::cout << "altDestMask       = "  << "0x" << std::hex <<   mpsNode->getAltDestMask() << std::dec    << std::endl;
-    std::cout << "msgCnt            = "  <<                       mpsNode->getMsgCount()                   << std::endl;
-    std::cout << "lastMsgAppId      = "  <<                       mpsNode->getLastMsgAppId()               << std::endl;
-    std::cout << "lastMsgLcls       = "  << std::boolalpha <<     mpsNode->getLastMsgLcls()                << std::endl;
-    std::cout << "lastMsgTimestamp  = "  <<                       mpsNode->getLastMsgTimeStamp()           << std::endl;
+    printPair( "appId",            mpsNode->getAppId()             );
+    printPair( "version",          mpsNode->getVersion()           );
+    printPair( "enable",           mpsNode->getEnable()            );
+    printPair( "lcls1Mode",        mpsNode->getLcls1Mode()         );
+    printPair( "byteCount",        mpsNode->getByteCount()         );
+    printPair( "digitalEn",        mpsNode->getDigitalEnable()     );
+    printPair( "beamDestMask",     mpsNode->getBeamDestMask()      );
+    printPair( "altDestMask",      mpsNode->getAltDestMask()       );
+    printPair( "msgCnt",           mpsNode->getMsgCount()          );
+    printPair( "lastMsgAppId",     mpsNode->getLastMsgAppId()      );
+    printPair( "lastMsgLcls",      mpsNode->getLastMsgLcls()       );
+    printPair( "lastMsgTimestamp", mpsNode->getLastMsgTimeStamp()  );
 
-    {
-        std::size_t n = mpsNode->getLastMsgByteSize();
-        std::cout << "lastMsgByte =" << std::endl;
-        std::cout << std::setw(10) << "Index:";
-        for (std::size_t i{0}; i < n; ++i)
-            std::cout << std::setw(12) << i;
-        std::cout << std::endl << std::setw(10) << "Status:";
-        for (std::size_t i{0}; i < n; ++i)
-            std::cout << std::setw(10) << "0x" << std::setfill('0') << std::setw(2) << std::hex <<  unsigned(mpsNode->getLastMsgByte(i)) << std::setfill(' ') << std::dec;
-        std::cout << std::endl;
-    }
+    
+    size_t n = mpsNode->getLastMsgByteSize();
+    std::cout << "lastMsgByte =" << std::endl;
+    std::cout << std::setw(10) << "Index:";
+    for (size_t i{0}; i < n; ++i)
+        std::cout << std::setw(12) << i;
+    std::cout << std::endl << std::setw(10) << "Status:";
+    for (size_t i{0}; i < n; ++i)
+        std::cout << std::setw(10) << "0x" << std::setfill('0') << std::setw(2) << std::hex <<  unsigned(mpsNode->getLastMsgByte(i).second) << std::setfill(' ') << std::dec;
+    std::cout << std::endl;
 
-    std::cout << "txLinkUp          = "  << std::boolalpha <<    mpsNode->getTxLinkUp()                   << std::endl;
-    std::cout << "txLinkUpCnt       = "  <<                      mpsNode->getTxLinkUpCnt()                << std::endl;
+    printPair( "txLinkUp",    mpsNode->getTxLinkUp()    );
+    printPair( "txLinkUpCnt", mpsNode->getTxLinkUpCnt() );
 
-    {
-        std::size_t n = mpsNode->getRxLinkUpCntSize();
-        std::cout << "rxLinkUp =" << std::endl;
-        std::cout << std::setw(10) << "Index:";
-        for (std::size_t i{0}; i < n; ++i)
-            std::cout << std::setw(12) << i;
-        std::cout << std::endl << std::setw(10) << "Status:";
-        for (std::size_t i{0}; i < n; ++i)
-            std::cout << std::setw(12) << std::boolalpha << mpsNode->getRxLinkUp(i);
-        std::cout << std::endl << std::setw(10) << "Counters:";
-        for (std::size_t i{0}; i < n; ++i)
-            std::cout << std::setw(12) << mpsNode->getRxLinkUpCnt(i);
-        std::cout << std::endl;
-    }
+    n = mpsNode->getRxLinkUpCntSize();
+    std::cout << "rxLinkUp =" << std::endl;
+    std::cout << std::setw(10) << "Index:";
+    for (size_t i{0}; i < n; ++i)
+        std::cout << std::setw(12) << i;
+    std::cout << std::endl << std::setw(10) << "Status:";
+    for (size_t i{0}; i < n; ++i)
+        std::cout << std::setw(12) << std::boolalpha << mpsNode->getRxLinkUp(i).second;
+    std::cout << std::endl << std::setw(10) << "Counters:";
+    for (size_t i{0}; i < n; ++i)
+        std::cout << std::setw(12) << mpsNode->getRxLinkUpCnt(i).second;
+    std::cout << std::endl;
+ 
+    printPair( "mpsSlot",      mpsNode->getMpsSlot()      );
+    printPair( "appType",      mpsNode->getAppType()      );
+    printPair( "pllLocked",    mpsNode->getPllLocked()    );
+    printPair( "rollOverEn",   mpsNode->getRollOverEn()   );
+    printPair( "txPktSentCnt", mpsNode->getTxPktSentCnt() );
 
-    std::cout << "mpsSlot           = "  << std::boolalpha <<    mpsNode->getMpsSlot()                    << std::endl;
-    std::cout << "appType           = "  <<                      mpsNode->getAppType()                    << std::endl;
-    std::cout << "pllLocked         = "  << std::boolalpha <<    mpsNode->getPllLocked()                  << std::endl;
-    std::cout << "rollOverEn        = "  <<                      mpsNode->getRollOverEn()                 << std::endl;
-    std::cout << "txPktSentCnt      = "  <<                      mpsNode->getTxPktSentCnt()               << std::endl;
-
-    {
-        std::size_t n = mpsNode->getRxPktRcvdCntSize();
-         std::cout << "rxPktRcvdCnt =" << std::endl;
-        std::cout << std::setw(10) << "Index:";
-        for (std::size_t i{0}; i < n; ++i)
-            std::cout << std::setw(12) << i;
-        std::cout << std::endl << std::setw(10) << "Counters:";
-        for (std::size_t i{0}; i < n; ++i)
-            std::cout << std::setw(12) << mpsNode->getRxPktRcvdCnt(i);
-        std::cout << std::endl;
-    }
+    n = mpsNode->getRxPktRcvdCntSize();
+    std::cout << "rxPktRcvdCnt =" << std::endl;
+    std::cout << std::setw(10) << "Index:";
+    for (std::size_t i{0}; i < n; ++i)
+        std::cout << std::setw(12) << i;
+    std::cout << std::endl << std::setw(10) << "Counters:";
+    for (std::size_t i{0}; i < n; ++i)
+        std::cout << std::setw(12) << mpsNode->getRxPktRcvdCnt(i).second;
+    std::cout << std::endl;
 
     std::cout << "====================================================" << std::endl;
     std::cout << "Done!"<< std::endl;
