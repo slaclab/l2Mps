@@ -18,7 +18,7 @@
 #include <boost/make_shared.hpp>
 #include <cpsw_api_user.h>
 
-#include "l2Mps_base.h"
+#include "l2Mps_cpsw.h"
 
 class IMpsNode;
 
@@ -31,7 +31,7 @@ const std::string MpsBaseModuleName = "AppMpsRegBase";
 const std::string MpsSaltModuleName = "AppMpsSalt";
 
 // Application type
-static std::map<int, std::string> appType = {
+static std::map<int, std::string> appTypeList = {
     {0,     "NONE"},
     {1,     "DEDBUG"},
     {10,    "TIME_GEN"},
@@ -45,67 +45,35 @@ static std::map<int, std::string> appType = {
     {121,   "MPS_6CH"}
 };
 
-// CPSW interfaces
-struct mps_infoScalval_t
-{
-    // From AppMpsRegAppCh
-    ScalVal     appId;
-    ScalVal     version;
-    ScalVal     enable;
-    ScalVal     lcls1Mode;
-    ScalVal_RO  byteCount;
-    ScalVal_RO  digitalEn;
-    ScalVal     beamDestMask;
-    ScalVal     altDestMask;
-    ScalVal_RO  msgCnt;
-    ScalVal_RO  lastMsgAppId;
-    ScalVal_RO  lastMsgLcls;
-    ScalVal_RO  lastMsgTimestamp;
-    ScalVal_RO  lastMsgByte;
-    // From AppMpsSalt
-    ScalVal_RO  txLinkUp;
-    ScalVal_RO  txLinkUpCnt;
-    ScalVal_RO  rxLinkUp;
-    ScalVal_RO  rxLinkUpCnt;
-    ScalVal_RO  mpsSlot;
-    ScalVal_RO  appType;
-    ScalVal_RO  pllLocked;
-    ScalVal     rollOverEn;
-    ScalVal_RO  txPktSentCnt;
-    ScalVal_RO  rxPktRcvdCnt;
-    Command     rstCnt;
-    Command     rstPll;
-};
-
 // Data
 struct mps_infoData_t
 {
     // From AppMpsRegAppCh
-    uint16_t                appId;
-    uint8_t                 version;
-    bool                    enable;
-    bool                    lcls1Mode;
-    uint8_t                 byteCount;
-    bool                    digitalEn;
-    uint16_t                beamDestMask;
-    uint16_t                altDestMask;
-    uint32_t                msgCnt;
-    uint16_t                lastMsgAppId;
-    bool                    lastMsgLcls;
-    uint16_t                lastMsgTimestamp;
-    std::vector<uint8_t>    lastMsgByte;
-
-    // From AppMpsSalt
-    bool                    txLinkUp;
-    uint32_t                txLinkUpCnt;
-    std::vector<bool>       rxLinkUp;
-    std::vector<uint32_t>   rxLinkUpCnt;
-    bool                    mpsSlot;
-    std::string             appType;
-    bool                    pllLocked;
-    uint16_t                rollOverEn;
-    uint32_t                txPktSentCnt;
-    std::vector<uint32_t>   rxPktRcvdCnt;
+    std::pair< bool, uint16_t             > appId;
+    std::pair< bool, uint8_t              > version;
+    std::pair< bool, bool                 > enable;
+    std::pair< bool, bool                 > lcls1Mode;
+    std::pair< bool, uint8_t              > byteCount;
+    std::pair< bool, bool                 > digitalEn;
+    std::pair< bool, uint16_t             > beamDestMask;
+    std::pair< bool, uint16_t             > altDestMask;
+    std::pair< bool, uint32_t             > msgCnt;
+    std::pair< bool, uint16_t             > lastMsgAppId;
+    std::pair< bool, bool                 > lastMsgLcls;
+    std::pair< bool, uint16_t             > lastMsgTimestamp;
+    std::pair< bool, std::vector<uint8_t> > lastMsgByte;
+                                              
+    // From AppMpsSalt                        
+    std::pair< bool, bool                  > txLinkUp;
+    std::pair< bool, uint32_t              > txLinkUpCnt;
+    std::pair< bool, std::vector<bool>     > rxLinkUp;
+    std::pair< bool, std::vector<uint32_t> > rxLinkUpCnt;
+    std::pair< bool, bool                  > mpsSlot;
+    std::pair< bool, std::string           > appType;
+    std::pair< bool, bool                  > pllLocked;
+    std::pair< bool, uint16_t              > rollOverEn;
+    std::pair< bool, uint32_t              > txPktSentCnt;
+    std::pair< bool, std::vector<uint32_t> > rxPktRcvdCnt;
 };
 
 typedef std::function<void(mps_infoData_t)> p_mpsCBFunc_t;
@@ -113,112 +81,134 @@ typedef std::function<void(mps_infoData_t)> p_mpsCBFunc_t;
 class IMpsNode
 {
 public:
-    // Constructor
     IMpsNode(Path mpsRoot);
-
-    // Destructor
     ~IMpsNode();
 
     const void readMpsInfo(mps_infoData_t& info) const;
 
     const void startPollThread(unsigned int poll, p_mpsCBFunc_t cbFunc);
 
-    const std::size_t getLastMsgByteSize()  const { return lastMsgByteSize;  };
-    const std::size_t getRxLinkUpCntSize()  const { return rxLinkUpCntSize;  };
-    const std::size_t getRxPktRcvdCntSize() const { return rxPktRcvdCntSize; };
+    const size_t getLastMsgByteSize()  const { return lastMsgByte.getNelms();  };
+    const size_t getRxLinkUpCntSize()  const { return rxLinkUpCnt.getNelms();  };
+    const size_t getRxPktRcvdCntSize() const { return rxPktRcvdCnt.getNelms(); };
 
     // Mps Application ID
-    uint16_t const getAppId(void) const                         { return IMpsBase::get(scalvals.appId);                     };
-    void setAppId(const uint16_t id) const                      { IMpsBase::set(scalvals.appId, id);                        };
+    std::pair<bool,uint16_t> getAppId(void) const                     { return appId.get();            };
+    bool setAppId(const uint16_t id) const                            { return appId.set(id);          };
 
     // Mps version
-    uint8_t const getVersion(void) const                        { return IMpsBase::get(scalvals.version);                   };
-    void setVersion(uint8_t ver) const                          {IMpsBase::set(scalvals.version, ver);                      };
+    std::pair<bool,uint8_t>  getVersion(void) const                   { return version.get();          };
+    bool setVersion(uint8_t ver) const                                { return version.set(ver);       };
 
     // Mps Enable
-    bool const getEnable(void) const                            { return IMpsBase::get(scalvals.enable)?true:false;         };
-    void setEnable(const bool en) const                         { IMpsBase::set(scalvals.enable, en);                       };
+    std::pair<bool,bool> getEnable(void) const                        { return enable.get();           };
+    bool setEnable(const bool en) const                               { return enable.set(en);         };
 
     // Lcls1 Mode (true = LCLS1 mode; false = LCLS2 Mode)
-    bool const getLcls1Mode(void) const                         { return IMpsBase::get(scalvals.lcls1Mode)?true:false;      };
-    void setLcls1Mode(const bool mode) const                    { IMpsBase::set(scalvals.lcls1Mode, mode);                  };
+    std::pair<bool,bool>  getLcls1Mode(void) const                    { return lcls1Mode.get();        };
+    bool  setLcls1Mode(const bool mode) const                         { return lcls1Mode.set(mode);    };
 
     // Number ofbytes in the MPS message
-    uint8_t const getByteCount(void) const                      { return IMpsBase::get(scalvals.byteCount);                 };
+    std::pair<bool,uint8_t>  getByteCount(void) const                 { return byteCount.get();        };
 
     // Application generates digital messages
-    bool const getDigitalEnable(void) const                     { return IMpsBase::get(scalvals.digitalEn)?true:false;      };
+    std::pair<bool,bool> getDigitalEnable(void) const                 { return digitalEn.get();        };
 
     // Beam destination mask
-    uint16_t const getBeamDestMask(void) const                  { return IMpsBase::get(scalvals.beamDestMask);              };
-    void setBeamDestMask(const uint16_t mask) const             { IMpsBase::set(scalvals.beamDestMask, mask);               };
+    std::pair<bool,int16_t> getBeamDestMask(void) const               { return beamDestMask.get();     };
+    bool setBeamDestMask(const uint16_t mask) const                   { return beamDestMask.set(mask); };
 
     // Alt destination mask
-    uint8_t const getAltDestMask(void) const                    { return IMpsBase::get(scalvals.altDestMask);               };
-    void setAltDestMask(const uint8_t mask) const               { IMpsBase::set(scalvals.altDestMask, mask);                };
+    std::pair<bool,uint8_t> getAltDestMask(void) const                { return altDestMask.get();      };
+    bool setAltDestMask(const uint8_t mask) const                     { return altDestMask.set(mask);  };
 
     // Application type
-    std::string const getAppType(void) const;
+    std::pair<bool,std::string> getAppType(void) const                { return getConvertedAppType();  };
 
     // MPS Tx Link Up counter
-    uint32_t const getTxLinkUpCnt(void) const                   { return IMpsBase::get(scalvals.txLinkUpCnt);               };
+    std::pair<bool,uint32_t> getTxLinkUpCnt(void) const               { return txLinkUpCnt.get();      };
 
     // MPS Rx Link Up counter
-    uint32_t const getRxLinkUpCnt(const uint8_t ch) const       { return IMpsBase::get(scalvals.rxLinkUpCnt, ch);           };
+    std::pair<bool,uint32_t> getRxLinkUpCnt(const uint8_t ch) const   { return rxLinkUpCnt.get(ch);    };
 
     // Status Counter Roll Over Enable
-    uint32_t const getRollOverEn(void) const                    { return IMpsBase::get(scalvals.rollOverEn);                };
+    std::pair<bool,uint32_t> getRollOverEn(void) const                { return rollOverEn.get();       };
 
     // Mps Tx LinkUp status
-    bool     const getTxLinkUp(void) const                      { return IMpsBase::get(scalvals.txLinkUp)?true:false;       };
-
+    std::pair<bool,bool> getTxLinkUp(void) const                      { return txLinkUp.get();         };
+ 
     // Mps Rx LinkUp status
-    bool     const getRxLinkUp(const uint8_t ch) const;
+    std::pair<bool,bool> getRxLinkUp(const uint8_t ch) const;
 
     // Mps Slot
-    bool     const getMpsSlot(void) const                       { return IMpsBase::get(scalvals.mpsSlot)?true:false;        };
+    std::pair<bool,bool> getMpsSlot(void) const                       { return mpsSlot.get();          };
 
     // MPS PLL Lock Status
-    bool     const getPllLocked(void) const                     { return IMpsBase::get(scalvals.pllLocked)?true:false;      };
+    std::pair<bool,bool> getPllLocked(void) const                     { return pllLocked.get();        };
 
     // Mps TX Packet Sent Counter
-    uint32_t const getTxPktSentCnt(void) const                  { return IMpsBase::get(scalvals.txPktSentCnt);              };
+    std::pair<bool,uint32_t> getTxPktSentCnt(void) const              { return txPktSentCnt.get();     };
 
     // MPS RX Packet Received Counter
-    uint32_t const getRxPktRcvdCnt(const uint8_t ch) const      { return IMpsBase::get(scalvals.rxPktRcvdCnt, ch);          };
+    std::pair<bool,uint32_t> getRxPktRcvdCnt(const uint8_t ch) const  { return rxPktRcvdCnt.get(ch);   };
 
     // MpsMessage counter
-    uint32_t const getMsgCount(void) const                      { return IMpsBase::get(scalvals.msgCnt);                    };
+    std::pair<bool,uint32_t> getMsgCount(void) const                  { return msgCnt.get();           };
 
     // App ID in the last message
-    uint16_t const getLastMsgAppId(void) const                  { return IMpsBase::get(scalvals.lastMsgAppId);              };
+    std::pair<bool,int16_t> getLastMsgAppId(void) const               { return lastMsgAppId.get();     };
 
     // LCLS flag in the last message
-    bool     const getLastMsgLcls(void) const                   { return IMpsBase::get(scalvals.lastMsgLcls)?true:false;    };
+    std::pair<bool,bool> getLastMsgLcls(void) const                   { return lastMsgLcls.get();      };
 
     // Timestamp in the last message
-    uint16_t const getLastMsgTimeStamp(void) const              { return IMpsBase::get(scalvals.lastMsgTimestamp);          };
+    std::pair<bool,uint16_t> getLastMsgTimeStamp(void) const          { return lastMsgTimestamp.get(); };
 
     // Bytes from the last message
-    uint8_t  const getLastMsgByte(const uint8_t index) const    { return IMpsBase::get(scalvals.lastMsgByte, index);        };
+    std::pair<bool,uint8_t> getLastMsgByte(const uint8_t index) const { return lastMsgByte.get(index); };
 
     // Reset the SALT conuters
-    void const resetSaltCnt(void) const                         { return IMpsBase::execute(scalvals.rstCnt);                };
+    bool resetSaltCnt(void) const                                     { return rstCnt.exe();           };
 
     // Reset the SALT PLL
-    void const resetSaltPll(void) const                         { return IMpsBase::execute(scalvals.rstPll);                };
+    bool resetSaltPll(void) const                                     { return rstPll.exe();           };
 
 private:
-    std::size_t         lastMsgByteSize;
-    std::size_t         rxLinkUpCntSize;
-    std::size_t         rxPktRcvdCntSize;
-    mps_infoScalval_t   scalvals;
     p_mpsCBFunc_t       mpsCB;
     unsigned int        pollCB;
     boost::atomic<bool> run;
     std::thread         scanThread;
 
-    void pollThread();
+    // CPSW interface from AppMpsRegAppCh
+    CpswRegRW<uint16_t> appId;
+    CpswRegRW<uint8_t>  version;
+    CpswRegRW<uint8_t>  enable;
+    CpswRegRW<uint8_t>  lcls1Mode;
+    CpswRegRO<uint8_t>  byteCount;
+    CpswRegRO<uint8_t>  digitalEn;
+    CpswRegRW<uint16_t> beamDestMask;
+    CpswRegRW<uint16_t> altDestMask;
+    CpswRegRO<uint32_t> msgCnt;
+    CpswRegRO<uint16_t> lastMsgAppId;
+    CpswRegRO<uint8_t>  lastMsgLcls;
+    CpswRegRO<uint16_t> lastMsgTimestamp;
+    CpswRegRO<uint8_t>  lastMsgByte;
+    // CPSW interfaces from AppMpsSalt
+    CpswRegRO<uint8_t>  txLinkUp;
+    CpswRegRO<uint32_t> txLinkUpCnt;
+    CpswRegRO<uint8_t>  rxLinkUp;
+    CpswRegRO<uint32_t> rxLinkUpCnt;
+    CpswRegRO<uint8_t>  mpsSlot;
+    CpswRegRO<uint8_t>  appType;
+    CpswRegRO<uint8_t>  pllLocked;
+    CpswRegRW<uint16_t> rollOverEn;
+    CpswRegRO<uint32_t> txPktSentCnt;
+    CpswRegRO<uint32_t> rxPktRcvdCnt;
+    CpswCmd             rstCnt;
+    CpswCmd             rstPll;
+
+    void                        pollThread();
+    std::pair<bool,std::string> getConvertedAppType() const;
 };
 
 class MpsNodeFactory
