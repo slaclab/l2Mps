@@ -74,7 +74,7 @@ int main(int argc, char **argv)
 	{
 	    MpsNode mpsNode = MpsNodeFactory::create(mpsRoot);
 
-            std::string appType(mpsNode->getAppType());
+            std::string appType(mpsNode->getAppType().second);
             std::cout << "This application type is " << appType << std::endl;
             if ( appType.compare("BPM") )
             {
