@@ -90,7 +90,7 @@ int main(int argc, char **argv)
         std::cout << "Application ID =                     ";
         try
         {
-            uint16_t id = aMpsNode->getAppId();
+            uint16_t id = aMpsNode->getAppId().second;
             std::cout << "0x" << std::hex << unsigned(id) << std::dec << std::endl;
         }
         catch (CPSWError &e)
@@ -101,7 +101,7 @@ int main(int argc, char **argv)
         std::cout << "Is MPS enabled? =                    ";
         try
         {
-            bool mpsEn = aMpsNode->getEnable();
+            bool mpsEn = aMpsNode->getEnable().second;
             std::cout << std::boolalpha << mpsEn << std::endl;
         }
         catch (CPSWError &e)
@@ -112,7 +112,7 @@ int main(int argc, char **argv)
         std::cout << "Is LCLS1 Mode enabled? =             ";
         try
         {
-            bool lcls1Mode = aMpsNode->getLcls1Mode();
+            bool lcls1Mode = aMpsNode->getLcls1Mode().second;
             std::cout << std::boolalpha << lcls1Mode << std::endl;
         }
         catch (CPSWError &e)
@@ -123,7 +123,7 @@ int main(int argc, char **argv)
         std::cout << "Byte Count =                         ";
         try
         {
-            uint8_t byteCount = aMpsNode->getByteCount();
+            uint8_t byteCount = aMpsNode->getByteCount().second;
             std::cout << unsigned(byteCount) << std::endl;
         }
         catch (CPSWError &e)
@@ -134,7 +134,7 @@ int main(int argc, char **argv)
         std::cout << "Does it generate digital messages? = ";
         try
         {
-            bool digital = aMpsNode->getDigitalEnable();
+            bool digital = aMpsNode->getDigitalEnable().second;
             std::cout << std::boolalpha << digital << std::endl;
         }
         catch (CPSWError &e)
