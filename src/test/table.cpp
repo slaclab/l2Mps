@@ -5,22 +5,20 @@
 #include "l2Mps_base.h"
 #include "l2Mps_mps.h"
 #include "l2Mps_thr.h"
+#include "helpers.h"
 
-class IYamlSetIP : public IYamlFixup
+template<typename T>
+void printCell(std::pair<bool, T> p)
 {
-    public:
-        IYamlSetIP( std::string ip_addr ) : ip_addr_(ip_addr) {}
+    std::cout << std::setw(10) << std::left;
 
-        void operator()(YAML::Node &node)
-        {
-            node["ipAddr"] = ip_addr_.c_str();
-        }
+    if (p.first)
+        printVal(p.second);
+    else
+        std::cout << "[Invalid]";
 
-        ~IYamlSetIP() {}
-
-    private:
-        std::string ip_addr_;
-};
+   std::cout << std::right;
+}
 
 int main(int argc, char **argv)
 {
@@ -87,60 +85,11 @@ int main(int argc, char **argv)
         std::cout << "MPS application information:"<< std::endl;
         std::cout << "============================"<< std::endl;
         
-        std::cout << "Application ID =                     ";
-        try
-        {
-            uint16_t id = aMpsNode->getAppId().second;
-            std::cout << "0x" << std::hex << unsigned(id) << std::dec << std::endl;
-        }
-        catch (CPSWError &e)
-        {
-            std::cout << "CPSW error: " << e.getInfo() << std::endl;
-        }
-
-        std::cout << "Is MPS enabled? =                    ";
-        try
-        {
-            bool mpsEn = aMpsNode->getEnable().second;
-            std::cout << std::boolalpha << mpsEn << std::endl;
-        }
-        catch (CPSWError &e)
-        {
-            std::cout << "CPSW error: " << e.getInfo() << std::endl;
-        }
-
-        std::cout << "Is LCLS1 Mode enabled? =             ";
-        try
-        {
-            bool lcls1Mode = aMpsNode->getLcls1Mode().second;
-            std::cout << std::boolalpha << lcls1Mode << std::endl;
-        }
-        catch (CPSWError &e)
-        {
-            std::cout << "CPSW error: " << e.getInfo() << std::endl;
-        }
-
-        std::cout << "Byte Count =                         ";
-        try
-        {
-            uint8_t byteCount = aMpsNode->getByteCount().second;
-            std::cout << unsigned(byteCount) << std::endl;
-        }
-        catch (CPSWError &e)
-        {
-            std::cout << "CPSW error: " << e.getInfo() << std::endl;
-        }
-
-        std::cout << "Does it generate digital messages? = ";
-        try
-        {
-            bool digital = aMpsNode->getDigitalEnable().second;
-            std::cout << std::boolalpha << digital << std::endl;
-        }
-        catch (CPSWError &e)
-        {
-            std::cout << "CPSW error: " << e.getInfo() << std::endl;
-        }
+        printPair( "Application ID",  aMpsNode->getAppId()         );
+        printPair( "Mps enabled",     aMpsNode->getEnable()        );
+        printPair( "LCLS-I mode",     aMpsNode->getLcls1Mode()     );
+        printPair( "Byte count",      aMpsNode->getByteCount()     );
+        printPair( "Digital enabled", aMpsNode->getDigitalEnable() );
 
         std::cout << std::endl;
         std::cout << "Threshold channel map:"<< std::endl;
@@ -154,20 +103,19 @@ int main(int argc, char **argv)
             {
                 ThrChannel aThr(IThrChannel::create(mpsRoot, ch));
 
-                std::cout << std::setw(2) << unsigned(aThr->getByteMap()) << std::string(8, ' ');
-                std::cout << std::setw(2) << unsigned(aThr->getThrCount()) << std::string(8, ' ');
-                std::cout << std::boolalpha << std::setw(5) << aThr->getLcls1En() << std::string(5, ' ');
-                std::cout << std::boolalpha << std::setw(5) << aThr->getIdleEn() << std::string(5, ' ');
-                std::cout << std::boolalpha << std::setw(5) << aThr->getAltEn() << std::string(5, ' ');
+                printCell(aThr->getByteMap());
+                printCell(aThr->getThrCount());
+                printCell(aThr->getLcls1En());
+                printCell(aThr->getIdleEn());
+                printCell(aThr->getAltEn());
                 std::cout << std::endl;
-
             }
             catch (std::runtime_error &e)
             {
                 std::cout << "Error while trying to read the threhold channel info: " << e.what() << std::endl;
             }
         }
-        }
+    }
     catch (CPSWError &e)
     {
         std::cout << "Error creating the MPS application: " << e.getInfo() << std::endl;
