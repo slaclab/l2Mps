@@ -1,17 +1,5 @@
 #include "l2Mps_thr.h"
 
-thr_tableScalval_t IThrChannel::createTableScalVal(const std::string& prefix) const
-{
-    thr_tableScalval_t tableScalVal;
-
-    tableScalVal.minEn = CpswRegRW<uint8_t>(  chRoot, prefix + "minEn" );
-    tableScalVal.maxEn = CpswRegRW<uint8_t>(  chRoot, prefix + "maxEn" );
-    tableScalVal.min   = CpswRegRW<uint32_t>( chRoot, prefix + "min"   );
-    tableScalVal.max   = CpswRegRW<uint32_t>( chRoot, prefix + "max"   );
-
-    return tableScalVal;
-}
-
 IThrChannel::IThrChannel(Path mpsRoot, uint8_t channel)
 :
     scaleFactor(1.0)
@@ -182,6 +170,18 @@ const float IThrChannel::getScaleFactor() const
 }
 
 // Helper functions definitions
+thr_tableScalval_t IThrChannel::createTableScalVal(const std::string& prefix) const
+{
+    thr_tableScalval_t tableScalVal;
+
+    tableScalVal.minEn = CpswRegRW<uint8_t>(  chRoot, prefix + "minEn" );
+    tableScalVal.maxEn = CpswRegRW<uint8_t>(  chRoot, prefix + "maxEn" );
+    tableScalVal.min   = CpswRegRW<uint32_t>( chRoot, prefix + "min"   );
+    tableScalVal.max   = CpswRegRW<uint32_t>( chRoot, prefix + "max"   );
+
+    return tableScalVal;
+}
+
 thr_tableScalval_t* IThrChannel::findDataTableScalval(const thr_table_t& ch)
 {
     thr_chScalval_t::iterator it;
