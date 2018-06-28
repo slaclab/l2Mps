@@ -7,18 +7,18 @@
 #include "l2Mps_thr.h"
 #include "helpers.h"
 
-template<typename T>
-void printCell(std::pair<bool, T> p)
-{
-    std::cout << std::setw(10) << std::left;
-
-    if (p.first)
-        printVal(p.second);
-    else
-        std::cout << "[Invalid]";
-
-   std::cout << std::right;
-}
+//template<typename T>
+//void printCell(std::pair<bool, T> p)
+//{
+//    std::cout << std::setw(10) << std::left;
+//
+//    if (p.first)
+//        printVal(p.second);
+//    else
+//        std::cout << "[Invalid]";
+//
+//   std::cout << std::right;
+//}
 
 int main(int argc, char **argv)
 {

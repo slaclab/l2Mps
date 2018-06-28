@@ -4,22 +4,7 @@
 
 #include "l2Mps_mps.h"
 #include "l2Mps_bcm.h"
-
-class IYamlSetIP : public IYamlFixup
-{
-    public:
-        IYamlSetIP( std::string ip_addr ) : ip_addr_(ip_addr) {}
-
-        void operator()(YAML::Node &node)
-        {
-            node["ipAddr"] = ip_addr_.c_str();
-        }
-
-        ~IYamlSetIP() {}
-
-    private:
-        std::string ip_addr_;
-};
+#include "helpers.h"
 
 int main(int argc, char **argv)
 {
@@ -67,37 +52,50 @@ int main(int argc, char **argv)
     IYamlSetIP setIP(ipAddr);
     Path root = IPath::loadYamlFile( yamlDoc.c_str(), "NetIODev", NULL, &setIP );    
 
+    Path mpsRoot;
     try
     {
-        Path mpsRoot = root->findByName(mpsRootName);
+        mpsRoot = root->findByName(mpsRootName);
+    }
+    catch (CPSWError &e)
+    {
+        printf("CPSW error: %s not found!\n", e.getInfo().c_str());
+        return 1;
+    }
 
+    try
+    {
+        MpsNode mpsNode = IMpsNode::create(mpsRoot);
+
+        std::string appType(mpsNode->getAppType().second);
+        std::cout << "This application type is " << appType << std::endl;
+        if ( appType.compare("BCM") )
         {
-            MpsNode mpsNode = IMpsNode::create(mpsRoot);
-
-            std::string appType(mpsNode->getAppType().second);
-            std::cout << "This application type is " << appType << std::endl;
-            if ( appType.compare("BCM") )
-            {
-                std::cout << "ERROR: This is not a BCM application. Aborting." << std::endl;
-                return 1;
-            }
+            std::cout << "ERROR: This is not a BCM application. Aborting." << std::endl;
+            return 1;
         }
+    }
+    catch (std::runtime_error &e)
+    {
+        std::cout << "Error creating the MPS application: " << e.what() << std::endl;
+        return 1;
+    }
 
-        std::array<MpsBcm, 2> myMpsBcm;
+    std::array<MpsBcm, 2> myMpsBcm;
 
-        for (std::size_t i {0}; i < 2; ++i)
+    for (std::size_t i {0}; i < 2; ++i)
+    {
+        std::cout << "BCM for AMC[" << i << "]: BCM[" << i << "]" << std::endl;
+        std::cout << "====================================================" << std::endl;
+        myMpsBcm[i] = IMpsBcm::create(mpsRoot, i);
+        std::cout << "====================================================" << std::endl;
+
+        std::cout << std::endl;
+
+        int n;
+        
+        for (int j = 0; j < numBcmChs; ++j)
         {
-            std::cout << "BCM for AMC[" << i << "]: BCM[" << i << "]" << std::endl;
-            std::cout << "====================================================" << std::endl;
-            myMpsBcm[i] = IMpsBcm::create(mpsRoot, i);
-            std::cout << "====================================================" << std::endl;
-
-            std::cout << std::endl;
-
-            int n;
-            
-            for (int j = 0; j < numBcmChs; ++j)
-            {
                 try 
                 {
                     bcm_channel_t bcmCh = j;
@@ -107,32 +105,26 @@ int main(int argc, char **argv)
                     std::cout << "  Channel = " << j << ":" << std::endl;
                     std::cout << "  ===============================================" << std::endl;
 
-                    std::cout << "    Thr channel =   " << myMpsBcm[i]->getChannel(bcmCh) << std::endl;
-                    std::cout << "    Thr count =     " << myMpsBcm[i]->getThrCount(bcmCh) << std::endl;
-                    std::cout << "    Byte map =      " << myMpsBcm[i]->getByteMap(bcmCh) << std::endl;
-                    std::cout << "    Idle Enabled =  " << std::boolalpha << myMpsBcm[i]->getIdleEn(bcmCh) << std::endl;
-                    std::cout << "    Lcls1 Enabled = " << std::boolalpha << myMpsBcm[i]->getLcls1En(bcmCh) << std::endl;
-                    std::cout << "    Alt Enabled =   " << std::boolalpha << myMpsBcm[i]->getAltEn(bcmCh) << std::endl;
+                    std::cout << "    Thr channel  = " << unsigned(myMpsBcm[i]->getChannel(bcmCh)) << std::endl;
+                    printPair( "    Thr count",     myMpsBcm[i]->getThrCount(bcmCh) );
+                    printPair( "    Byte map",      myMpsBcm[i]->getByteMap(bcmCh)  );
+                    printPair( "    Idle EN",  myMpsBcm[i]->getIdleEn(bcmCh)   );
+                    printPair( "    Lcls1 EN", myMpsBcm[i]->getLcls1En(bcmCh)  );
+                    printPair( "    Alt EN",   myMpsBcm[i]->getAltEn(bcmCh)    );
 
                     std::cout << std::endl;
                     std::cout << "    Threshold tables:" << std::endl;
-                    std::cout << "    ==========================================" << std::endl;
-                    std::cout << "    Table     " << "   minEn" << "     min" << "   maxEn" << "     max" << std::endl;
-                    std::cout << "    ==========================================" << std::endl;
+                    std::cout << "    ================================================" << std::endl;
+                    std::cout << "    Table     " << "minEn     " << "min       " << "maxEn     " << "max       " << std::endl;
+                    std::cout << "    ================================================" << std::endl;
 
                     bcmThr_channel_t bcmThrCh;
                     bcmThrCh.appCh = bcmCh;
-                    
+
                     try
                     {
                         bcmThrCh.thrTb = thr_table_t{{0,0}};
-                        std::cout << "    LCLS1     ";
-                        
-                        std::cout << std::setw(8) << std::boolalpha << myMpsBcm[i]->getThresholdMinEn(bcmThrCh);
-                        std::cout << std::setw(8) << myMpsBcm[i]->getThresholdMin(bcmThrCh);
-                        std::cout << std::setw(8) << std::boolalpha << myMpsBcm[i]->getThresholdMaxEn(bcmThrCh);
-                        std::cout << std::setw(8) << myMpsBcm[i]->getThresholdMax(bcmThrCh);
-                        std::cout << std::endl;
+                        printThrRow( "LCLS1", myMpsBcm[i], bcmThrCh);
                     }
                     catch (std::exception &e)
                     {
@@ -142,13 +134,7 @@ int main(int argc, char **argv)
                     try
                     {
                         bcmThrCh.thrTb = thr_table_t{{1,0}};
-                        std::cout << "    IDLE      ";
-                        
-                        std::cout << std::setw(8) << std::boolalpha << myMpsBcm[i]->getThresholdMinEn(bcmThrCh);
-                        std::cout << std::setw(8) << myMpsBcm[i]->getThresholdMin(bcmThrCh);
-                        std::cout << std::setw(8) << std::boolalpha << myMpsBcm[i]->getThresholdMaxEn(bcmThrCh);
-                        std::cout << std::setw(8) << myMpsBcm[i]->getThresholdMax(bcmThrCh);
-                        std::cout << std::endl;
+                        printThrRow( "IDLE", myMpsBcm[i], bcmThrCh);
                     }
                     catch (std::exception &e)
                     {
@@ -160,14 +146,9 @@ int main(int argc, char **argv)
                         try
                         {
                             bcmThrCh.thrTb = thr_table_t{{2,m}};
-                            std::cout << "    STD[" << m << "]    ";
-                            
-                            std::cout << std::setw(8) << std::boolalpha << myMpsBcm[i]->getThresholdMinEn(bcmThrCh);
-                            std::cout << std::setw(8) << myMpsBcm[i]->getThresholdMin(bcmThrCh);
-                            std::cout << std::setw(8) << std::boolalpha << myMpsBcm[i]->getThresholdMaxEn(bcmThrCh);
-                            std::cout << std::setw(8) << myMpsBcm[i]->getThresholdMax(bcmThrCh);
-                            std::cout << std::endl;
-
+                            std::stringstream name("");
+                            name << "STD[" << m << "]";
+                            printThrRow( name.str(), myMpsBcm[i], bcmThrCh);
                         }
                         catch (std::exception &e)
                         {
@@ -182,13 +163,9 @@ int main(int argc, char **argv)
                         {
                     
                             bcmThrCh.thrTb = thr_table_t{{1,0}};
-                            std::cout << "    ALT[" << m << "]    ";
-                                
-                            std::cout << std::setw(8) << std::boolalpha << myMpsBcm[i]->getThresholdMinEn(bcmThrCh);
-                            std::cout << std::setw(8) << myMpsBcm[i]->getThresholdMin(bcmThrCh);
-                            std::cout << std::setw(8) << std::boolalpha << myMpsBcm[i]->getThresholdMaxEn(bcmThrCh);
-                            std::cout << std::setw(8) << myMpsBcm[i]->getThresholdMax(bcmThrCh);
-                            std::cout << std::endl;
+                            std::stringstream name("");
+                            name << "ALT[" << m << "]";
+                            printThrRow( name.str(), myMpsBcm[i], bcmThrCh);
                         }
                         catch (std::exception &e)
                         {
@@ -196,7 +173,6 @@ int main(int argc, char **argv)
                         }
 
                     }
-
 
                     std::cout << "    ==========================================" << std::endl;
                     std::cout << std::endl;
@@ -207,19 +183,12 @@ int main(int argc, char **argv)
                 {
                     printf("  Error channel info section: %s\n", e.what());
                 }
-
-            }
-
-            std::cout << "====================================================" << std::endl;
-            std::cout << std::endl;
         }
 
+        std::cout << "====================================================" << std::endl;
+        std::cout << std::endl;
     }
-    catch (CPSWError &e)
-    {
-        printf("CPSW error: %s not found!\n", e.getInfo().c_str());
-        return 1;
-    }
+
 
     return 0;
 }

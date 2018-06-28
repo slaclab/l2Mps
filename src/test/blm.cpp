@@ -4,22 +4,7 @@
 
 #include "l2Mps_mps.h"
 #include "l2Mps_blm.h"
-
-class IYamlSetIP : public IYamlFixup
-{
-    public:
-        IYamlSetIP( std::string ip_addr ) : ip_addr_(ip_addr) {}
-
-        void operator()(YAML::Node &node)
-        {
-            node["ipAddr"] = ip_addr_.c_str();
-        }
-
-        ~IYamlSetIP() {}
-
-    private:
-        std::string ip_addr_;
-};
+#include "helpers.h"
 
 int main(int argc, char **argv)
 {
@@ -67,161 +52,146 @@ int main(int argc, char **argv)
     IYamlSetIP setIP(ipAddr);
     Path root = IPath::loadYamlFile( yamlDoc.c_str(), "NetIODev", NULL, &setIP );    
 
+    Path mpsRoot;
     try
     {
-        Path mpsRoot = root->findByName(mpsRootName);
-
-        {
-            MpsNode mpsNode = IMpsNode::create(mpsRoot);
-
-            std::string appType(mpsNode->getAppType().second);
-            std::cout << "This application type is " << appType << std::endl;
-            if ( appType.compare("BLM") & appType.compare("MPS_6CH") & appType.compare("MPS_24CH") )
-            {
-                std::cout << "ERROR: This is not a BLM application. Aborting." << std::endl;
-                return 1;
-            }
-        }
-
-        std::array<MpsBlm, 2> myMpsBlm;
-
-        for (std::size_t i {0}; i < 2; ++i)
-        {
-            std::cout << "BLM for AMC[" << i << "]: BLM[" << i << "]" << std::endl;
-            std::cout << "====================================================" << std::endl;
-            myMpsBlm[i] = IMpsBlm::create(mpsRoot, i);
-            std::cout << "====================================================" << std::endl;
-
-            std::cout << std::endl;
-
-            int n;
-            
-            for (int j = 0; j < numBlmChs; ++j)
-            {
-                for (int k = 0; k <numBlmIntChs; ++k)
-                {
-                    try 
-                    {
-                        blm_channel_t blmCh = blm_channel_t{{j,k}};
-
-                        std::cout << std::endl;
-                        std::cout << "  ===============================================" << std::endl;
-                        std::cout << "  Channel = (" << j << ", " << k << "):" << std::endl;
-                        std::cout << "  ===============================================" << std::endl;
-
-                        std::cout << "    Thr channel =   " << myMpsBlm[i]->getChannel(blmCh) << std::endl;
-                        std::cout << "    Thr count =     " << myMpsBlm[i]->getThrCount(blmCh) << std::endl;
-                        std::cout << "    Byte map =      " << myMpsBlm[i]->getByteMap(blmCh) << std::endl;
-                        std::cout << "    Idle Enabled =  " << std::boolalpha << myMpsBlm[i]->getIdleEn(blmCh) << std::endl;
-                        std::cout << "    Lcls1 Enabled = " << std::boolalpha << myMpsBlm[i]->getLcls1En(blmCh) << std::endl;
-                        std::cout << "    Alt Enabled =   " << std::boolalpha << myMpsBlm[i]->getAltEn(blmCh) << std::endl;
-
-                        std::cout << std::endl;
-                        std::cout << "    Threshold tables:" << std::endl;
-                        std::cout << "    ==========================================" << std::endl;
-                        std::cout << "    Table     " << "   minEn" << "     min" << "   maxEn" << "     max" << std::endl;
-                        std::cout << "    ==========================================" << std::endl;
-
-                        blmThr_channel_t blmThrCh;
-                        blmThrCh.appCh = blmCh;
-                        
-                        try
-                        {
-                            blmThrCh.thrTb = thr_table_t{{0,0}};
-                            std::cout << "    LCLS1     ";
-                            
-                            std::cout << std::setw(8) << std::boolalpha << myMpsBlm[i]->getThresholdMinEn(blmThrCh);
-                            std::cout << std::setw(8) << myMpsBlm[i]->getThresholdMin(blmThrCh);
-                            std::cout << std::setw(8) << std::boolalpha << myMpsBlm[i]->getThresholdMaxEn(blmThrCh);
-                            std::cout << std::setw(8) << myMpsBlm[i]->getThresholdMax(blmThrCh);
-                            std::cout << std::endl;
-                        }
-                        catch (std::exception &e)
-                        {
-                            printf("   Error on LCLS 1 table section: %s", e.what());
-                        }
-
-                        try
-                        {
-                            blmThrCh.thrTb = thr_table_t{{1,0}};
-                            std::cout << "    IDLE      ";
-                            
-                            std::cout << std::setw(8) << std::boolalpha << myMpsBlm[i]->getThresholdMinEn(blmThrCh);
-                            std::cout << std::setw(8) << myMpsBlm[i]->getThresholdMin(blmThrCh);
-                            std::cout << std::setw(8) << std::boolalpha << myMpsBlm[i]->getThresholdMaxEn(blmThrCh);
-                            std::cout << std::setw(8) << myMpsBlm[i]->getThresholdMax(blmThrCh);
-                            std::cout << std::endl;
-                        }
-                        catch (std::exception &e)
-                        {
-                            printf("   Error on IDLE table section: %s", e.what());
-                        }
-                        
-                        for (int m = 0; m < maxThrCount; ++m)
-                        {
-                            try
-                            {
-                                blmThrCh.thrTb = thr_table_t{{2,m}};
-                                std::cout << "    STD[" << m << "]    ";
-                                
-                                std::cout << std::setw(8) << std::boolalpha << myMpsBlm[i]->getThresholdMinEn(blmThrCh);
-                                std::cout << std::setw(8) << myMpsBlm[i]->getThresholdMin(blmThrCh);
-                                std::cout << std::setw(8) << std::boolalpha << myMpsBlm[i]->getThresholdMaxEn(blmThrCh);
-                                std::cout << std::setw(8) << myMpsBlm[i]->getThresholdMax(blmThrCh);
-                                std::cout << std::endl;
-
-                            }
-                            catch (std::exception &e)
-                            {
-                                printf("   Error on STD table section: %s", e.what());
-                            }
-                        }
-
-
-                        for (int m = 0; m < maxThrCount; ++m)
-                        {
-                            try
-                            {
-                        
-                                blmThrCh.thrTb = thr_table_t{{1,0}};
-                                std::cout << "    ALT[" << m << "]    ";
-                                    
-                                std::cout << std::setw(8) << std::boolalpha << myMpsBlm[i]->getThresholdMinEn(blmThrCh);
-                                std::cout << std::setw(8) << myMpsBlm[i]->getThresholdMin(blmThrCh);
-                                std::cout << std::setw(8) << std::boolalpha << myMpsBlm[i]->getThresholdMaxEn(blmThrCh);
-                                std::cout << std::setw(8) << myMpsBlm[i]->getThresholdMax(blmThrCh);
-                                std::cout << std::endl;
-                            }
-                            catch (std::exception &e)
-                            {
-                                printf("   Error on ALT table section: %s", e.what());
-                            }
-
-                        }
-
-
-                        std::cout << "    ==========================================" << std::endl;
-                        std::cout << std::endl;
-                        std::cout << "  ===============================================" << std::endl;
-                        std::cout << std::endl;
-                    }
-                    catch (std::exception &e)
-                    {
-                        printf("  Error channel info section: %s\n", e.what());
-                    }
-                }
-            }
-
-            std::cout << "====================================================" << std::endl;
-            std::cout << std::endl;
-        }
-
+        mpsRoot = root->findByName(mpsRootName);
     }
     catch (CPSWError &e)
     {
         printf("CPSW error: %s not found!\n", e.getInfo().c_str());
         return 1;
     }
+
+    try
+    {
+        MpsNode mpsNode = IMpsNode::create(mpsRoot);
+
+        std::string appType(mpsNode->getAppType().second);
+        std::cout << "This application type is " << appType << std::endl;
+        if ( appType.compare("BLM") & appType.compare("MPS_6CH") & appType.compare("MPS_24CH") )
+        {
+            std::cout << "ERROR: This is not a BLM application. Aborting." << std::endl;
+            return 1;
+        }
+    }
+    catch (std::runtime_error &e)
+    {
+        std::cout << "Error creating the MPS application: " << e.what() << std::endl;
+        return 1;
+    }
+
+    std::array<MpsBlm, 2> myMpsBlm;
+
+    for (std::size_t i {0}; i < 2; ++i)
+    {
+        std::cout << "BLM for AMC[" << i << "]: BLM[" << i << "]" << std::endl;
+        std::cout << "====================================================" << std::endl;
+        myMpsBlm[i] = IMpsBlm::create(mpsRoot, i);
+        std::cout << "====================================================" << std::endl;
+
+        std::cout << std::endl;
+
+        int n;
+        
+        for (int j = 0; j < numBlmChs; ++j)
+        {
+            for (int k = 0; k <numBlmIntChs; ++k)
+            {
+                try 
+                {
+                    blm_channel_t blmCh = blm_channel_t{{j,k}};
+
+                    std::cout << std::endl;
+                    std::cout << "  ===============================================" << std::endl;
+                    std::cout << "  Channel = (" << j << ", " << k << "):" << std::endl;
+                    std::cout << "  ===============================================" << std::endl;
+
+                    std::cout << "    Thr channel  = " << unsigned(myMpsBlm[i]->getChannel(blmCh)) << std::endl;
+                    printPair( "    Thr count",     myMpsBlm[i]->getThrCount(blmCh) );
+                    printPair( "    Byte map",      myMpsBlm[i]->getByteMap(blmCh)  );
+                    printPair( "    Idle EN",  myMpsBlm[i]->getIdleEn(blmCh)   );
+                    printPair( "    Lcls1 EN", myMpsBlm[i]->getLcls1En(blmCh)  );
+                    printPair( "    Alt EN",   myMpsBlm[i]->getAltEn(blmCh)    );
+
+                    std::cout << std::endl;
+                    std::cout << "    Threshold tables:" << std::endl;
+                    std::cout << "    ================================================" << std::endl;
+                    std::cout << "    Table     " << "minEn     " << "min       " << "maxEn     " << "max       " << std::endl;
+                    std::cout << "    ================================================" << std::endl;
+
+                    blmThr_channel_t blmThrCh;
+                    blmThrCh.appCh = blmCh;
+
+                    try
+                    {
+                        blmThrCh.thrTb = thr_table_t{{0,0}};
+                        printThrRow( "LCLS1", myMpsBlm[i], blmThrCh);
+                    }
+                    catch (std::exception &e)
+                    {
+                        printf("   Error on LCLS 1 table section: %s", e.what());
+                    }
+
+                    try
+                    {
+                        blmThrCh.thrTb = thr_table_t{{1,0}};
+                        printThrRow( "IDLE", myMpsBlm[i], blmThrCh);
+                    }
+                    catch (std::exception &e)
+                    {
+                        printf("   Error on IDLE table section: %s", e.what());
+                    }
+                    
+                    for (int m = 0; m < maxThrCount; ++m)
+                    {
+                        try
+                        {
+                            blmThrCh.thrTb = thr_table_t{{2,m}};
+                            std::stringstream name("");
+                            name << "STD[" << m << "]";
+                            printThrRow( name.str(), myMpsBlm[i], blmThrCh);
+                        }
+                        catch (std::exception &e)
+                        {
+                            printf("   Error on STD table section: %s", e.what());
+                        }
+                    }
+
+
+                    for (int m = 0; m < maxThrCount; ++m)
+                    {
+                        try
+                        {
+                    
+                            blmThrCh.thrTb = thr_table_t{{1,0}};
+                            std::stringstream name("");
+                            name << "ALT[" << m << "]";
+                            printThrRow( name.str(), myMpsBlm[i], blmThrCh);
+                        }
+                        catch (std::exception &e)
+                        {
+                            printf("   Error on ALT table section: %s", e.what());
+                        }
+
+                    }
+
+                    std::cout << "    ==========================================" << std::endl;
+                    std::cout << std::endl;
+                    std::cout << "  ===============================================" << std::endl;
+                    std::cout << std::endl;
+                }
+                catch (std::exception &e)
+                {
+                    printf("  Error channel info section: %s\n", e.what());
+                }
+            }
+        }
+
+        std::cout << "====================================================" << std::endl;
+        std::cout << std::endl;
+    }
+
 
     return 0;
 }
