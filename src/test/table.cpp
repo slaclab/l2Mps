@@ -74,6 +74,7 @@ int main(int argc, char **argv)
     catch (CPSWError &e)
     {
         printf("CPSW error: %s not found!\n", e.getInfo().c_str());
+        return 1;
     }
 
 
@@ -116,9 +117,9 @@ int main(int argc, char **argv)
             }
         }
     }
-    catch (CPSWError &e)
+    catch (std::runtime_error &e)
     {
-        std::cout << "Error creating the MPS application: " << e.getInfo() << std::endl;
+        std::cout << "Error creating the MPS application: " << e.what() << std::endl;
         return 1;
     }
 
