@@ -152,10 +152,13 @@ bool IThrChannel::setThresholdMaxEn(thr_table_t ch, const bool val)
 }
 
 // Set the scale factor
-void IThrChannel::setScaleFactor(const float sf)
+bool IThrChannel::setScaleFactor(const float sf)
 {
-    if (sf != 0)
-        scaleFactor = sf;
+    if (sf == 0)
+        return false;
+        
+    scaleFactor = sf;
+    return true;
 }
 
 // Get the scale factor

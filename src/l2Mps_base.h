@@ -59,7 +59,7 @@ public:
     std::pair<bool, float>   getThresholdMax     ( const appThr_channel_t<T>& ch) const { return findThrChannel(ch.appCh)->getThresholdMax(ch.thrTb); };
 
     // Scale factors set/get methods for thresholds
-    void                     setScaleFactor      ( const T& ch, const float sf) const { findThrChannel(ch)->setScaleFactor(sf);          };
+    bool                     setScaleFactor      ( const T& ch, const float sf) const { findThrChannel(ch)->setScaleFactor(sf);          };
     const float              getScaleFactor      ( const T& ch) const                 { return findThrChannel(ch)->getScaleFactor();     };
 
     // Set polling thread with callback function

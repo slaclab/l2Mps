@@ -136,7 +136,7 @@ public:
     bool setThresholdMaxEn(thr_table_t ch, const bool val);
 
     // Set/get scale factor
-    void        setScaleFactor(const float sf);
+    bool        setScaleFactor(const float sf);
     const float getScaleFactor() const;
 
     void readAll(thr_ch_t& data) const;
