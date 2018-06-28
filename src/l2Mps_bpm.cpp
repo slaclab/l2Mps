@@ -10,11 +10,11 @@ IMpsBpm::IMpsBpm(Path mpsRoot, uint8_t amc)
         {
             ThrChannel aThr(IThrChannel::create(mpsRoot, ch));
 
-            if (aThr->getThrCount())
+            if (( aThr->getThrCount().first) && (aThr->getThrCount().second) > 0)
             {
                 for (int i = 0; i < numBpmChs; ++i)
                 {
-                    if (aThr->getByteMap() == bpmChByteMap[amc][i])
+                    if ( ( aThr->getByteMap().first ) && ( aThr->getByteMap().second == bpmChByteMap[amc][i] ) )
                     {
                         appThrMap.insert( std::make_pair( i, aThr ) );
                         break;

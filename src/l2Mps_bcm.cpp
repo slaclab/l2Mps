@@ -9,11 +9,11 @@ IMpsBcm::IMpsBcm(Path mpsRoot, const uint8_t amc)
         {
             ThrChannel aThr(IThrChannel::create(mpsRoot, ch));
 
-            if (aThr->getThrCount())
+            if ( ( aThr->getThrCount().first ) && ( aThr->getThrCount().second > 0 ) ) 
             {
                 for (int i = 0; i < numBcmChs; ++i)
                 {
-                    if (aThr->getByteMap() == bcmChByteMap[amc][i])
+                    if ( ( aThr->getByteMap().first ) && ( aThr->getByteMap().second == bcmChByteMap[amc][i] ) )
                     {
                         appThrMap.insert( std::make_pair( i, aThr ) );
                         break;
