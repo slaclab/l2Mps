@@ -88,3 +88,28 @@ void printArray(const std::string& regName, const std::string& varName, const T&
     }
     std::cout << std::endl;
 } 
+
+template<typename T>
+void printCell(std::pair<bool, T> p)
+{
+    std::cout << std::setw(10) << std::left;
+
+    if (p.first)
+        printVal(p.second);
+    else
+        std::cout << "[Invalid]";
+
+   std::cout << std::right;
+}
+
+template<typename T, typename U>
+void printThrRow(const std::string& name, const T& app, const U& thrCh)
+{
+    std::cout << "    " << std::left << std::setw(10) << name << std::right;
+    printCell( app->getThresholdMinEn( thrCh ) );
+    printCell( app->getThresholdMin(   thrCh ) );
+    printCell( app->getThresholdMaxEn( thrCh ) );
+    printCell( app->getThresholdMax(   thrCh ) );
+    std::cout << std::endl;
+}
+//void printThrRow(const std::string& name, const MpsBlm& blm, const blmThr_channel_t& blmThrCh)
