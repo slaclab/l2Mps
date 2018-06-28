@@ -4,7 +4,7 @@ IThrChannel::IThrChannel(Path mpsRoot, uint8_t channel)
 :
     scaleFactor(1.0)
 {
-    if (channel > maxChannelCount)
+    if (channel >= maxChannelCount)
         throw std::runtime_error("Channel exceeds the maximum channel number");
 
     ch = channel;
