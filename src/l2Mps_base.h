@@ -43,23 +43,23 @@ public:
 
 
     // Threshold set enable methods
-    bool                     setThresholdMinEn   ( const appThr_channel_t<T>& ch, const bool val) const { findThrChannel(ch.appCh)->setThresholdMinEn(ch.thrTb, val); };
-    bool                     setThresholdMaxEn   ( const appThr_channel_t<T>& ch, const bool val) const { findThrChannel(ch.appCh)->setThresholdMaxEn(ch.thrTb, val); };
+    bool                     setThresholdMinEn   ( const appThr_channel_t<T>& ch, const bool val) const { return findThrChannel(ch.appCh)->setThresholdMinEn(ch.thrTb, val); };
+    bool                     setThresholdMaxEn   ( const appThr_channel_t<T>& ch, const bool val) const { return findThrChannel(ch.appCh)->setThresholdMaxEn(ch.thrTb, val); };
 
     // Threshold get enable methods
     std::pair<bool, bool>    getThresholdMinEn   ( const appThr_channel_t<T>& ch) const { return findThrChannel(ch.appCh)->getThresholdMinEn(ch.thrTb); };
     std::pair<bool, bool>    getThresholdMaxEn   ( const appThr_channel_t<T>& ch) const { return findThrChannel(ch.appCh)->getThresholdMaxEn(ch.thrTb); };
 
     // Threshold set methods
-    bool                     setThresholdMin     ( const appThr_channel_t<T>& ch, const float val) const { findThrChannel(ch.appCh)->setThresholdMin(ch.thrTb, val); };
-    bool                     setThresholdMax     ( const appThr_channel_t<T>& ch, const float val) const { findThrChannel(ch.appCh)->setThresholdMax(ch.thrTb, val); };
+    bool                     setThresholdMin     ( const appThr_channel_t<T>& ch, const float val) const { return findThrChannel(ch.appCh)->setThresholdMin(ch.thrTb, val); };
+    bool                     setThresholdMax     ( const appThr_channel_t<T>& ch, const float val) const { return findThrChannel(ch.appCh)->setThresholdMax(ch.thrTb, val); };
 
     // Threshold get methods
     std::pair<bool, float>   getThresholdMin     ( const appThr_channel_t<T>& ch) const { return findThrChannel(ch.appCh)->getThresholdMin(ch.thrTb); };
     std::pair<bool, float>   getThresholdMax     ( const appThr_channel_t<T>& ch) const { return findThrChannel(ch.appCh)->getThresholdMax(ch.thrTb); };
 
     // Scale factors set/get methods for thresholds
-    bool                     setScaleFactor      ( const T& ch, const float sf) const { findThrChannel(ch)->setScaleFactor(sf);          };
+    bool                     setScaleFactor      ( const T& ch, const float sf) const { return findThrChannel(ch)->setScaleFactor(sf);   };
     const float              getScaleFactor      ( const T& ch) const                 { return findThrChannel(ch)->getScaleFactor();     };
 
     // Set polling thread with callback function
