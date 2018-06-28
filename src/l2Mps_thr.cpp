@@ -5,11 +5,7 @@ IThrChannel::IThrChannel(Path mpsRoot, uint8_t channel)
     scaleFactor(1.0)
 {
     if (channel > maxChannelCount)
-    {
-        std::cout << "        >   ERROR: channel" << unsigned(channel) << " exceeds the maximum channel number " << unsigned(maxChannelCount) << std::endl;
-        std::cout << "        >   Aborting..." << std::endl;
-        return;
-    }
+        throw std::runtime_error("Channel exceeds the maximum channel number");
 
     ch = channel;
 
@@ -24,8 +20,7 @@ IThrChannel::IThrChannel(Path mpsRoot, uint8_t channel)
     }
     catch (CPSWError &e)
     {
-        std::cout << "Channel not implemented: " << e.getInfo() << std::endl;
-        return;
+        throw std::runtime_error("Channel not implemented");
     }
 
     // Get Channel header information register
