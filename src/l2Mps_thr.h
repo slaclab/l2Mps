@@ -81,8 +81,7 @@ struct thr_ch_t
 struct thr_scalval_t
 {
     thr_chInfoScalval_t info;
-    thr_chScalval_t   data;
-
+    thr_chScalval_t     data;
 };
 
 // Maximum number of channels
@@ -121,20 +120,20 @@ public:
 
 
     // Read threshold register
-    std::pair< bool, float > getThresholdMin(thr_table_t ch) const;
-    std::pair< bool, float > getThresholdMax(thr_table_t ch) const;
+    std::pair< bool, float > getThresholdMin(thr_table_t ch);
+    std::pair< bool, float > getThresholdMax(thr_table_t ch);
 
     // Read threshold enable register
-    std::pair< bool, bool > getThresholdMinEn(thr_table_t ch) const;
-    std::pair< bool, bool > getThresholdMaxEn(thr_table_t ch) const;
+    std::pair< bool, bool > getThresholdMinEn(thr_table_t ch);
+    std::pair< bool, bool > getThresholdMaxEn(thr_table_t ch);
 
     // Write threshold registers
-    bool setThresholdMin(thr_table_t ch, const float val) const;
-    bool setThresholdMax(thr_table_t ch, const float val) const;
+    bool setThresholdMin(thr_table_t ch, const float val);
+    bool setThresholdMax(thr_table_t ch, const float val);
 
     // Write threshold enable register
-    bool setThresholdMinEn(thr_table_t ch, const bool val) const;
-    bool setThresholdMaxEn(thr_table_t ch, const bool val) const;
+    bool setThresholdMinEn(thr_table_t ch, const bool val);
+    bool setThresholdMaxEn(thr_table_t ch, const bool val);
 
     // Set/get scale factor
     void        setScaleFactor(const float sf);
@@ -152,7 +151,8 @@ private:
     float           scaleFactor;    // Scale factor (egu/raw)
 
     // Helper functions
-    thr_tableScalval_t createTableScalVal(const std::string& prefix);
+    thr_tableScalval_t createTableScalVal(const std::string& prefix) const;
+    thr_tableScalval_t* findDataTableScalval(const thr_table_t& ch);
 };
 
 #endif

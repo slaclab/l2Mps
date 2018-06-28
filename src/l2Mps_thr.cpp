@@ -1,6 +1,6 @@
 #include "l2Mps_thr.h"
 
-thr_tableScalval_t IThrChannel::createTableScalVal(const std::string& prefix)
+thr_tableScalval_t IThrChannel::createTableScalVal(const std::string& prefix) const
 {
     thr_tableScalval_t tableScalVal;
 
@@ -77,7 +77,6 @@ IThrChannel::IThrChannel(Path mpsRoot, uint8_t channel)
             }
         }
     }
-
 }
 
 ThrChannel IThrChannel::create(Path mpsRoot, uint8_t channel)
@@ -121,107 +120,52 @@ void IThrChannel::readAll(thr_ch_t& data) const
     readThrChData(data.data);
 }
 
-// Read threshold register
-std::pair<bool, float> IThrChannel::getThresholdMin(thr_table_t ch) const
+// Read threshold registers
+std::pair<bool, float> IThrChannel::getThresholdMin(thr_table_t ch)
 {
-    thr_chScalval_t::const_iterator it;
-    it = thrScalvals.data.find(ch);
-    if (it != thrScalvals.data.end())
-    {
-        std::pair<bool, uint32_t> tmp = (it->second).min.get();
-        return std::make_pair( tmp.first, ( static_cast<int32_t>(tmp.second) ) * scaleFactor );
-    }
-    else
-        throw std::runtime_error("Threshold not defined\n");
+    std::pair<bool, uint32_t> tmp = findDataTableScalval(ch)->min.get();
+    return std::make_pair( tmp.first, ( static_cast<int32_t>(tmp.second) ) * scaleFactor );
 }
 
-std::pair<bool, float> IThrChannel::getThresholdMax(thr_table_t ch) const
+std::pair<bool, float> IThrChannel::getThresholdMax(thr_table_t ch)
 {
-    thr_chScalval_t::const_iterator it;
-    it = thrScalvals.data.find(ch);
-    if (it != thrScalvals.data.end())
-    {
-        std::pair<bool, uint32_t> tmp = (it->second).max.get();
-        return std::make_pair( tmp.first, ( static_cast<int32_t>(tmp.second) ) * scaleFactor );
-    }
-    else
-        throw std::runtime_error("Threshold not defined\n");
+    std::pair<bool, uint32_t> tmp = findDataTableScalval(ch)->max.get();
+    return std::make_pair( tmp.first, ( static_cast<int32_t>(tmp.second) ) * scaleFactor );
 }
 
-// Read threshold enable register
-std::pair<bool,bool> IThrChannel::getThresholdMinEn(thr_table_t ch) const
+// Read threshold enable registers
+std::pair<bool,bool> IThrChannel::getThresholdMinEn(thr_table_t ch)
 {
-    thr_chScalval_t::const_iterator it;
-    it = thrScalvals.data.find(ch);
-    if (it != thrScalvals.data.end())
-    {
-        return (it->second).minEn.get();
-    }
-    else
-        throw std::runtime_error("Threshold not defined\n");
+    return findDataTableScalval(ch)->minEn.get();
 }
 
-std::pair<bool,bool> IThrChannel::getThresholdMaxEn(thr_table_t ch) const
+std::pair<bool,bool> IThrChannel::getThresholdMaxEn(thr_table_t ch)
 {
-    thr_chScalval_t::const_iterator it;
-    it = thrScalvals.data.find(ch);
-    if (it != thrScalvals.data.end())
-    {
-        return (it->second).maxEn.get();
-    }
-    else
-        throw std::runtime_error("Threshold not defined\n");
+    return findDataTableScalval(ch)->maxEn.get();
 }
 
 // Write threshold registers
-bool IThrChannel::setThresholdMin(thr_table_t ch, const float val) const
+bool IThrChannel::setThresholdMin(thr_table_t ch, const float val)
 {
-    thr_chScalval_t::const_iterator it;
-    it = thrScalvals.data.find(ch);
-    if (it != thrScalvals.data.end())
-    {
-        uint32_t scaledVal = (uint32_t)(val/scaleFactor);
-        return (it->second).min.set(scaledVal);
-    }
-    else
-        throw std::runtime_error("Threshold not defined\n");
+    uint32_t scaledVal = static_cast<uint32_t>(val/scaleFactor);
+    return findDataTableScalval(ch)->min.set(scaledVal);
 }
 
-bool IThrChannel::setThresholdMax(thr_table_t ch, const float val) const
+bool IThrChannel::setThresholdMax(thr_table_t ch, const float val)
 {
-    thr_chScalval_t::const_iterator it;
-    it = thrScalvals.data.find(ch);
-    if (it != thrScalvals.data.end())
-    {
-        uint32_t scaledVal = (uint32_t)(val/scaleFactor);
-        return (it->second).max.set(scaledVal);
-    }
-    else
-        throw std::runtime_error("Threshold not defined\n");
+    uint32_t scaledVal = static_cast<uint32_t>(val/scaleFactor);
+    return findDataTableScalval(ch)->max.set(scaledVal);
 }
 
-bool IThrChannel::setThresholdMinEn(thr_table_t ch, const bool val) const
+// Write threshold enable registers
+bool IThrChannel::setThresholdMinEn(thr_table_t ch, const bool val)
 {
-    thr_chScalval_t::const_iterator it;
-    it = thrScalvals.data.find(ch);
-    if (it != thrScalvals.data.end())
-    {
-        return (it->second).minEn.set(val);
-    }
-    else
-        throw std::runtime_error("Threshold not defined\n");
+    return findDataTableScalval(ch)->minEn.set(val);
 }
 
-bool IThrChannel::setThresholdMaxEn(thr_table_t ch, const bool val) const
+bool IThrChannel::setThresholdMaxEn(thr_table_t ch, const bool val)
 {
-    thr_chScalval_t::const_iterator it;
-    it = thrScalvals.data.find(ch);
-    if (it != thrScalvals.data.end())
-    {
-        return (it->second).maxEn.set(val);
-    }
-    else
-        throw std::runtime_error("Threshold not defined\n");
+    return findDataTableScalval(ch)->maxEn.set(val);
 }
 
 // Set the scale factor
@@ -236,3 +180,17 @@ const float IThrChannel::getScaleFactor() const
 {
     return scaleFactor;
 }
+
+// Helper functions definitions
+thr_tableScalval_t* IThrChannel::findDataTableScalval(const thr_table_t& ch)
+{
+    thr_chScalval_t::iterator it;
+    it = thrScalvals.data.find(ch);
+    if (it != thrScalvals.data.end())
+    {
+        return &(it->second);
+    }
+    else
+        throw std::runtime_error("Threshold not defined\n");
+}
+
