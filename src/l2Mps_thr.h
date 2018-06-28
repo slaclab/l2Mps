@@ -150,6 +150,9 @@ private:
     int             ch;             // Threhold channel number
     thr_scalval_t   thrScalvals;    // Threshold scalval interfaces
     float           scaleFactor;    // Scale factor (egu/raw)
+
+    // Helper functions
+    thr_tableScalval_t createTableScalVal(const std::string& prefix);
 };
 
 #endif

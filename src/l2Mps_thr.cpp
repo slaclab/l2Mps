@@ -1,5 +1,17 @@
 #include "l2Mps_thr.h"
 
+thr_tableScalval_t IThrChannel::createTableScalVal(const std::string& prefix)
+{
+    thr_tableScalval_t tableScalVal;
+
+    tableScalVal.minEn = CpswRegRW<uint8_t>(  chRoot, prefix + "minEn" );
+    tableScalVal.maxEn = CpswRegRW<uint8_t>(  chRoot, prefix + "maxEn" );
+    tableScalVal.min   = CpswRegRW<uint32_t>( chRoot, prefix + "min"   );
+    tableScalVal.max   = CpswRegRW<uint32_t>( chRoot, prefix + "max"   );
+
+    return tableScalVal;
+}
+
 IThrChannel::IThrChannel(Path mpsRoot, uint8_t channel)
 :
     scaleFactor(1.0)
@@ -39,63 +51,29 @@ IThrChannel::IThrChannel(Path mpsRoot, uint8_t channel)
     readThrChInfo(thrChInfo);
 
     if (thrChInfo.lcls1En.first && thrChInfo.lcls1En.second)
-    {
-        thr_tableScalval_t tableScalVal;
-
-        tableScalVal.minEn = CpswRegRW<uint8_t>(  chRoot, "lcls1Thr/minEn" );
-        tableScalVal.maxEn = CpswRegRW<uint8_t>(  chRoot, "lcls1Thr/maxEn" );
-        tableScalVal.min   = CpswRegRW<uint32_t>( chRoot, "lcls1Thr/min"   );
-        tableScalVal.max   = CpswRegRW<uint32_t>( chRoot, "lcls1Thr/max"   );
-
-        thrScalvals.data.insert( std::make_pair( thr_table_t{{0,0}}, tableScalVal) );
-    }
+        thrScalvals.data.insert( std::make_pair( thr_table_t{{0,0}}, createTableScalVal("lcls1Thr/") ) );
 
     if ( thrChInfo.idleEn.first && thrChInfo.idleEn.second )
-    {
-        thr_tableScalval_t tableScalVal;
-
-        tableScalVal.minEn = CpswRegRW<uint8_t>(  chRoot, "idleThr/minEn" );
-        tableScalVal.maxEn = CpswRegRW<uint8_t>(  chRoot, "idleThr/maxEn" );
-        tableScalVal.min   = CpswRegRW<uint32_t>( chRoot, "idleThr/min"   );
-        tableScalVal.max   = CpswRegRW<uint32_t>( chRoot, "idleThr/max"   );
-
-        thrScalvals.data.insert( std::make_pair( thr_table_t{{1,0}}, tableScalVal) );
-    }
-
-    std::stringstream regName;
+        thrScalvals.data.insert( std::make_pair( thr_table_t{{1,0}}, createTableScalVal("idleThr/") ) );
 
     if ( thrChInfo.count.first )
     {
+        std::stringstream tablePrefix;
+
         for (int i=0; i<thrChInfo.count.second; ++i)
         {
-            thr_tableScalval_t tableScalVal;
-
-            regName.str("");
-            regName << "stdThr[" << unsigned(i) << "]/";
-
-            tableScalVal.minEn = CpswRegRW<uint8_t>(  chRoot, regName.str() + "minEn" );
-            tableScalVal.maxEn = CpswRegRW<uint8_t>(  chRoot, regName.str() + "maxEn" );
-            tableScalVal.min   = CpswRegRW<uint32_t>( chRoot, regName.str() + "min"   );
-            tableScalVal.max   = CpswRegRW<uint32_t>( chRoot, regName.str() + "max"   );
-
-            thrScalvals.data.insert( std::make_pair( thr_table_t{{2,i}}, tableScalVal) );
+            tablePrefix.str("");
+            tablePrefix << "stdThr[" << unsigned(i) << "]/";
+            thrScalvals.data.insert( std::make_pair( thr_table_t{{2,i}}, createTableScalVal(tablePrefix.str()) ) );
         }
 
         if ( thrChInfo.altEn.first && thrChInfo.altEn.second  )
         {
             for (int i=0; i<thrChInfo.count.second; ++i)
             {
-                thr_tableScalval_t tableScalVal;
-
-                regName.str("");
-                regName << "altThr[" << unsigned(i) << "]/";
-
-                tableScalVal.minEn = CpswRegRW<uint8_t>(  chRoot, regName.str() + "minEn" );
-                tableScalVal.maxEn = CpswRegRW<uint8_t>(  chRoot, regName.str() + "maxEn" );
-                tableScalVal.min   = CpswRegRW<uint32_t>( chRoot, regName.str() + "min"   );
-                tableScalVal.max   = CpswRegRW<uint32_t>( chRoot, regName.str() + "max"   );
-
-                thrScalvals.data.insert( std::make_pair( thr_table_t{{3,i}}, tableScalVal) );
+                tablePrefix.str("");
+                tablePrefix << "altThr[" << unsigned(i) << "]/";
+                thrScalvals.data.insert( std::make_pair( thr_table_t{{3,i}}, createTableScalVal(tablePrefix.str()) ) );
             }
         }
     }
