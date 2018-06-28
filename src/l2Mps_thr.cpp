@@ -1,6 +1,8 @@
 #include "l2Mps_thr.h"
 
-IThrChannel::IThrChannel(Path mpsRoot, uint8_t channel) : scaleFactor(1.0)
+IThrChannel::IThrChannel(Path mpsRoot, uint8_t channel)
+:
+    scaleFactor(1.0)
 {
     if (channel > maxChannelCount)
     {
@@ -27,71 +29,74 @@ IThrChannel::IThrChannel(Path mpsRoot, uint8_t channel) : scaleFactor(1.0)
     }
 
     // Get Channel header information register
-    thrScalvals.info.count   = IMpsBase::createInterface<ScalVal_RO>( chRoot, "thresholdCount" );
-    thrScalvals.info.idleEn  = IMpsBase::createInterface<ScalVal>(    chRoot, "idleEn"         );
-    thrScalvals.info.altEn   = IMpsBase::createInterface<ScalVal_RO>( chRoot, "altEn"          );
-    thrScalvals.info.lcls1En = IMpsBase::createInterface<ScalVal_RO>( chRoot, "lcls1En"        );
-    thrScalvals.info.byteMap = IMpsBase::createInterface<ScalVal_RO>( chRoot, "byteMap"        );
+    thrScalvals.info.count   = CpswRegRO<uint8_t>( chRoot, "thresholdCount" );
+    thrScalvals.info.idleEn  = CpswRegRW<uint8_t>( chRoot, "idleEn"         );
+    thrScalvals.info.altEn   = CpswRegRO<uint8_t>( chRoot, "altEn"          );
+    thrScalvals.info.lcls1En = CpswRegRO<uint8_t>( chRoot, "lcls1En"        );
+    thrScalvals.info.byteMap = CpswRegRO<uint8_t>( chRoot, "byteMap"        );
 
     thr_chInfoData_t thrChInfo;
     readThrChInfo(thrChInfo);
 
-    if (thrChInfo.lcls1En)
+    if (thrChInfo.lcls1En.first && thrChInfo.lcls1En.second)
     {
         thr_tableScalval_t tableScalVal;
 
-        tableScalVal.minEn = IMpsBase::createInterface<ScalVal>( chRoot, "lcls1Thr/minEn" );
-        tableScalVal.maxEn = IMpsBase::createInterface<ScalVal>( chRoot, "lcls1Thr/maxEn" );
-        tableScalVal.min   = IMpsBase::createInterface<ScalVal>( chRoot, "lcls1Thr/min" );
-        tableScalVal.max   = IMpsBase::createInterface<ScalVal>( chRoot, "lcls1Thr/max" );
+        tableScalVal.minEn = CpswRegRW<uint8_t>(  chRoot, "lcls1Thr/minEn" );
+        tableScalVal.maxEn = CpswRegRW<uint8_t>(  chRoot, "lcls1Thr/maxEn" );
+        tableScalVal.min   = CpswRegRW<uint32_t>( chRoot, "lcls1Thr/min"   );
+        tableScalVal.max   = CpswRegRW<uint32_t>( chRoot, "lcls1Thr/max"   );
 
         thrScalvals.data.insert( std::make_pair( thr_table_t{{0,0}}, tableScalVal) );
     }
 
-    if (thrChInfo.idleEn)
+    if ( thrChInfo.idleEn.first && thrChInfo.idleEn.second )
     {
         thr_tableScalval_t tableScalVal;
 
-        tableScalVal.minEn = IMpsBase::createInterface<ScalVal>( chRoot, "idleThr/minEn" );
-        tableScalVal.maxEn = IMpsBase::createInterface<ScalVal>( chRoot, "idleThr/maxEn" );
-        tableScalVal.min   = IMpsBase::createInterface<ScalVal>( chRoot, "idleThr/min" );
-        tableScalVal.max   = IMpsBase::createInterface<ScalVal>( chRoot, "idleThr/max" );
+        tableScalVal.minEn = CpswRegRW<uint8_t>(  chRoot, "idleThr/minEn" );
+        tableScalVal.maxEn = CpswRegRW<uint8_t>(  chRoot, "idleThr/maxEn" );
+        tableScalVal.min   = CpswRegRW<uint32_t>( chRoot, "idleThr/min"   );
+        tableScalVal.max   = CpswRegRW<uint32_t>( chRoot, "idleThr/max"   );
 
         thrScalvals.data.insert( std::make_pair( thr_table_t{{1,0}}, tableScalVal) );
     }
 
     std::stringstream regName;
 
-    for (int i=0; i<thrChInfo.count; ++i)
+    if ( thrChInfo.count.first )
     {
-        thr_tableScalval_t tableScalVal;
-
-        regName.str("");
-        regName << "stdThr[" << unsigned(i) << "]/";
-
-        tableScalVal.minEn = IMpsBase::createInterface<ScalVal>( chRoot, regName.str() + "minEn" );
-        tableScalVal.maxEn = IMpsBase::createInterface<ScalVal>( chRoot, regName.str() + "maxEn" );
-        tableScalVal.min   = IMpsBase::createInterface<ScalVal>( chRoot, regName.str() + "min" );
-        tableScalVal.max   = IMpsBase::createInterface<ScalVal>( chRoot, regName.str() + "max" );
-
-        thrScalvals.data.insert( std::make_pair( thr_table_t{{2,i}}, tableScalVal) );
-    }
-
-    if (thrChInfo.altEn)
-    {
-        for (int i=0; i<thrChInfo.count; ++i)
+        for (int i=0; i<thrChInfo.count.second; ++i)
         {
             thr_tableScalval_t tableScalVal;
 
             regName.str("");
-            regName << "altThr[" << unsigned(i) << "]/";
+            regName << "stdThr[" << unsigned(i) << "]/";
 
-            tableScalVal.minEn = IMpsBase::createInterface<ScalVal>( chRoot, regName.str() + "minEn" );
-            tableScalVal.maxEn = IMpsBase::createInterface<ScalVal>( chRoot, regName.str() + "maxEn" );
-            tableScalVal.min   = IMpsBase::createInterface<ScalVal>( chRoot, regName.str() + "min" );
-            tableScalVal.max   = IMpsBase::createInterface<ScalVal>( chRoot, regName.str() + "max" );
+            tableScalVal.minEn = CpswRegRW<uint8_t>(  chRoot, regName.str() + "minEn" );
+            tableScalVal.maxEn = CpswRegRW<uint8_t>(  chRoot, regName.str() + "maxEn" );
+            tableScalVal.min   = CpswRegRW<uint32_t>( chRoot, regName.str() + "min"   );
+            tableScalVal.max   = CpswRegRW<uint32_t>( chRoot, regName.str() + "max"   );
 
-            thrScalvals.data.insert( std::make_pair( thr_table_t{{3,i}}, tableScalVal) );
+            thrScalvals.data.insert( std::make_pair( thr_table_t{{2,i}}, tableScalVal) );
+        }
+
+        if ( thrChInfo.altEn.first && thrChInfo.altEn.second  )
+        {
+            for (int i=0; i<thrChInfo.count.second; ++i)
+            {
+                thr_tableScalval_t tableScalVal;
+
+                regName.str("");
+                regName << "altThr[" << unsigned(i) << "]/";
+
+                tableScalVal.minEn = CpswRegRW<uint8_t>(  chRoot, regName.str() + "minEn" );
+                tableScalVal.maxEn = CpswRegRW<uint8_t>(  chRoot, regName.str() + "maxEn" );
+                tableScalVal.min   = CpswRegRW<uint32_t>( chRoot, regName.str() + "min"   );
+                tableScalVal.max   = CpswRegRW<uint32_t>( chRoot, regName.str() + "max"   );
+
+                thrScalvals.data.insert( std::make_pair( thr_table_t{{3,i}}, tableScalVal) );
+            }
         }
     }
 
@@ -104,24 +109,12 @@ ThrChannel IThrChannel::create(Path mpsRoot, uint8_t channel)
 
 void IThrChannel::readThrChInfo(thr_chInfoData_t& info) const
 {
-    uint32_t u32;
-
-    thrScalvals.info.count->getVal(&u32);
-    info.count = u32;
-
-    thrScalvals.info.byteMap->getVal(&u32);
-    info.byteMap = u32;
-
-    thrScalvals.info.idleEn->getVal(&u32);
-    info.idleEn = (u32?true:false);
-
-    thrScalvals.info.lcls1En->getVal(&u32);
-    info.lcls1En = (u32?true:false);
-
-    thrScalvals.info.altEn->getVal(&u32);
-    info.altEn = (u32?true:false);
-
-    info.ch = ch;
+    info.count       = thrScalvals.info.count.get();
+    info.byteMap     = thrScalvals.info.byteMap.get();
+    info.idleEn      = thrScalvals.info.idleEn.get();
+    info.lcls1En     = thrScalvals.info.lcls1En.get();
+    info.altEn       = thrScalvals.info.altEn.get();
+    info.ch          = ch;
     info.scaleFactor = scaleFactor;
 }
 
@@ -131,19 +124,14 @@ void IThrChannel::readThrChData(thr_chData_t& data) const
     {
         thr_tableData_t tableData;
 
-        uint32_t reg;
+        tableData.minEn = (it->second).minEn.get();
+        tableData.maxEn = (it->second).maxEn.get();
 
-        (it->second).minEn->getVal(&reg);
-        tableData.minEn = reg?true:false;
+        std::pair<bool,uint32_t> tmp ( (it->second).min.get() );
+        tableData.min   = std::make_pair( tmp.first, static_cast<int32_t>(tmp.second) * scaleFactor );
 
-        (it->second).maxEn->getVal(&reg);
-        tableData.maxEn = reg?true:false;
-
-        (it->second).min->getVal(&reg);
-        tableData.min = ((int32_t)reg)*scaleFactor;
-
-        (it->second).max->getVal(&reg);
-        tableData.max = ((int32_t)reg)*scaleFactor;
+	tmp = (it->second).max.get();
+        tableData.max   = std::make_pair( tmp.first, static_cast<int32_t>(tmp.second) * scaleFactor );
 
         data.insert( std::make_pair(it->first, tableData) );
     }
@@ -155,169 +143,104 @@ void IThrChannel::readAll(thr_ch_t& data) const
     readThrChData(data.data);
 }
 
-uint8_t IThrChannel::getThrCount() const
-{
-    if (!thrScalvals.info.count)
-        throw std::runtime_error("Register interface not implemented\n");
-
-    uint8_t reg;
-    thrScalvals.info.count->getVal(&reg);
-    return reg;
-}
-
-bool IThrChannel::getIdleEn() const
-{
-    if (!thrScalvals.info.idleEn)
-        throw std::runtime_error("Register interface not implemented\n");
-
-    uint8_t reg;
-    thrScalvals.info.idleEn->getVal(&reg);
-    return (reg & 0x01)?true:false;
-}
-
-void IThrChannel::setIdleEn(const bool en) const
-{
-    if (!thrScalvals.info.idleEn)
-        throw std::runtime_error("Register interface not implemented\n");
-
-    thrScalvals.info.idleEn->setVal(en);
-}
-
-bool IThrChannel::getAltEn() const
-{
-    if (!thrScalvals.info.altEn)
-        throw std::runtime_error("Register interface not implemented\n");
-
-    uint8_t reg;
-    thrScalvals.info.altEn->getVal(&reg);
-    return (reg & 0x01)?true:false;
-
-}
-
-bool IThrChannel::getLcls1En() const
-{
-    if (!thrScalvals.info.lcls1En)
-        throw std::runtime_error("Register interface not implemented\n");
-
-    uint8_t reg;
-    thrScalvals.info.lcls1En->getVal(&reg);
-    return (reg & 0x01)?true:false;
-}
-
-uint8_t IThrChannel::getByteMap() const
-{
-    if (!thrScalvals.info.byteMap)
-        throw std::runtime_error("Register interface not implemented\n");
-
-    uint8_t reg;
-    thrScalvals.info.byteMap->getVal(&reg);
-    return reg;
-}
-
 // Read threshold register
-const float IThrChannel::getThresholdMin(thr_table_t ch) const
+std::pair<bool, float> IThrChannel::getThresholdMin(thr_table_t ch) const
 {
     thr_chScalval_t::const_iterator it;
     it = thrScalvals.data.find(ch);
     if (it != thrScalvals.data.end())
     {
-        uint32_t reg;
-        (it->second).min->getVal(&reg, 1);
-        return ((int32_t)reg) * scaleFactor;
+        std::pair<bool, uint32_t> tmp = (it->second).min.get();
+        return std::make_pair( tmp.first, ( static_cast<int32_t>(tmp.second) ) * scaleFactor );
     }
     else
         throw std::runtime_error("Threshold not defined\n");
 }
 
-const float IThrChannel::getThresholdMax(thr_table_t ch) const
+std::pair<bool, float> IThrChannel::getThresholdMax(thr_table_t ch) const
 {
     thr_chScalval_t::const_iterator it;
     it = thrScalvals.data.find(ch);
     if (it != thrScalvals.data.end())
     {
-        uint32_t reg;
-        (it->second).max->getVal(&reg, 1);
-        return ((int32_t)reg) * scaleFactor;
+        std::pair<bool, uint32_t> tmp = (it->second).max.get();
+        return std::make_pair( tmp.first, ( static_cast<int32_t>(tmp.second) ) * scaleFactor );
     }
     else
         throw std::runtime_error("Threshold not defined\n");
 }
 
 // Read threshold enable register
-const bool IThrChannel::getThresholdMinEn(thr_table_t ch) const
+std::pair<bool,bool> IThrChannel::getThresholdMinEn(thr_table_t ch) const
 {
     thr_chScalval_t::const_iterator it;
     it = thrScalvals.data.find(ch);
     if (it != thrScalvals.data.end())
     {
-        uint32_t reg;
-        (it->second).minEn->getVal(&reg, 1);
-        return reg?true:false;
+        return (it->second).minEn.get();
     }
     else
         throw std::runtime_error("Threshold not defined\n");
 }
 
-const bool IThrChannel::getThresholdMaxEn(thr_table_t ch) const
+std::pair<bool,bool> IThrChannel::getThresholdMaxEn(thr_table_t ch) const
 {
     thr_chScalval_t::const_iterator it;
     it = thrScalvals.data.find(ch);
     if (it != thrScalvals.data.end())
     {
-        uint32_t reg;
-        (it->second).maxEn->getVal(&reg, 1);
-        return reg?true:false;
+        return (it->second).maxEn.get();
     }
     else
         throw std::runtime_error("Threshold not defined\n");
 }
 
 // Write threshold registers
-void IThrChannel::setThresholdMin(thr_table_t ch, const float val) const
+bool IThrChannel::setThresholdMin(thr_table_t ch, const float val) const
 {
     thr_chScalval_t::const_iterator it;
     it = thrScalvals.data.find(ch);
     if (it != thrScalvals.data.end())
     {
         uint32_t scaledVal = (uint32_t)(val/scaleFactor);
-        (it->second).min->setVal(scaledVal);
+        return (it->second).min.set(scaledVal);
     }
     else
         throw std::runtime_error("Threshold not defined\n");
 }
 
-void IThrChannel::setThresholdMax(thr_table_t ch, const float val) const
+bool IThrChannel::setThresholdMax(thr_table_t ch, const float val) const
 {
     thr_chScalval_t::const_iterator it;
     it = thrScalvals.data.find(ch);
     if (it != thrScalvals.data.end())
     {
         uint32_t scaledVal = (uint32_t)(val/scaleFactor);
-        (it->second).max->setVal(scaledVal);
+        return (it->second).max.set(scaledVal);
     }
     else
         throw std::runtime_error("Threshold not defined\n");
 }
 
-void IThrChannel::setThresholdMinEn(thr_table_t ch, const bool val) const
+bool IThrChannel::setThresholdMinEn(thr_table_t ch, const bool val) const
 {
     thr_chScalval_t::const_iterator it;
     it = thrScalvals.data.find(ch);
     if (it != thrScalvals.data.end())
     {
-        (it->second).minEn->setVal(val);
+        return (it->second).minEn.set(val);
     }
     else
         throw std::runtime_error("Threshold not defined\n");
 }
 
-void IThrChannel::setThresholdMaxEn(thr_table_t ch, const bool val) const
+bool IThrChannel::setThresholdMaxEn(thr_table_t ch, const bool val) const
 {
     thr_chScalval_t::const_iterator it;
     it = thrScalvals.data.find(ch);
     if (it != thrScalvals.data.end())
     {
-        (it->second).maxEn->setVal(val);
+        return (it->second).maxEn.set(val);
     }
     else
         throw std::runtime_error("Threshold not defined\n");

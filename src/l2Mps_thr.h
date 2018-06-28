@@ -7,7 +7,7 @@
 #include <boost/shared_ptr.hpp>
 #include <boost/make_shared.hpp>
 
-#include "l2Mps_common.h"
+#include "l2Mps_cpsw.h"
 
 class IThrChannel;
 
@@ -26,10 +26,10 @@ typedef std::array<int, 2>                          thr_table_t;
 // Threshold table data
 struct thr_tableData_t
 {
-    bool    minEn;
-    bool    maxEn;
-    float   min;
-    float   max;
+    std::pair< bool, bool  >  minEn;
+    std::pair< bool, bool  >  maxEn;
+    std::pair< bool, float >  min;
+    std::pair< bool, float >  max;
 };
 
 // Threshold table data map
@@ -38,10 +38,10 @@ typedef std::map<thr_table_t, thr_tableData_t>      thr_chData_t;
 // Threhold table scalval interfaces
 struct thr_tableScalval_t
 {
-    ScalVal minEn;
-    ScalVal maxEn;
-    ScalVal min;
-    ScalVal max;
+    CpswRegRW<uint8_t>  minEn;
+    CpswRegRW<uint8_t>  maxEn;
+    CpswRegRW<uint32_t> min;
+    CpswRegRW<uint32_t> max;
 };
 
 // Threshold table scalval interfaces map
@@ -50,23 +50,23 @@ typedef std::map<thr_table_t, thr_tableScalval_t>   thr_chScalval_t;
 // Threhold channel information data
 struct thr_chInfoData_t
 {
-    int   ch;
-    int   count;
-    int   byteMap;
-    bool  idleEn;
-    bool  altEn;
-    bool  lcls1En;
-    float scaleFactor;
+    int                        ch;
+    std::pair< bool, uint8_t > count;
+    std::pair< bool, uint8_t > byteMap;
+    std::pair< bool, bool    > idleEn;
+    std::pair< bool, bool    > altEn;
+    std::pair< bool, bool    > lcls1En;
+    float                      scaleFactor;
 };
 
 // Threshold channel information scalval interfaces
 struct thr_chInfoScalval_t
 {
-    ScalVal_RO count;
-    ScalVal_RO byteMap;
-    ScalVal    idleEn;
-    ScalVal_RO altEn;
-    ScalVal_RO lcls1En;
+    CpswRegRO<uint8_t> count;
+    CpswRegRO<uint8_t> byteMap;
+    CpswRegRW<uint8_t> idleEn;
+    CpswRegRO<uint8_t> altEn;
+    CpswRegRO<uint8_t> lcls1En;
 };
 
 // Threhold data (information + table data)
@@ -110,30 +110,30 @@ public:
     static ThrChannel create(Path mpsRoot, uint8_t channel);
 
     // Channel header
-    uint8_t getChannel()             const   { return ch; }
-    uint8_t getThrCount()            const;
-    bool    getIdleEn()              const;
-    void    setIdleEn(const bool en) const;
-    bool    getAltEn()               const;
-    bool    getLcls1En()             const;
-    uint8_t getByteMap()             const;
+    uint8_t                    getChannel()             const { return ch;                              };
+    std::pair< bool, uint8_t > getThrCount()            const { return thrScalvals.info.count.get();    };
+    std::pair< bool, bool    > getIdleEn()              const { return thrScalvals.info.idleEn.get();   };
+    bool                       setIdleEn(const bool en) const { return thrScalvals.info.idleEn.set(en); };
+    std::pair< bool, bool    > getAltEn()               const { return thrScalvals.info.altEn.get();    };
+    std::pair< bool, bool    > getLcls1En()             const { return thrScalvals.info.lcls1En.get();  };
+    std::pair< bool, uint8_t > getByteMap()             const { return thrScalvals.info.byteMap.get();  };
 
 
     // Read threshold register
-    const float getThresholdMin(thr_table_t ch) const;
-    const float getThresholdMax(thr_table_t ch) const;
+    std::pair< bool, float > getThresholdMin(thr_table_t ch) const;
+    std::pair< bool, float > getThresholdMax(thr_table_t ch) const;
 
     // Read threshold enable register
-    const bool getThresholdMinEn(thr_table_t ch) const;
-    const bool getThresholdMaxEn(thr_table_t ch) const;
+    std::pair< bool, bool > getThresholdMinEn(thr_table_t ch) const;
+    std::pair< bool, bool > getThresholdMaxEn(thr_table_t ch) const;
 
     // Write threshold registers
-    void setThresholdMin(thr_table_t ch, const float val) const;
-    void setThresholdMax(thr_table_t ch, const float val) const;
+    bool setThresholdMin(thr_table_t ch, const float val) const;
+    bool setThresholdMax(thr_table_t ch, const float val) const;
 
     // Write threshold enable register
-    void setThresholdMinEn(thr_table_t ch, const bool val) const;
-    void setThresholdMaxEn(thr_table_t ch, const bool val) const;
+    bool setThresholdMinEn(thr_table_t ch, const bool val) const;
+    bool setThresholdMaxEn(thr_table_t ch, const bool val) const;
 
     // Set/get scale factor
     void        setScaleFactor(const float sf);
