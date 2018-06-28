@@ -1,5 +1,13 @@
 #include "l2Mps_mps.h"
 
+MpsNode IMpsNode::create(Path mpsRoot) 
+{
+    if(!mpsRoot)
+        throw std::runtime_error("The roo Path is empty");
+ 
+    return boost::make_shared<IMpsNode>(mpsRoot); 
+}
+
 IMpsNode::IMpsNode(Path mpsRoot)
 :
     run              ( false ),

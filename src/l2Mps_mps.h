@@ -85,7 +85,7 @@ public:
     ~IMpsNode();
 
     // Factory method, which returns a smart pointer
-    static MpsNode create(Path mpsRoot) { return boost::make_shared<IMpsNode>(mpsRoot); }
+    static MpsNode create(Path mpsRoot);
  
     const void readMpsInfo(mps_infoData_t& info) const;
 
