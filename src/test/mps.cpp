@@ -21,12 +21,15 @@ void intHandler(int dummy)
 
 class Tester
 {
-public: 
+public:
     Tester(Path root);
     ~Tester();
 
     void printInfo();
     void startPolling();
+
+    void setAppId(uint16_t id);
+    void setEnable(bool en);
 
 private:
     bool    polling;
@@ -110,7 +113,7 @@ void Tester::printInfo()
     printPair( "lastMsgLcls",      mpsNode->getLastMsgLcls()       );
     printPair( "lastMsgTimestamp", mpsNode->getLastMsgTimeStamp()  );
 
-    
+
     size_t n = mpsNode->getLastMsgByteSize();
     std::cout << "lastMsgByte =" << std::endl;
     std::cout << std::setw(10) << "Index:";
@@ -136,7 +139,7 @@ void Tester::printInfo()
     for (size_t i{0}; i < n; ++i)
         std::cout << std::setw(12) << mpsNode->getRxLinkUpCnt(i).second;
     std::cout << std::endl;
- 
+
     printPair( "mpsSlot",      mpsNode->getMpsSlot()      );
     printPair( "appType",      mpsNode->getAppType()      );
     printPair( "pllLocked",    mpsNode->getPllLocked()    );
@@ -171,15 +174,46 @@ void Tester::startPolling()
     polling = true;
 }
 
+void Tester::setAppId(uint16_t id)
+{
+    std::cout << "Changing the app ID to " << unsigned(id) << std::endl;
+    if (mpsNode->setAppId(id))
+        std::cout << "appID changed successfully." << std::endl;
+    else
+        std::cout << "Error setting the AppID." << std::endl;
+}
+
+void Tester::setEnable(bool en)
+{
+    std::cout << "Setting the enable bit to " << std::boolalpha << en << std::endl;
+    if (mpsNode->setEnable(en))
+        std::cout << "Enable bit changed successfully." << std::endl;
+    else
+        std::cout << "Error setting the Enable bit." << std::endl;
+}
+
+void usage(const char* name)
+{
+    std::cout << "Usage: " << name << "-a <IP_address> -Y <Yaml_top> [-i <App_ID>] [-e <Enable>] [-h]" << std::endl;
+    std::cout << "    -h              : show this message." << std::endl;
+    std::cout << "    -a <IP_address> : IP address of the target FPGA." << std::endl;
+    std::cout << "    -Y <Yaml_top>   : Path to YAML top level file." << std::endl;
+    std::cout << "    -i <App_ID>     : Set new MPS APP_ID to <App_ID>." << std::endl;
+    std::cout << "    -e <Enable>     : Set the MPS enable bit (0: disable; 1: enabled)." << std::endl;
+    std::cout << std::endl;
+}
+
 int main(int argc, char **argv)
 {
     signal(SIGINT, intHandler);
     unsigned char buf[sizeof(struct in6_addr)];
     std::string ipAddr;
     std::string yamlDoc;
+    int id     = -1;
+    int en = -1;
     int c;
 
-    while((c =  getopt(argc, argv, "a:Y:")) != -1)
+    while((c =  getopt(argc, argv, "a:Y:i:e:")) != -1)
     {
         switch (c)
         {
@@ -194,8 +228,22 @@ int main(int argc, char **argv)
             case 'Y':
                 yamlDoc = std::string(optarg);
                 break;
+            case 'i':
+                if ((1 != sscanf(optarg, "%d", &id)) || (id < 0) || (id > 1023))
+                {
+                    std::cout << "Invalid ID value..." << std::endl;
+                    exit(1);
+                }
+                break;
+            case 'e':
+                if ((1 != sscanf(optarg, "%d", &en)) || (en < 0) || (en > 1))
+                {
+                    std::cout << "Invalid Enable value..." << std::endl;
+                    exit(1);
+                }
+                break;
             default:
-                std::cout << "Invalid option. Use -a <IP_address> -Y <Yaml_top>" << std::endl;
+                usage(argv[0]);
                 exit(1);
                 break;
         }
@@ -225,6 +273,12 @@ int main(int argc, char **argv)
         mpsRoot = root->findByName(mpsRootName);
 
         Tester t( mpsRoot );
+
+        if (-1 != id)
+            t.setAppId(id);
+
+        if (-1 != en)
+            t.setEnable(en?true:false);
 
         t.printInfo();
         t.startPolling();
