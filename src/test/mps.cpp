@@ -278,6 +278,8 @@ int main(int argc, char **argv)
     IYamlSetIP setIP(ipAddr);
     Path root = IPath::loadYamlFile( yamlDoc.c_str(), "NetIODev", NULL, &setIP );
 
+    std::cout << std::endl << std::endl;
+
     Path mpsRoot;
 
     try
