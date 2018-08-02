@@ -45,7 +45,6 @@ Tester::Tester(Path mpsRoot)
     msgCnt  ( 0 ),
     mpsNode ( IMpsNode::create(mpsRoot) )
 {
-    std::cout << "Tester object created" << std::endl;
 }
 
 Tester::~Tester()
