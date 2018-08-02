@@ -66,25 +66,26 @@ void printArray(const std::string& regName, const std::string& varName, const T&
 {
     std::cout << regName << ": [" << std::string(p.first?"valid":"non-valid") << "]" << std::endl;
 
-    std::cout << std::setw(10) << "Index:";
-    for (std::size_t i{0}; i < p.second.size(); ++i)
-        std::cout << std::setw(12) << i;
+    std::cout << std::setw(11) << "Index:" << std::setw(12) << varName << ":" << std::endl;
 
-    std::cout << std::endl << std::setw(9) << varName << ":";
-
-    size_t w = 12;
+    size_t w = 13;
     if (useHex)
         w -= hexW;
 
     for (std::size_t i{0}; i < p.second.size(); ++i)
     {
+        std::cout << std::setw(10) << i;
+
         std::cout << std::setw(w);
+
         if (useHex)
             std::cout << "0x" << std::setfill('0') << std::setw(hexW) << std::hex;
 
-         printVal(p.second.at(i));
+        printVal(p.second.at(i));
 
-         std::cout << std::dec << std::setfill(' ');;
+        std::cout << std::endl;
+
+        std::cout << std::dec << std::setfill(' ');
     }
     std::cout << std::endl;
 }
