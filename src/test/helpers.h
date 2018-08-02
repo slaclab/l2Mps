@@ -87,7 +87,6 @@ void printArray(const std::string& regName, const std::string& varName, const T&
 
         std::cout << std::dec << std::setfill(' ');
     }
-    std::cout << std::endl;
 }
 
 template<typename T>
