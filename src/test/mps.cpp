@@ -51,7 +51,7 @@ Tester::Tester(Path mpsRoot)
 Tester::~Tester()
 {
     if (polling)
-        std::cout << "\033[48B";
+        std::cout << "\033[47B";
 
     std::cout << "Tester object destroyed" << std::endl;
 }
@@ -60,32 +60,32 @@ void Tester::mpsInfoReceiver(mps_infoData_t info)
 {
     std::cout << "MPS message received!. Message # " << ++msgCnt << std::endl;
     std::cout << "=============================" << std::endl;
-    printPair( "appId",            info.appId                    );
-    printPair( "version",          info.version                  );
-    printPair( "enable",           info.enable                   );
-    printPair( "lcls1Mode",        info.lcls1Mode                );
-    printPair( "byteCount",        info.byteCount                );
-    printPair( "digitalEn",        info.digitalEn                );
-    printPair( "beamDestMask",     info.beamDestMask,     true   );
-    printPair( "altDestMask",      info.altDestMask,      true   );
-    printPair( "msgCnt",           info.msgCnt                   );
-    printPair( "mpsSlot",          info.mpsSlot                  );
-    printPair( "appType",          info.appType                  );
+    printPair( "appId",             info.appId                  );
+    printPair( "version",           info.version                );
+    printPair( "enable",            info.enable                 );
+    printPair( "lcls1Mode",         info.lcls1Mode              );
+    printPair( "byteCount",         info.byteCount              );
+    printPair( "digitalEn",         info.digitalEn              );
+    printPair( "beamDestMask",      info.beamDestMask,  true    );
+    printPair( "altDestMask",       info.altDestMask,   true    );
+    printPair( "msgCnt",            info.msgCnt                 );
+    printPair( "mpsSlot",           info.mpsSlot                );
+    printPair( "appType",           info.appType                );
 
     std::cout << std::endl;
 
-    printPair( "lastMsgAppId",     info.lastMsgAppId             );
-    printPair( "lastMsgLcls",      info.lastMsgLcls              );
-    printPair( "lastMsgTimestamp", info.lastMsgTimestamp         );
-    printArray( "lastMsgByte", "Status", info.lastMsgByte, true );
+    printPair( "lastMsgAppId",      info.lastMsgAppId           );
+    printPair( "lastMsgLcls",       info.lastMsgLcls            );
+    printPair( "lastMsgTimestamp",  info.lastMsgTimestamp       );
+    printArray( "lastMsgByte",      info.lastMsgByte,   true    );
 
     std::cout << std::endl;
 
-    printPair( "pllLocked",        info.pllLocked              );
-    printPair( "rollOverEn",       info.rollOverEn             );
-    printPair( "txLinkUp",         info.txLinkUp              );
-    printPair( "txLinkUpCnt",      info.txLinkUpCnt           );
-    printPair( "txPktSentCnt",     info.txPktSentCnt           );
+    printPair( "pllLocked",        info.pllLocked               );
+    printPair( "rollOverEn",       info.rollOverEn              );
+    printPair( "txLinkUp",         info.txLinkUp                );
+    printPair( "txLinkUpCnt",      info.txLinkUpCnt             );
+    printPair( "txPktSentCnt",     info.txPktSentCnt            );
 
     std::vector<std::string> n({"rxLinkUp", "rxLinkUpCnt","rxPktRcvd"});
     std::vector< std::pair< bool, std::vector<uint32_t> > > v
@@ -98,7 +98,7 @@ void Tester::mpsInfoReceiver(mps_infoData_t info)
 
     std::cout << "=============================" << std::endl;
 
-    std::cout << "\033[48A\r";
+    std::cout << "\033[47A\r";
 }
 
 void Tester::printInfo()

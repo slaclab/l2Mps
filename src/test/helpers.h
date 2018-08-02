@@ -62,11 +62,11 @@ void printPair(const std::string& name, const std::pair<bool, T>& v, bool useHex
 }
 
 template<typename T>
-void printArray(const std::string& regName, const std::string& varName, const T& p, bool useHex = false, size_t hexW = 2)
+void printArray(const std::string& regName, const T& p, bool useHex = false, size_t hexW = 2)
 {
-    std::cout << regName << ": [" << std::string(p.first?"valid":"non-valid") << "]" << std::endl;
-
-    std::cout << std::setw(11) << "Index:" << std::setw(12) << varName << ":" << std::endl;
+    std::cout << std::setw(11) << "Index:" << std::setw(12) << regName << ":";
+    std::cout << std::setw(11) << std::string("[" + std::string(p.first?"valid":"non-valid") + "]");
+    std::cout << std::endl;
 
     size_t w = 13;
     if (useHex)
