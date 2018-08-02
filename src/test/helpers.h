@@ -95,8 +95,6 @@ void printArray(const std::vector<std::string>& regName, const std::vector<T>& p
     std::size_t n(regName.size());          // Number of variables
     std::size_t m(p.at(0).second.size());   // Number of elements in each vaiable
 
-    // std::cout << regName << ": [" << std::string(p.first?"valid":"non-valid") << "]" << std::endl;
-
     std::cout << std::setw(11) << "Index:";
     for (std::size_t i{0}; i < n; ++i)
         std::cout << std::setw(15) << regName.at(i) << ":";

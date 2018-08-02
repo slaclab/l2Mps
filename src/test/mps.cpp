@@ -94,7 +94,7 @@ void Tester::mpsInfoReceiver(mps_infoData_t info)
         info.rxLinkUpCnt,
         info.rxPktRcvdCnt
     };
-    printArray( n, v, true);
+    printArray( n, v, false);
 
     std::cout << "=============================" << std::endl;
 
