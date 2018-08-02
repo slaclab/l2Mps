@@ -51,7 +51,7 @@ Tester::Tester(Path mpsRoot)
 Tester::~Tester()
 {
     if (polling)
-        std::cout << "\033[33B";
+        std::cout << "\033[82B";
 
     std::cout << "Tester object destroyed" << std::endl;
 }
@@ -91,7 +91,7 @@ void Tester::mpsInfoReceiver(mps_infoData_t info)
 
     std::cout << "=============================" << std::endl;
 
-    std::cout << "\033[34A\r";
+    std::cout << "\033[82A\r";
 }
 
 void Tester::printInfo()
