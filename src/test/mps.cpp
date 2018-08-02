@@ -194,12 +194,13 @@ void Tester::setEnable(bool en)
 
 void usage(const char* name)
 {
-    std::cout << "Usage: " << name << "-a <IP_address> -Y <Yaml_top> [-i <App_ID>] [-e <Enable>] [-h]" << std::endl;
+    std::cout << "Usage: " << name << "-a <IP_address> -Y <Yaml_top> [-i <App_ID>] [-e <Enable>] [-c] [-h]" << std::endl;
     std::cout << "    -h              : show this message." << std::endl;
     std::cout << "    -a <IP_address> : IP address of the target FPGA." << std::endl;
     std::cout << "    -Y <Yaml_top>   : Path to YAML top level file." << std::endl;
     std::cout << "    -i <App_ID>     : Set new MPS APP_ID to <App_ID>." << std::endl;
     std::cout << "    -e <Enable>     : Set the MPS enable bit (0: disable; 1: enabled)." << std::endl;
+    std::cout << "    -c              : Enable continuous read mode (default just one shot reading)" << std::endl;
     std::cout << std::endl;
 }
 
@@ -210,10 +211,11 @@ int main(int argc, char **argv)
     std::string ipAddr;
     std::string yamlDoc;
     int id     = -1;
-    int en = -1;
+    int en     = -1;
+    bool cont  = false;
     int c;
 
-    while((c =  getopt(argc, argv, "a:Y:i:e:")) != -1)
+    while((c =  getopt(argc, argv, "a:Y:i:e:c")) != -1)
     {
         switch (c)
         {
@@ -241,6 +243,9 @@ int main(int argc, char **argv)
                     std::cout << "Invalid Enable value..." << std::endl;
                     exit(1);
                 }
+                break;
+            case 'c':
+                cont = true;
                 break;
             default:
                 usage(argv[0]);
@@ -280,12 +285,18 @@ int main(int argc, char **argv)
         if (-1 != en)
             t.setEnable(en?true:false);
 
-        t.printInfo();
-        t.startPolling();
+        if (!cont)
+        {
+            t.printInfo();
+        }
+        else
+        {
+            t.startPolling();
 
-        run = true;
-        while(run)
-            std::this_thread::sleep_for( std::chrono::seconds( 1 ) );
+            run = true;
+            while(run)
+                std::this_thread::sleep_for( std::chrono::seconds( 1 ) );
+        }
     }
     catch (CPSWError &e)
     {
