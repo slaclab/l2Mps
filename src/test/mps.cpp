@@ -51,7 +51,7 @@ Tester::Tester(Path mpsRoot)
 Tester::~Tester()
 {
     if (polling)
-        std::cout << "\033[82B";
+        std::cout << "\033[47B";
 
     std::cout << "Tester object destroyed" << std::endl;
 }
@@ -84,15 +84,18 @@ void Tester::mpsInfoReceiver(mps_infoData_t info)
 
     printArray( "lastMsgByte", "Status", info.lastMsgByte, true );
 
-    printArray( "rxLinkUp",    "Status",   info.rxLinkUp    );
-    printArray( "rxLinkUpCnt", "Counters", info.rxLinkUpCnt );
-
-
-    printArray( "rxPktRcvd", "Counters", info.rxPktRcvdCnt );
+    std::vector<std::string> n({"rxLinkUp", "rxLinkUpCnt","rxPktRcvd"});
+    std::vector< std::pair< bool, std::vector<uint32_t> > > v
+    {
+        make_pair(info.rxLinkUp.first, std::vector<uint32_t>(info.rxLinkUp.second.begin(), info.rxLinkUp.second.end() )),
+        info.rxLinkUpCnt,
+        info.rxPktRcvdCnt
+    };
+    printArray( n, v, true);
 
     std::cout << "=============================" << std::endl;
 
-    std::cout << "\033[82A\r";
+    std::cout << "\033[47A\r";
 }
 
 void Tester::printInfo()

@@ -91,6 +91,48 @@ void printArray(const std::string& regName, const std::string& varName, const T&
 }
 
 template<typename T>
+void printArray(const std::vector<std::string>& regName, const std::vector<T>& p, bool useHex = false, size_t hexW = 2)
+{
+    std::size_t n(regName.size());          // Number of variables
+    std::size_t m(p.at(0).second.size());   // Number of elements in each vaiable
+
+    // std::cout << regName << ": [" << std::string(p.first?"valid":"non-valid") << "]" << std::endl;
+
+    std::cout << std::setw(11) << "Index:";
+    for (std::size_t i{0}; i < n; ++i)
+        std::cout << std::setw(15) << regName.at(i) << ":";
+    std::cout << std::endl;
+
+    std::cout << std::setw(10) << "";
+    for (std::size_t i{0}; i < n; ++i)
+        std::cout << std::setw(16) << std::string("[" + std::string(p.at(i).first?"valid":"non-valid") + "]");
+    std::cout << std::endl;
+
+    size_t w = 16;
+    if (useHex)
+        w -= hexW;
+
+    for (std::size_t i{0}; i < m; ++i)
+    {
+        std::cout << std::setw(10) << i;
+
+        for (std::size_t j{0}; j < n; ++j)
+        {
+            std::cout << std::setw(w);
+
+            if (useHex)
+                std::cout << "0x" << std::setfill('0') << std::setw(hexW);
+
+            printVal(p.at(j).second.at(i));
+
+            std::cout << std::dec << std::setfill(' ');
+        }
+
+        std::cout << std::endl;
+    }
+}
+
+template<typename T>
 void printCell(std::pair<bool, T> p)
 {
     std::cout << std::setw(10) << std::left;
