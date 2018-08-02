@@ -182,20 +182,20 @@ void Tester::startPolling()
 
 void Tester::setAppId(uint16_t id)
 {
-    std::cout << "Changing the app ID to " << unsigned(id) << std::endl;
+    std::cout << "Changing the app ID to " << unsigned(id) << "... ";
     if (mpsNode->setAppId(id))
-        std::cout << "appID changed successfully." << std::endl;
+        std::cout << "Done!" << std::endl;
     else
-        std::cout << "Error setting the AppID." << std::endl;
+        std::cout << "Error!" << std::endl;
 }
 
 void Tester::setEnable(bool en)
 {
-    std::cout << "Setting the enable bit to " << std::boolalpha << en << std::endl;
+    std::cout << "Setting the enable bit to " << std::boolalpha << en << "... ";
     if (mpsNode->setEnable(en))
-        std::cout << "Enable bit changed successfully." << std::endl;
+        std::cout << "Done!" << std::endl;
     else
-        std::cout << "Error setting the Enable bit." << std::endl;
+        std::cout << "Error!" << std::endl;
 }
 
 void usage(const char* name)
