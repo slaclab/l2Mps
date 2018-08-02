@@ -40,7 +40,7 @@ void printVal(const uint8_t& v)
 template<typename T>
 void printPair(const std::string& name, const std::pair<bool, T>& v, bool useHex = false )
 {
-    size_t w = 8;
+    size_t w = 12;
 
     std::cout << std::left << std::setw(17) << name;
     std::cout << "= ";
@@ -65,7 +65,7 @@ template<typename T>
 void printArray(const std::string& regName, const T& p, bool useHex = false, size_t hexW = 2)
 {
     std::cout << std::setw(11) << "Index:" << std::setw(12) << regName << ":";
-    std::cout << std::setw(11) << std::string("[" + std::string(p.first?"valid":"non-valid") + "]");
+    std::cout << std::setw(15) << std::string("[" + std::string(p.first?"valid":"non-valid") + "]");
     std::cout << std::endl;
 
     size_t w = 13;
