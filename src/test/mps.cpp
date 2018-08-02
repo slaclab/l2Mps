@@ -73,19 +73,20 @@ void Tester::mpsInfoReceiver(mps_infoData_t info)
     printPair( "lastMsgLcls",      info.lastMsgLcls              );
     printPair( "lastMsgTimestamp", info.lastMsgTimestamp         );
 
-    printArray( "lastMsgByte", "Status", info.lastMsgByte, true );
-
     printPair( "txLinkUp",            info.txLinkUp              );
     printPair( "txLinkUpCnt",         info.txLinkUpCnt           );
-
-    printArray( "rxLinkUp",    "Status",   info.rxLinkUp    );
-    printArray( "rxLinkUpCnt", "Counters", info.rxLinkUpCnt );
 
     printPair( "mpsSlot",            info.mpsSlot                );
     printPair( "appType",            info.appType                );
     printPair( "pllLocked",          info.pllLocked              );
     printPair( "rollOverEn",         info.rollOverEn             );
     printPair( "txPktSentCnt",       info.txPktSentCnt           );
+
+    printArray( "lastMsgByte", "Status", info.lastMsgByte, true );
+
+    printArray( "rxLinkUp",    "Status",   info.rxLinkUp    );
+    printArray( "rxLinkUpCnt", "Counters", info.rxLinkUpCnt );
+
 
     printArray( "rxPktRcvd", "Counters", info.rxPktRcvdCnt );
 
