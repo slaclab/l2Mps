@@ -121,41 +121,34 @@ void Tester::printInfo()
 
 
     size_t n = mpsNode->getLastMsgByteSize();
-    std::cout << std::setw(4) << "" << "lastMsgByte:" << std::endl;
+    std::cout << std::setw(20) << "lastMsgByte" << std::endl;
     for (size_t i{0}; i < n; ++i)
-        printPair( std::to_string(static_cast<long long int>(i)), mpsNode->getLastMsgByte(i), true, 8, 4, 17 );
+        printPair( std::to_string(static_cast<long long int>(i)), mpsNode->getLastMsgByte(i), true, 3, 11, 15 );
 
     printPair( "txLinkUp",    mpsNode->getTxLinkUp()    );
     printPair( "txLinkUpCnt", mpsNode->getTxLinkUpCnt() );
 
     n = mpsNode->getRxLinkUpCntSize();
-    std::cout << "rxLinkUp =" << std::endl;
-    std::cout << std::setw(10) << "Index:";
-    for (size_t i{0}; i < n; ++i)
-        std::cout << std::setw(12) << i;
-    std::cout << std::endl << std::setw(10) << "Status:";
-    for (size_t i{0}; i < n; ++i)
-        std::cout << std::setw(12) << std::boolalpha << mpsNode->getRxLinkUp(i).second;
-    std::cout << std::endl << std::setw(10) << "Counters:";
-    for (size_t i{0}; i < n; ++i)
-        std::cout << std::setw(12) << mpsNode->getRxLinkUpCnt(i).second;
+    std::cout << std::setw(20) << "rxLinkUp";
+    std::cout << std::setw(16) << "rxLinkUpCnt";
+    std::cout << std::setw(16) << "rxPktRcvd";
     std::cout << std::endl;
+
+    for (size_t i{0}; i < n; ++i)
+    {
+        std::cout << std::setw(4) << i;
+        std::cout << std::setw(16) << std::boolalpha << mpsNode->getRxLinkUp(i).second;
+        std::cout << std::setw(16) << mpsNode->getRxLinkUpCnt(i).second;
+        std::cout << std::setw(16) << mpsNode->getRxPktRcvdCnt(i).second;
+        std::cout << std::endl;
+    }
+
 
     printPair( "mpsSlot",      mpsNode->getMpsSlot()      );
     printPair( "appType",      mpsNode->getAppType()      );
     printPair( "pllLocked",    mpsNode->getPllLocked()    );
     printPair( "rollOverEn",   mpsNode->getRollOverEn()   );
     printPair( "txPktSentCnt", mpsNode->getTxPktSentCnt() );
-
-    n = mpsNode->getRxPktRcvdCntSize();
-    std::cout << "rxPktRcvdCnt =" << std::endl;
-    std::cout << std::setw(10) << "Index:";
-    for (std::size_t i{0}; i < n; ++i)
-        std::cout << std::setw(12) << i;
-    std::cout << std::endl << std::setw(10) << "Counters:";
-    for (std::size_t i{0}; i < n; ++i)
-        std::cout << std::setw(12) << mpsNode->getRxPktRcvdCnt(i).second;
-    std::cout << std::endl;
 
     std::cout << "====================================================" << std::endl;
     std::cout << "Done!"<< std::endl;
