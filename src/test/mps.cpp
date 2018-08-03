@@ -106,23 +106,23 @@ void Tester::printInfo()
     std::cout << "====================================================" << std::endl;
     std::cout << "Read all registers using the get functions" << std::endl;
     std::cout << "====================================================" << std::endl;
-    printPair( "appId",             mpsNode->getAppId()             );
-    printPair( "version",           mpsNode->getVersion()           );
-    printPair( "enable",            mpsNode->getEnable()            );
-    printPair( "lcls1Mode",         mpsNode->getLcls1Mode()         );
-    printPair( "byteCount",         mpsNode->getByteCount()         );
-    printPair( "digitalEn",         mpsNode->getDigitalEnable()     );
-    printPair( "beamDestMask",      mpsNode->getBeamDestMask()      );
-    printPair( "altDestMask",       mpsNode->getAltDestMask()       );
-    printPair( "msgCnt",            mpsNode->getMsgCount()          );
-    printPair( "mpsSlot",           mpsNode->getMpsSlot()           );
-    printPair( "appType",           mpsNode->getAppType()           );
+    printPair( "appId",             mpsNode->getAppId()                     );
+    printPair( "version",           mpsNode->getVersion()                   );
+    printPair( "enable",            mpsNode->getEnable()                    );
+    printPair( "lcls1Mode",         mpsNode->getLcls1Mode()                 );
+    printPair( "byteCount",         mpsNode->getByteCount()                 );
+    printPair( "digitalEn",         mpsNode->getDigitalEnable()             );
+    printPair( "beamDestMask",      mpsNode->getBeamDestMask(),     true    );
+    printPair( "altDestMask",       mpsNode->getAltDestMask(),      true    );
+    printPair( "msgCnt",            mpsNode->getMsgCount()                  );
+    printPair( "mpsSlot",           mpsNode->getMpsSlot()                   );
+    printPair( "appType",           mpsNode->getAppType()                   );
 
     std::cout << std::endl;
 
-    printPair( "lastMsgAppId",      mpsNode->getLastMsgAppId()      );
-    printPair( "lastMsgLcls",       mpsNode->getLastMsgLcls()       );
-    printPair( "lastMsgTimestamp",  mpsNode->getLastMsgTimeStamp()  );
+    printPair( "lastMsgAppId",      mpsNode->getLastMsgAppId()              );
+    printPair( "lastMsgLcls",       mpsNode->getLastMsgLcls()               );
+    printPair( "lastMsgTimestamp",  mpsNode->getLastMsgTimeStamp()          );
 
 
     {
