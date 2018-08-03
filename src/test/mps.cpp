@@ -51,8 +51,6 @@ Tester::~Tester()
 {
     if (polling)
         std::cout << "\033[47B";
-
-    std::cout << "Tester object destroyed" << std::endl;
 }
 
 void Tester::mpsInfoReceiver(mps_infoData_t info)
