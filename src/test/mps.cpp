@@ -121,14 +121,9 @@ void Tester::printInfo()
 
 
     size_t n = mpsNode->getLastMsgByteSize();
-    std::cout << "lastMsgByte =" << std::endl;
-    std::cout << std::setw(10) << "Index:";
+    std::cout << std::setw(4) << "" << "lastMsgByte:" << std::endl;
     for (size_t i{0}; i < n; ++i)
-        std::cout << std::setw(12) << i;
-    std::cout << std::endl << std::setw(10) << "Status:";
-    for (size_t i{0}; i < n; ++i)
-        std::cout << std::setw(10) << "0x" << std::setfill('0') << std::setw(2) << std::hex <<  unsigned(mpsNode->getLastMsgByte(i).second) << std::setfill(' ') << std::dec;
-    std::cout << std::endl;
+        printPair( std::to_string(static_cast<long long int>(i)), mpsNode->getLastMsgByte(i), true, 8, 4, 17 );
 
     printPair( "txLinkUp",    mpsNode->getTxLinkUp()    );
     printPair( "txLinkUpCnt", mpsNode->getTxLinkUpCnt() );
