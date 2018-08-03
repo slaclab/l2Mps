@@ -106,27 +106,36 @@ void Tester::printInfo()
     std::cout << "====================================================" << std::endl;
     std::cout << "Read all registers using the get functions" << std::endl;
     std::cout << "====================================================" << std::endl;
-    printPair( "appId",            mpsNode->getAppId()             );
-    printPair( "version",          mpsNode->getVersion()           );
-    printPair( "enable",           mpsNode->getEnable()            );
-    printPair( "lcls1Mode",        mpsNode->getLcls1Mode()         );
-    printPair( "byteCount",        mpsNode->getByteCount()         );
-    printPair( "digitalEn",        mpsNode->getDigitalEnable()     );
-    printPair( "beamDestMask",     mpsNode->getBeamDestMask()      );
-    printPair( "altDestMask",      mpsNode->getAltDestMask()       );
-    printPair( "msgCnt",           mpsNode->getMsgCount()          );
-    printPair( "lastMsgAppId",     mpsNode->getLastMsgAppId()      );
-    printPair( "lastMsgLcls",      mpsNode->getLastMsgLcls()       );
-    printPair( "lastMsgTimestamp", mpsNode->getLastMsgTimeStamp()  );
+    printPair( "appId",             mpsNode->getAppId()             );
+    printPair( "version",           mpsNode->getVersion()           );
+    printPair( "enable",            mpsNode->getEnable()            );
+    printPair( "lcls1Mode",         mpsNode->getLcls1Mode()         );
+    printPair( "byteCount",         mpsNode->getByteCount()         );
+    printPair( "digitalEn",         mpsNode->getDigitalEnable()     );
+    printPair( "beamDestMask",      mpsNode->getBeamDestMask()      );
+    printPair( "altDestMask",       mpsNode->getAltDestMask()       );
+    printPair( "msgCnt",            mpsNode->getMsgCount()          );
+    printPair( "mpsSlot",           mpsNode->getMpsSlot()           );
+    printPair( "appType",           mpsNode->getAppType()           );
 
+    std::cout << std::endl;
+
+    printPair( "lastMsgAppId",      mpsNode->getLastMsgAppId()      );
+    printPair( "lastMsgLcls",       mpsNode->getLastMsgLcls()       );
+    printPair( "lastMsgTimestamp",  mpsNode->getLastMsgTimeStamp()  );
 
     size_t n = mpsNode->getLastMsgByteSize();
     std::cout << std::setw(20) << "lastMsgByte" << std::endl;
     for (size_t i{0}; i < n; ++i)
         printPair( std::to_string(static_cast<long long int>(i)), mpsNode->getLastMsgByte(i), true, 3, 11, 15 );
 
-    printPair( "txLinkUp",    mpsNode->getTxLinkUp()    );
-    printPair( "txLinkUpCnt", mpsNode->getTxLinkUpCnt() );
+    std::cout << std::endl;
+
+    printPair( "pllLocked",         mpsNode->getPllLocked()         );
+    printPair( "rollOverEn",        mpsNode->getRollOverEn()        );
+    printPair( "txLinkUp",          mpsNode->getTxLinkUp()          );
+    printPair( "txLinkUpCnt",       mpsNode->getTxLinkUpCnt()       );
+    printPair( "txPktSentCnt",      mpsNode->getTxPktSentCnt()      );
 
     n = mpsNode->getRxLinkUpCntSize();
     std::cout << std::setw(20) << "rxLinkUp";
@@ -144,11 +153,7 @@ void Tester::printInfo()
     }
 
 
-    printPair( "mpsSlot",      mpsNode->getMpsSlot()      );
-    printPair( "appType",      mpsNode->getAppType()      );
-    printPair( "pllLocked",    mpsNode->getPllLocked()    );
-    printPair( "rollOverEn",   mpsNode->getRollOverEn()   );
-    printPair( "txPktSentCnt", mpsNode->getTxPktSentCnt() );
+
 
     std::cout << "====================================================" << std::endl;
     std::cout << "Done!"<< std::endl;
