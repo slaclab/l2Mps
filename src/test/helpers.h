@@ -38,11 +38,12 @@ void printVal(const uint8_t& v)
 }
 
 template<typename T>
-void printPair(const std::string& name, const std::pair<bool, T>& v, bool useHex = false )
+void printPair(const std::string& name, const std::pair<bool, T>& v, bool useHex = false, size_t s1 = 0, size_t w1 = 17, size_t w2 = 12)
 {
-    size_t w = 12;
+    size_t w = w2;
 
-    std::cout << std::left << std::setw(17) << name;
+    std::cout << std::setw(s1) << "";
+    std::cout << std::left << std::setw(w1) << name;
     std::cout << "= ";
 
     if (useHex)
