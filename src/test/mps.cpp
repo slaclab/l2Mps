@@ -124,10 +124,22 @@ void Tester::printInfo()
     printPair( "lastMsgLcls",       mpsNode->getLastMsgLcls()       );
     printPair( "lastMsgTimestamp",  mpsNode->getLastMsgTimeStamp()  );
 
-    size_t n = mpsNode->getLastMsgByteSize();
-    std::cout << std::setw(20) << "lastMsgByte" << std::endl;
-    for (size_t i{0}; i < n; ++i)
-        printPair( std::to_string(static_cast<long long int>(i)), mpsNode->getLastMsgByte(i), true, 3, 11, 15 );
+
+    {
+        std::pair< bool, std::vector<uint32_t> > p;
+        bool allValid = true;
+        for (std::size_t i(0); i < mpsNode->getLastMsgByteSize() ; ++i)
+        {
+            std::pair<bool, uint32_t> v = mpsNode->getLastMsgByte(i);
+
+            allValid &= v.first;
+
+            p.second.push_back(v.second);
+        }
+        p.first = allValid;
+
+        printArray("lastMsgByte", p, true);
+    }
 
     std::cout << std::endl;
 
@@ -137,23 +149,31 @@ void Tester::printInfo()
     printPair( "txLinkUpCnt",       mpsNode->getTxLinkUpCnt()       );
     printPair( "txPktSentCnt",      mpsNode->getTxPktSentCnt()      );
 
-    n = mpsNode->getRxLinkUpCntSize();
-    std::cout << std::setw(20) << "rxLinkUp";
-    std::cout << std::setw(16) << "rxLinkUpCnt";
-    std::cout << std::setw(16) << "rxPktRcvd";
-    std::cout << std::endl;
-
-    for (size_t i{0}; i < n; ++i)
     {
-        std::cout << std::setw(4) << i;
-        std::cout << std::setw(16) << std::boolalpha << mpsNode->getRxLinkUp(i).second;
-        std::cout << std::setw(16) << mpsNode->getRxLinkUpCnt(i).second;
-        std::cout << std::setw(16) << mpsNode->getRxPktRcvdCnt(i).second;
-        std::cout << std::endl;
+        std::vector< std::pair< bool, std::vector<uint32_t> > > ps(3);
+        std::vector<std::string> ns({"rxLinkUp", "rxLinkUpCnt", "rxPktRcvd"});
+
+        ps.at(0).first = true;
+        ps.at(1).first = true;
+        ps.at(2).first = true;
+
+        for (std::size_t i(0); i < mpsNode->getRxLinkUpCntSize(); ++i)
+        {
+            std::pair<bool, bool> v1 = mpsNode->getRxLinkUp(i);
+            ps.at(0).first &= v1.first;
+            ps.at(0).second.push_back(static_cast<uint32_t>(v1.second));
+
+            std::pair<bool, uint32_t> v2 = mpsNode->getRxLinkUpCnt(i);
+            ps.at(1).first &= v2.first;
+            ps.at(1).second.push_back(v2.second);
+
+            std::pair<bool, uint32_t> v3 = mpsNode->getRxPktRcvdCnt(i);
+            ps.at(2).first &= v3.first;
+            ps.at(2).second.push_back(v3.second);
+        }
+
+        printArray(ns, ps);
     }
-
-
-
 
     std::cout << "====================================================" << std::endl;
     std::cout << "Done!"<< std::endl;
