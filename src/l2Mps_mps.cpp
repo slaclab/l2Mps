@@ -165,6 +165,7 @@ std::pair<bool,bool> IMpsNode::getRxLinkUp(const uint8_t ch) const
     {
         uint8_t mask = (1<<ch);
         val = ( rxLinkUpRaw.second & mask ) ? true : false;
+        valid = true;
     }
 
     return std::make_pair( valid, val );
