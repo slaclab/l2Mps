@@ -3,6 +3,9 @@
 Release notes for the SLAC LCLS2 HPS MPS Driver.
 
 ## Releases:
+* __R1.2.0__: 2018-10-26 J. Vasquez
+  * Update CPSW framework to R3.6.4
+
 * __R1.1.0__: 2018-06-28 J. Vasquez
   * Add new CPSW wrapper class which catches errors from CPSW and set valid flags which is
     forward to the user via the API call using pairs of status and value. 
