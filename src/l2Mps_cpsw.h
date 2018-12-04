@@ -1,6 +1,27 @@
 #ifndef L2MPS_CPSW_H
 #define L2MPS_CPSW_H
 
+/**
+ *-----------------------------------------------------------------------------
+ * Title      : Class with CPSW wrappers
+ * ----------------------------------------------------------------------------
+ * File       : l2Mps_cpsw.h
+ * Author     : Jesus Vasquez, jvasquez@slac.stanford.edu
+ * Created    : 2018-06-27
+ * ----------------------------------------------------------------------------
+ * Description:
+ * This class contains functions that wrap CPSW API calls.
+ * ----------------------------------------------------------------------------
+ * This file is part of l2Mps. It is subject to
+ * the license terms in the LICENSE.txt file found in the top-level directory
+ * of this distribution and at:
+    * https://confluence.slac.stanford.edu/display/ppareg/LICENSE.html.
+ * No part of l2Mps, including this file, may be
+ * copied, modified, propagated, or distributed except according to the terms
+ * contained in the LICENSE.txt file.
+ * ----------------------------------------------------------------------------
+**/
+
 #include <iostream>
 #include <cpsw_api_user.h>
 
@@ -30,7 +51,7 @@ Command createCPSWInterface(const Path& root, const std::string& regName)
 }
 
 // This doesn't seem to be supported by the rhel6 compiler
-//template<typename T> 
+//template<typename T>
 //using cpsw_pair_t = std::pair<bool,T>;
 
 // CPSW base clases. Includes common functions to all registers.
@@ -65,7 +86,7 @@ public:
         reg   = rhs.reg;
         name  = rhs.name;
         nElms = rhs.nElms;
-        nBits = rhs.nBits;  
+        nBits = rhs.nBits;
         return *this;
     };
 
@@ -75,7 +96,7 @@ public:
     {
         bool valid = false;
         U    val   = 0;
-    
+
         if (nElms == 1)
         {
             try
@@ -89,12 +110,12 @@ public:
         }
         return std::make_pair(valid, val);
     };
- 
+
     std::pair<bool, U> get(const size_t& index) const
     {
         bool valid = false;
         U    val   = 0;
-    
+
         if (nElms > index)
         {
             try
@@ -109,12 +130,12 @@ public:
         }
         return std::make_pair(valid, val);
     };
- 
+
     std::pair< bool, std::vector<U> > getArray() const
     {
         bool           valid = false;
         std::vector<U> vals(nElms);
-    
+
         if (nElms > 1)
         {
             try
@@ -138,7 +159,7 @@ protected:
     T           reg;
     std::string name;
     size_t      nElms;
-    size_t      nBits;   
+    size_t      nBits;
 };
 
 // Class for RO registers
@@ -152,7 +173,7 @@ public:
     {
         CpswRegBase<ScalVal_RO, T>::operator=(rhs);
         return *this;
-    }; 
+    };
     virtual ~CpswRegRO() {};
 };
 
@@ -173,7 +194,7 @@ public:
     bool set(const T& val) const
     {
         bool ret = false;
-    
+
         if (this->nElms == 1)
         {
             try
@@ -201,7 +222,7 @@ public:
         try
         {
             cmd = createCPSWInterface<Command>(root, name);
-            created = true; 
+            created = true;
         }
         catch(CPSWError &e)
         {

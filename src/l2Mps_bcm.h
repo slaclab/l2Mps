@@ -1,6 +1,27 @@
 #ifndef L2MPS_BCM_H
 #define L2MPS_BCM_H
 
+/**
+ *-----------------------------------------------------------------------------
+ * Title      : BCM application class
+ * ----------------------------------------------------------------------------
+ * File       : l2Mps_bcm.h
+ * Author     : Jesus Vasquez, jvasquez@slac.stanford.edu
+ * Created    : 2017-10-20
+ * ----------------------------------------------------------------------------
+ * Description:
+ * Class for interfacing the BCM's MPS application.
+ * ----------------------------------------------------------------------------
+ * This file is part of l2Mps. It is subject to
+ * the license terms in the LICENSE.txt file found in the top-level directory
+ * of this distribution and at:
+    * https://confluence.slac.stanford.edu/display/ppareg/LICENSE.html.
+ * No part of l2Mps, including this file, may be
+ * copied, modified, propagated, or distributed except according to the terms
+ * contained in the LICENSE.txt file.
+ * ----------------------------------------------------------------------------
+**/
+
 #include "l2Mps_base.h"
 
 //Number of Threshold channels for BCM is 1 per bay: BCM, DIFF

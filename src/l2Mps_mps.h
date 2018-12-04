@@ -1,6 +1,28 @@
 #ifndef LCLS2MPSLN_MPS_H
 #define LCLS2MPSLN_MPS_H
 
+/**
+ *-----------------------------------------------------------------------------
+ * Title      : Common Platfrom MPS module class.
+ * ----------------------------------------------------------------------------
+ * File       : l2Mps_mps.h
+ * Author     : Jesus Vasquez, jvasquez@slac.stanford.edu
+ * Created    : 2017-10-20
+ * ----------------------------------------------------------------------------
+ * Description:
+ * Class for interfacing the MPS register common to all applications, included
+ * as part of the Common Platform.
+ * ----------------------------------------------------------------------------
+ * This file is part of l2Mps. It is subject to
+ * the license terms in the LICENSE.txt file found in the top-level directory
+ * of this distribution and at:
+    * https://confluence.slac.stanford.edu/display/ppareg/LICENSE.html.
+ * No part of l2Mps, including this file, may be
+ * copied, modified, propagated, or distributed except according to the terms
+ * contained in the LICENSE.txt file.
+ * ----------------------------------------------------------------------------
+**/
+
 #define _GLIBCXX_USE_NANOSLEEP    // Workaround to use std::this_thread::sleep_for
 
 #include <stdio.h>
@@ -62,8 +84,8 @@ struct mps_infoData_t
     std::pair< bool, bool                 > lastMsgLcls;
     std::pair< bool, uint16_t             > lastMsgTimestamp;
     std::pair< bool, std::vector<uint8_t> > lastMsgByte;
-                                              
-    // From AppMpsSalt                        
+
+    // From AppMpsSalt
     std::pair< bool, bool                  > txLinkUp;
     std::pair< bool, uint32_t              > txLinkUpCnt;
     std::pair< bool, std::vector<bool>     > rxLinkUp;
@@ -86,7 +108,7 @@ public:
 
     // Factory method, which returns a smart pointer
     static MpsNode create(Path mpsRoot);
- 
+
     const void readMpsInfo(mps_infoData_t& info) const;
 
     const void startPollThread(unsigned int poll, p_mpsCBFunc_t cbFunc);
@@ -139,7 +161,7 @@ public:
 
     // Mps Tx LinkUp status
     std::pair<bool,bool> getTxLinkUp(void) const                      { return txLinkUp.get();         };
- 
+
     // Mps Rx LinkUp status
     std::pair<bool,bool> getRxLinkUp(const uint8_t ch) const;
 

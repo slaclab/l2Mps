@@ -1,6 +1,27 @@
 #ifndef L2MPS_BASE_H
 #define L2MPS_BASE_H
 
+/**
+ *-----------------------------------------------------------------------------
+ * Title      : Base class for application classes
+ * ----------------------------------------------------------------------------
+ * File       : l2Mps_base.h
+ * Author     : Jesus Vasquez, jvasquez@slac.stanford.edu
+ * Created    : 2018-01-24
+ * ----------------------------------------------------------------------------
+ * Description:
+ * Base classe with common function of all application classes.
+ * ----------------------------------------------------------------------------
+ * This file is part of l2Mps. It is subject to
+ * the license terms in the LICENSE.txt file found in the top-level directory
+ * of this distribution and at:
+    * https://confluence.slac.stanford.edu/display/ppareg/LICENSE.html.
+ * No part of l2Mps, including this file, may be
+ * copied, modified, propagated, or distributed except according to the terms
+ * contained in the LICENSE.txt file.
+ * ----------------------------------------------------------------------------
+**/
+
 #define _GLIBCXX_USE_NANOSLEEP    // Workaround to use std::this_thread::sleep_for
 
 #include <thread>
@@ -20,10 +41,10 @@ class IMpsAppBase
 {
 private:
     typedef std::function<void(int, std::map<T, thr_ch_t>)> p_appCBFunc_t;
- 
+
 public:
     IMpsAppBase(const uint8_t amc) : amc(amc), run(false) {};
-    virtual ~IMpsAppBase() 
+    virtual ~IMpsAppBase()
     {
         if (run)
         {

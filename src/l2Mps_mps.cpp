@@ -1,11 +1,33 @@
+/**
+ *-----------------------------------------------------------------------------
+ * Title      : Common Platfrom MPS module class.
+ * ----------------------------------------------------------------------------
+ * File       : l2Mps_mps.cpp
+ * Author     : Jesus Vasquez, jvasquez@slac.stanford.edu
+ * Created    : 2017-10-20
+ * ----------------------------------------------------------------------------
+ * Description:
+ * Class for interfacing the MPS register common to all applications, included
+ * as part of the Common Platform.
+ * ----------------------------------------------------------------------------
+ * This file is part of l2Mps. It is subject to
+ * the license terms in the LICENSE.txt file found in the top-level directory
+ * of this distribution and at:
+    * https://confluence.slac.stanford.edu/display/ppareg/LICENSE.html.
+ * No part of l2Mps, including this file, may be
+ * copied, modified, propagated, or distributed except according to the terms
+ * contained in the LICENSE.txt file.
+ * ----------------------------------------------------------------------------
+**/
+
 #include "l2Mps_mps.h"
 
-MpsNode IMpsNode::create(Path mpsRoot) 
+MpsNode IMpsNode::create(Path mpsRoot)
 {
     if(!mpsRoot)
         throw std::runtime_error("The roo Path is empty");
- 
-    return boost::make_shared<IMpsNode>(mpsRoot); 
+
+    return boost::make_shared<IMpsNode>(mpsRoot);
 }
 
 IMpsNode::IMpsNode(Path mpsRoot)
@@ -13,20 +35,20 @@ IMpsNode::IMpsNode(Path mpsRoot)
     run              ( false ),
     // MPS Base interfaces
     appId            ( mpsRoot, MpsBaseModuleName + "/mpsAppId"         ),
-    version          ( mpsRoot, MpsBaseModuleName + "/mpsVersion"       ), 
-    enable           ( mpsRoot, MpsBaseModuleName + "/mpsEnable"        ), 
-    lcls1Mode        ( mpsRoot, MpsBaseModuleName + "/lcls1Mode"        ), 
-    byteCount        ( mpsRoot, MpsBaseModuleName + "/byteCount"        ), 
-    digitalEn        ( mpsRoot, MpsBaseModuleName + "/digitalEn"        ), 
-    beamDestMask     ( mpsRoot, MpsBaseModuleName + "/beamDestMask"     ), 
-    altDestMask      ( mpsRoot, MpsBaseModuleName + "/altDestMask"      ), 
-    msgCnt           ( mpsRoot, MpsBaseModuleName + "/mpsMsgCount"      ), 
-    lastMsgAppId     ( mpsRoot, MpsBaseModuleName + "/lastMsgAppId"     ), 
-    lastMsgLcls      ( mpsRoot, MpsBaseModuleName + "/lastMsgLcls"      ), 
+    version          ( mpsRoot, MpsBaseModuleName + "/mpsVersion"       ),
+    enable           ( mpsRoot, MpsBaseModuleName + "/mpsEnable"        ),
+    lcls1Mode        ( mpsRoot, MpsBaseModuleName + "/lcls1Mode"        ),
+    byteCount        ( mpsRoot, MpsBaseModuleName + "/byteCount"        ),
+    digitalEn        ( mpsRoot, MpsBaseModuleName + "/digitalEn"        ),
+    beamDestMask     ( mpsRoot, MpsBaseModuleName + "/beamDestMask"     ),
+    altDestMask      ( mpsRoot, MpsBaseModuleName + "/altDestMask"      ),
+    msgCnt           ( mpsRoot, MpsBaseModuleName + "/mpsMsgCount"      ),
+    lastMsgAppId     ( mpsRoot, MpsBaseModuleName + "/lastMsgAppId"     ),
+    lastMsgLcls      ( mpsRoot, MpsBaseModuleName + "/lastMsgLcls"      ),
     lastMsgTimestamp ( mpsRoot, MpsBaseModuleName + "/lastMsgTimeStamp" ),
-    lastMsgByte      ( mpsRoot, MpsBaseModuleName + "/lastMsgByte"      ), 
+    lastMsgByte      ( mpsRoot, MpsBaseModuleName + "/lastMsgByte"      ),
     // MPS SALT interfaces
-    txLinkUp         ( mpsRoot, MpsSaltModuleName + "/MpsTxLinkUP"      ), 
+    txLinkUp         ( mpsRoot, MpsSaltModuleName + "/MpsTxLinkUP"      ),
     txLinkUpCnt      ( mpsRoot, MpsSaltModuleName + "/MpsTxLinkUpCnt"   ),
     rxLinkUp         ( mpsRoot, MpsSaltModuleName + "/MpsRxLinkUP"      ),
     rxLinkUpCnt      ( mpsRoot, MpsSaltModuleName + "/MpsRxLinkUpCnt"   ),
@@ -45,7 +67,7 @@ IMpsNode::~IMpsNode()
 {
     // Stop the thread if it was running
     if(run)
-    {   
+    {
         run = false;
         scanThread.join();
     }
@@ -55,23 +77,23 @@ const void IMpsNode::readMpsInfo(mps_infoData_t& info) const
 {
     // Single value registers
     info.appId            = appId.get();
-    info.version          = version.get();         
-    info.enable           = enable.get();          
-    info.lcls1Mode        = lcls1Mode.get();       
-    info.byteCount        = byteCount.get();       
-    info.digitalEn        = digitalEn.get();       
-    info.beamDestMask     = beamDestMask.get();    
-    info.altDestMask      = altDestMask.get();     
-    info.msgCnt           = msgCnt.get();          
-    info.lastMsgAppId     = lastMsgAppId.get();    
-    info.lastMsgLcls      = lastMsgLcls.get();     
+    info.version          = version.get();
+    info.enable           = enable.get();
+    info.lcls1Mode        = lcls1Mode.get();
+    info.byteCount        = byteCount.get();
+    info.digitalEn        = digitalEn.get();
+    info.beamDestMask     = beamDestMask.get();
+    info.altDestMask      = altDestMask.get();
+    info.msgCnt           = msgCnt.get();
+    info.lastMsgAppId     = lastMsgAppId.get();
+    info.lastMsgLcls      = lastMsgLcls.get();
     info.lastMsgTimestamp = lastMsgTimestamp.get();
-    info.txLinkUp         = txLinkUp.get();        
-    info.txLinkUpCnt      = txLinkUpCnt.get();     
-    info.mpsSlot          = mpsSlot.get();         
-    info.pllLocked        = pllLocked.get();       
-    info.rollOverEn       = rollOverEn.get();      
-    info.txPktSentCnt     = txPktSentCnt.get();    
+    info.txLinkUp         = txLinkUp.get();
+    info.txLinkUpCnt      = txLinkUpCnt.get();
+    info.mpsSlot          = mpsSlot.get();
+    info.pllLocked        = pllLocked.get();
+    info.rollOverEn       = rollOverEn.get();
+    info.txPktSentCnt     = txPktSentCnt.get();
 
     // AppType which is converted to string
     info.appType          = getConvertedAppType();
@@ -113,7 +135,7 @@ const void IMpsNode::startPollThread(unsigned int poll, p_mpsCBFunc_t cbFunc)
 
     std::cout << "    Starting MPS node scan thread..." << std::endl;
     run = true;
-    scanThread = std::thread( &IMpsNode::pollThread, this ); 
+    scanThread = std::thread( &IMpsNode::pollThread, this );
     if ( pthread_setname_np( scanThread.native_handle(), "mpsNodeScan" ) )
       perror( "pthread_setname_np failed for for MpsNode scanThread" );
 }
