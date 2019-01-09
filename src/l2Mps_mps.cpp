@@ -1,6 +1,6 @@
 /**
  *-----------------------------------------------------------------------------
- * Title      : Common Platfrom MPS module class.
+ * Title      : Common Platform MPS module class.
  * ----------------------------------------------------------------------------
  * File       : l2Mps_mps.cpp
  * Author     : Jesus Vasquez, jvasquez@slac.stanford.edu

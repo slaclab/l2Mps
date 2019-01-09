@@ -10,7 +10,7 @@
  * Created    : 2018-01-24
  * ----------------------------------------------------------------------------
  * Description:
- * Base classe with common function of all application classes.
+ * Base class with common function of all application classes.
  * ----------------------------------------------------------------------------
  * This file is part of l2Mps. It is subject to
  * the license terms in the LICENSE.txt file found in the top-level directory

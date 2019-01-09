@@ -3,7 +3,7 @@
 
 /**
  *-----------------------------------------------------------------------------
- * Title      : Common Platfrom MPS module class.
+ * Title      : Common Platform MPS module class.
  * ----------------------------------------------------------------------------
  * File       : l2Mps_mps.h
  * Author     : Jesus Vasquez, jvasquez@slac.stanford.edu
