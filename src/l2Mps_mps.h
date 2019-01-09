@@ -38,9 +38,15 @@
 #include <boost/atomic.hpp>
 #include <boost/shared_ptr.hpp>
 #include <boost/make_shared.hpp>
+#include <boost/any.hpp>
 #include <cpsw_api_user.h>
 
 #include "l2Mps_cpsw.h"
+#include "l2Mps_bpm.h"
+#include "l2Mps_blen.h"
+#include "l2Mps_bcm.h"
+#include "l2Mps_blm.h"
+
 
 class IMpsNode;
 
@@ -66,6 +72,9 @@ static std::map<int, std::string> appTypeList = {
     {120,   "MPS_24CH"},
     {121,   "MPS_6CH"}
 };
+
+// Number of AMC bays on a carrier
+const uint8_t numberOfBays = 2;
 
 // Data
 struct mps_infoData_t
@@ -198,6 +207,8 @@ public:
     // Reset the SALT PLL
     bool resetSaltPll(void) const                                     { return rstPll.exe();           };
 
+    boost::any getBayApp(uint8_t bay)                                 { return amc[bay];               };
+
 private:
     p_mpsCBFunc_t       mpsCB;
     unsigned int        pollCB;
@@ -234,6 +245,8 @@ private:
 
     void                        pollThread();
     std::pair<bool,std::string> getConvertedAppType() const;
+
+    boost::any amc[numberOfBays];
 };
 
 #endif

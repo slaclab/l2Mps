@@ -61,6 +61,23 @@ IMpsNode::IMpsNode(Path mpsRoot)
     rstCnt           ( mpsRoot, MpsSaltModuleName + "/RstCnt"           ),
     rstPll           ( mpsRoot, MpsSaltModuleName + "/RstPll"           )
 {
+    // Create the application specific objects
+    std::pair<bool,std::string> appTypeVal = getConvertedAppType();
+
+    if (!appTypeVal.first)
+        throw std::runtime_error("Invalid application type");
+
+    for(std::size_t i {0}; i < numberOfBays; ++i)
+    {
+        if (!appTypeVal.second.compare("BPM"))
+            amc[i] = IMpsBpm::create(mpsRoot, i);
+        else if (!appTypeVal.second.compare("BLEN"))
+            amc[i] = IMpsBlen::create(mpsRoot, i);
+        else if (!appTypeVal.second.compare("BCM"))
+            amc[i] = IMpsBcm::create(mpsRoot, i);
+        else if ((!appTypeVal.second.compare("BLM")) | (!appTypeVal.second.compare("MPS_6CH")) | (!appTypeVal.second.compare("MPS_24CH")))
+            amc[i] = IMpsBlm::create(mpsRoot, i);
+    }
 }
 
 IMpsNode::~IMpsNode()
