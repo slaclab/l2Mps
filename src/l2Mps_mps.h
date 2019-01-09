@@ -243,10 +243,15 @@ private:
     CpswCmd             rstCnt;
     CpswCmd             rstPll;
 
+    // Application type name
+    std::string         appTypeName;
+
+    // Application object (one for each bay)
+    boost::any          amc[numberOfBays];
+
     void                        pollThread();
     std::pair<bool,std::string> getConvertedAppType() const;
 
-    boost::any amc[numberOfBays];
 };
 
 #endif

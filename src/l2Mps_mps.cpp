@@ -63,22 +63,23 @@ IMpsNode::IMpsNode(Path mpsRoot)
 {
 
     // Get the application type
-    std::pair<bool,std::string> appTypeVal = getConvertedAppType();
+    bool appTypeValid;
+    std::tie(appTypeValid, appTypeName) = getConvertedAppType();
 
     // Check if the application type is supported
-    if (!appTypeVal.first)
+    if (!appTypeValid)
         throw std::runtime_error("Unsupported application type");
 
     // Create the application specific objects
     for(std::size_t i {0}; i < numberOfBays; ++i)
     {
-        if (!appTypeVal.second.compare("BPM"))
+        if (!appTypeName.compare("BPM"))
             amc[i] = IMpsBpm::create(mpsRoot, i);
-        else if (!appTypeVal.second.compare("BLEN"))
+        else if (!appTypeName.compare("BLEN"))
             amc[i] = IMpsBlen::create(mpsRoot, i);
-        else if (!appTypeVal.second.compare("BCM"))
+        else if (!appTypeName.compare("BCM"))
             amc[i] = IMpsBcm::create(mpsRoot, i);
-        else if ((!appTypeVal.second.compare("BLM")) | (!appTypeVal.second.compare("MPS_6CH")) | (!appTypeVal.second.compare("MPS_24CH")))
+        else if ((!appTypeName.compare("BLM")) | (!appTypeName.compare("MPS_6CH")) | (!appTypeName.compare("MPS_24CH")))
             amc[i] = IMpsBlm::create(mpsRoot, i);
     }
 }
