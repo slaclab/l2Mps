@@ -25,7 +25,7 @@
 MpsNode IMpsNode::create(Path mpsRoot)
 {
     if(!mpsRoot)
-        throw std::runtime_error("The roo Path is empty");
+        throw std::runtime_error("The root Path is empty");
 
     return boost::make_shared<IMpsNode>(mpsRoot);
 }
@@ -159,7 +159,7 @@ const void IMpsNode::startPollThread(unsigned int poll, p_mpsCBFunc_t cbFunc)
 
 void IMpsNode::pollThread()
 {
-    std::cout << "    MPS node scan thread created succesfully." << std::endl;
+    std::cout << "    MPS node scan thread created successfully." << std::endl;
 
     for(;;)
     {
