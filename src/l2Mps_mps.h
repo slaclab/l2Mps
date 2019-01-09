@@ -1,5 +1,5 @@
-#ifndef LCLS2MPSLN_MPS_H
-#define LCLS2MPSLN_MPS_H
+#ifndef L2MPS_MPS_H
+#define L2MPS_MPS_H
 
 /**
  *-----------------------------------------------------------------------------
