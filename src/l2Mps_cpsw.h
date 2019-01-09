@@ -54,7 +54,7 @@ Command createCPSWInterface(const Path& root, const std::string& regName)
 //template<typename T>
 //using cpsw_pair_t = std::pair<bool,T>;
 
-// CPSW base clases. Includes common functions to all registers.
+// CPSW base clase. Includes common functions to all registers.
 template<typename T, typename U>
 class CpswRegBase
 {
