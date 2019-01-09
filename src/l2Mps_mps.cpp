@@ -61,12 +61,15 @@ IMpsNode::IMpsNode(Path mpsRoot)
     rstCnt           ( mpsRoot, MpsSaltModuleName + "/RstCnt"           ),
     rstPll           ( mpsRoot, MpsSaltModuleName + "/RstPll"           )
 {
-    // Create the application specific objects
+
+    // Get the application type
     std::pair<bool,std::string> appTypeVal = getConvertedAppType();
 
+    // Check if the application type is supported
     if (!appTypeVal.first)
-        throw std::runtime_error("Invalid application type");
+        throw std::runtime_error("Unsupported application type");
 
+    // Create the application specific objects
     for(std::size_t i {0}; i < numberOfBays; ++i)
     {
         if (!appTypeVal.second.compare("BPM"))
