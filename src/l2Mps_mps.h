@@ -53,10 +53,10 @@ class IMpsNode;
 typedef boost::shared_ptr<IMpsNode>     MpsNode;
 
 // Name of the Base MPS module
-const std::string MpsBaseModuleName = "AppMpsRegBase";
+const std::string MpsBaseModuleName = "AppMpsRegBase/";
 
 // Name of the SALT MPS module
-const std::string MpsSaltModuleName = "AppMpsSalt";
+const std::string MpsSaltModuleName = "AppMpsSalt/";
 
 // Application type
 static std::map<int, std::string> appTypeList = {
@@ -75,6 +75,9 @@ static std::map<int, std::string> appTypeList = {
 
 // Number of AMC bays on a carrier
 const uint8_t numberOfBays = 2;
+
+// Default MPS Root Path
+const std::string defaultMpsRootPath("mmio/AmcCarrierCore/AppMps/");
 
 // Data
 struct mps_infoData_t
@@ -112,11 +115,11 @@ typedef std::function<void(mps_infoData_t)> p_mpsCBFunc_t;
 class IMpsNode
 {
 public:
-    IMpsNode(Path mpsRoot);
+    IMpsNode(Path root);
     ~IMpsNode();
 
     // Factory method, which returns a smart pointer
-    static MpsNode create(Path mpsRoot);
+    static MpsNode create(Path root);
 
     const void readMpsInfo(mps_infoData_t& info) const;
 
@@ -214,6 +217,9 @@ private:
     unsigned int        pollCB;
     boost::atomic<bool> run;
     std::thread         scanThread;
+
+    // MPS root path
+    Path                mpsRoot;
 
     // CPSW interface from AppMpsRegAppCh
     CpswRegRW<uint16_t> appId;

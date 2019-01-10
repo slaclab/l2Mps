@@ -22,44 +22,46 @@
 
 #include "l2Mps_mps.h"
 
-MpsNode IMpsNode::create(Path mpsRoot)
+MpsNode IMpsNode::create(Path root)
 {
-    if(!mpsRoot)
+    if(!root)
         throw std::runtime_error("The root Path is empty");
 
-    return boost::make_shared<IMpsNode>(mpsRoot);
+    return boost::make_shared<IMpsNode>(root);
 }
 
-IMpsNode::IMpsNode(Path mpsRoot)
+IMpsNode::IMpsNode(Path root)
 :
     run              ( false ),
+    // MPS root path
+    mpsRoot          (root->findByName(defaultMpsRootPath.c_str())),
     // MPS Base interfaces
-    appId            ( mpsRoot, MpsBaseModuleName + "/mpsAppId"         ),
-    version          ( mpsRoot, MpsBaseModuleName + "/mpsVersion"       ),
-    enable           ( mpsRoot, MpsBaseModuleName + "/mpsEnable"        ),
-    lcls1Mode        ( mpsRoot, MpsBaseModuleName + "/lcls1Mode"        ),
-    byteCount        ( mpsRoot, MpsBaseModuleName + "/byteCount"        ),
-    digitalEn        ( mpsRoot, MpsBaseModuleName + "/digitalEn"        ),
-    beamDestMask     ( mpsRoot, MpsBaseModuleName + "/beamDestMask"     ),
-    altDestMask      ( mpsRoot, MpsBaseModuleName + "/altDestMask"      ),
-    msgCnt           ( mpsRoot, MpsBaseModuleName + "/mpsMsgCount"      ),
-    lastMsgAppId     ( mpsRoot, MpsBaseModuleName + "/lastMsgAppId"     ),
-    lastMsgLcls      ( mpsRoot, MpsBaseModuleName + "/lastMsgLcls"      ),
-    lastMsgTimestamp ( mpsRoot, MpsBaseModuleName + "/lastMsgTimeStamp" ),
-    lastMsgByte      ( mpsRoot, MpsBaseModuleName + "/lastMsgByte"      ),
+    appId            ( mpsRoot, MpsBaseModuleName + "mpsAppId"         ),
+    version          ( mpsRoot, MpsBaseModuleName + "mpsVersion"       ),
+    enable           ( mpsRoot, MpsBaseModuleName + "mpsEnable"        ),
+    lcls1Mode        ( mpsRoot, MpsBaseModuleName + "lcls1Mode"        ),
+    byteCount        ( mpsRoot, MpsBaseModuleName + "byteCount"        ),
+    digitalEn        ( mpsRoot, MpsBaseModuleName + "digitalEn"        ),
+    beamDestMask     ( mpsRoot, MpsBaseModuleName + "beamDestMask"     ),
+    altDestMask      ( mpsRoot, MpsBaseModuleName + "altDestMask"      ),
+    msgCnt           ( mpsRoot, MpsBaseModuleName + "mpsMsgCount"      ),
+    lastMsgAppId     ( mpsRoot, MpsBaseModuleName + "lastMsgAppId"     ),
+    lastMsgLcls      ( mpsRoot, MpsBaseModuleName + "lastMsgLcls"      ),
+    lastMsgTimestamp ( mpsRoot, MpsBaseModuleName + "lastMsgTimeStamp" ),
+    lastMsgByte      ( mpsRoot, MpsBaseModuleName + "lastMsgByte"      ),
     // MPS SALT interfaces
-    txLinkUp         ( mpsRoot, MpsSaltModuleName + "/MpsTxLinkUP"      ),
-    txLinkUpCnt      ( mpsRoot, MpsSaltModuleName + "/MpsTxLinkUpCnt"   ),
-    rxLinkUp         ( mpsRoot, MpsSaltModuleName + "/MpsRxLinkUP"      ),
-    rxLinkUpCnt      ( mpsRoot, MpsSaltModuleName + "/MpsRxLinkUpCnt"   ),
-    mpsSlot          ( mpsRoot, MpsSaltModuleName + "/MPS_SLOT_G"       ),
-    appType          ( mpsRoot, MpsSaltModuleName + "/APP_TYPE_G"       ),
-    pllLocked        ( mpsRoot, MpsSaltModuleName + "/MpsPllLocked"     ),
-    rollOverEn       ( mpsRoot, MpsSaltModuleName + "/RollOverEn"       ),
-    txPktSentCnt     ( mpsRoot, MpsSaltModuleName + "/MpsTxPktSentCnt"  ),
-    rxPktRcvdCnt     ( mpsRoot, MpsSaltModuleName + "/MpsRxPktRcvdCnt"  ),
-    rstCnt           ( mpsRoot, MpsSaltModuleName + "/RstCnt"           ),
-    rstPll           ( mpsRoot, MpsSaltModuleName + "/RstPll"           )
+    txLinkUp         ( mpsRoot, MpsSaltModuleName + "MpsTxLinkUP"      ),
+    txLinkUpCnt      ( mpsRoot, MpsSaltModuleName + "MpsTxLinkUpCnt"   ),
+    rxLinkUp         ( mpsRoot, MpsSaltModuleName + "MpsRxLinkUP"      ),
+    rxLinkUpCnt      ( mpsRoot, MpsSaltModuleName + "MpsRxLinkUpCnt"   ),
+    mpsSlot          ( mpsRoot, MpsSaltModuleName + "MPS_SLOT_G"       ),
+    appType          ( mpsRoot, MpsSaltModuleName + "APP_TYPE_G"       ),
+    pllLocked        ( mpsRoot, MpsSaltModuleName + "MpsPllLocked"     ),
+    rollOverEn       ( mpsRoot, MpsSaltModuleName + "RollOverEn"       ),
+    txPktSentCnt     ( mpsRoot, MpsSaltModuleName + "MpsTxPktSentCnt"  ),
+    rxPktRcvdCnt     ( mpsRoot, MpsSaltModuleName + "MpsRxPktRcvdCnt"  ),
+    rstCnt           ( mpsRoot, MpsSaltModuleName + "RstCnt"           ),
+    rstPll           ( mpsRoot, MpsSaltModuleName + "RstPll"           )
 {
 
     // Get the application type
