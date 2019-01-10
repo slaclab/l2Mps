@@ -53,10 +53,10 @@ class IMpsNode;
 typedef boost::shared_ptr<IMpsNode>     MpsNode;
 
 // Name of the Base MPS module
-const std::string MpsBaseModuleName = "AppMpsRegBase/";
+const std::string MpsBaseModuleName("AppMpsRegBase/");
 
 // Name of the SALT MPS module
-const std::string MpsSaltModuleName = "AppMpsSalt/";
+const std::string MpsSaltModuleName("AppMpsSalt/");
 
 // Application type
 static std::map<int, std::string> appTypeList = {
@@ -74,7 +74,7 @@ static std::map<int, std::string> appTypeList = {
 };
 
 // Number of AMC bays on a carrier
-const uint8_t numberOfBays = 2;
+const uint8_t numberOfBays(2);
 
 // Default MPS Root Path
 const std::string defaultMpsRootPath("mmio/AmcCarrierCore/AppMps/");

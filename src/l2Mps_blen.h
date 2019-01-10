@@ -26,7 +26,7 @@
 
 
 //Number of Threshold channels for BLEN is 1 pre bay
-const uint8_t numBlenChs = 1;
+const uint8_t numBlenChs(1);
 
 // Channel to byte map
 //   - The index is the AMC nuber (0 or 1)

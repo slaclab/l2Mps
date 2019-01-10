@@ -25,7 +25,7 @@
 #include "l2Mps_base.h"
 
 //Number of Threshold channels for BCM is 1 per bay: BCM, DIFF
-const uint8_t numBcmChs = 2;
+const uint8_t numBcmChs(2);
 
 // Channel to byte map
 //   - The index is the AMC nuber (0 or 1)
