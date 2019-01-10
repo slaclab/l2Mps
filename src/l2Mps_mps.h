@@ -42,6 +42,7 @@
 #include <cpsw_api_user.h>
 
 #include "l2Mps_cpsw.h"
+#include "l2Mps_bsi.h"
 #include "l2Mps_bpm.h"
 #include "l2Mps_blen.h"
 #include "l2Mps_bcm.h"
@@ -210,7 +211,15 @@ public:
     // Reset the SALT PLL
     bool resetSaltPll(void) const                                     { return rstPll.exe();           };
 
+    // Get the application object
     boost::any getBayApp(uint8_t bay)                                 { return amc[bay];               };
+
+    // Get the crate ID
+    std::pair<bool,uint16_t> getCrateId() const                       { return mpsBsi->getCrateId();   };
+
+    // Get the Slot Numbe
+    std::pair<bool,uint8_t> getSlotNumber() const                     { return mpsBsi->getSlotNumber(); };
+
 
 private:
     p_mpsCBFunc_t       mpsCB;
@@ -254,6 +263,9 @@ private:
 
     // Application object (one for each bay)
     boost::any          amc[numberOfBays];
+
+    // BSI interface
+    MpsBsi              mpsBsi;
 
     void                        pollThread();
     std::pair<bool,std::string> getConvertedAppType() const;

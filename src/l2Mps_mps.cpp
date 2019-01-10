@@ -61,7 +61,8 @@ IMpsNode::IMpsNode(Path root)
     txPktSentCnt     ( mpsRoot, MpsSaltModuleName + "MpsTxPktSentCnt"  ),
     rxPktRcvdCnt     ( mpsRoot, MpsSaltModuleName + "MpsRxPktRcvdCnt"  ),
     rstCnt           ( mpsRoot, MpsSaltModuleName + "RstCnt"           ),
-    rstPll           ( mpsRoot, MpsSaltModuleName + "RstPll"           )
+    rstPll           ( mpsRoot, MpsSaltModuleName + "RstPll"           ),
+    mpsBsi           ( IMpsBsi::create(root)                           )
 {
 
     // Get the application type
