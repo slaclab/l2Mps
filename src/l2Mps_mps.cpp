@@ -34,7 +34,7 @@ IMpsNode::IMpsNode(Path root)
 :
     run              ( false ),
     // MPS root path
-    mpsRoot          (root->findByName(defaultMpsRootPath.c_str())),
+    mpsRoot          ( root->findByName(defaultMpsRootPath.c_str())     ),
     // MPS Base interfaces
     appId            ( mpsRoot, MpsBaseModuleName + "mpsAppId"         ),
     version          ( mpsRoot, MpsBaseModuleName + "mpsVersion"       ),
