@@ -91,7 +91,7 @@ public:
             std::cout << "Error creating poll thread: poll time must be greater than 0" << std::endl;
             return;
         }
-        poll   = poll;
+        appPoll   = poll;
         appCB  = callBack;
 
         std::cout << "    Starting MPS app scan thread..." << std::endl;
@@ -119,7 +119,7 @@ public:
 protected:
     std::map<T, ThrChannel>  appThrMap;
     uint8_t                  amc;
-    unsigned int             poll;
+    unsigned int             appPoll;
     p_appCBFunc_t            appCB;
     std::thread              scanThread;
     boost::atomic<bool>      run;
@@ -131,14 +131,14 @@ protected:
 
         for(;;)
         {
-             if (!run)
-             {
-                 std::cout << "    Mps app scan thread interrupted." << std::endl;
-                 return;
-             }
+            if (!run)
+            {
+                std::cout << "    Mps app scan thread interrupted." << std::endl;
+                return;
+            }
 
-             std::map<T, thr_ch_t> dataMap;
-             typename std::map<T, ThrChannel>::const_iterator it;
+            std::map<T, thr_ch_t> dataMap;
+            typename std::map<T, ThrChannel>::const_iterator it;
             for (it = appThrMap.begin() ; it != appThrMap.end(); ++it)
             {
                 thr_ch_t data;
@@ -150,7 +150,7 @@ protected:
             appCB(amc, dataMap);
             dataMap.clear();
 
-            std::this_thread::sleep_for( std::chrono::seconds( poll ) );
+            std::this_thread::sleep_for( std::chrono::seconds( appPoll ) );
         }
     };
 };
