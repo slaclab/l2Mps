@@ -220,6 +220,8 @@ public:
     // Get the Slot Numbe
     std::pair<bool,uint8_t> getSlotNumber() const                     { return mpsBsi->getSlotNumber(); };
 
+    // Get a copy of the MPS root path
+    Path getMpsRoot() const                                           { return mpsRoot->clone();        };
 
 private:
     p_mpsCBFunc_t       mpsCB;
