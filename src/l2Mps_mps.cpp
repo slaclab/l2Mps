@@ -34,7 +34,8 @@ IMpsNode::IMpsNode(Path root)
 :
     run              ( false ),
     // MPS root path
-    mpsRoot          ( root->findByName(defaultMpsRootPath.c_str())     ),
+    cpswRoot         ( root ),
+    mpsRoot          ( root->findByName(defaultMpsRootPath.c_str())    ),
     // MPS Base interfaces
     appId            ( mpsRoot, MpsBaseModuleName + "mpsAppId"         ),
     version          ( mpsRoot, MpsBaseModuleName + "mpsVersion"       ),
@@ -215,4 +216,12 @@ std::pair<bool,bool> IMpsNode::getRxLinkUp(const uint8_t ch) const
     }
 
     return std::make_pair( valid, val );
+}
+
+// Load configuration (CPSW's YAML) file
+const uint64_t IMpsNode::loadConfigFile(std::string fileName) const
+{
+    std::cout << "Loading application configuration file " << fileName << "..." << std::endl;
+    uint64_t nEntriesLoaded = cpswRoot->loadConfigFromYamlFile(fileName.c_str());
+    std::cout << "Done!. " << unsigned(nEntriesLoaded) << " entries were loaded." << std::endl;
 }

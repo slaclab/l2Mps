@@ -223,11 +223,17 @@ public:
     // Get a copy of the MPS root path
     Path getMpsRoot() const                                           { return mpsRoot->clone();        };
 
+    // Load configuration (CPSW's YAML) file
+    const uint64_t loadConfigFile(std::string fileName) const;
+
 private:
     p_mpsCBFunc_t       mpsCB;
     unsigned int        pollCB;
     boost::atomic<bool> run;
     std::thread         scanThread;
+
+    // Root path
+    Path                cpswRoot;
 
     // MPS root path
     Path                mpsRoot;
