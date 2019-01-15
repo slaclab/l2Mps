@@ -221,7 +221,7 @@ std::pair<bool,bool> IMpsNode::getRxLinkUp(const uint8_t ch) const
 // Load configuration (CPSW's YAML) file
 const uint64_t IMpsNode::loadConfigFile(std::string fileName) const
 {
-    std::cout << "Loading application configuration file " << fileName << "..." << std::endl;
+    std::cout << "Loading MPS application configuration file " << fileName << "..." << std::endl;
     uint64_t nEntriesLoaded = cpswRoot->loadConfigFromYamlFile(fileName.c_str());
     std::cout << "Done!. " << unsigned(nEntriesLoaded) << " entries were loaded." << std::endl;
 }
