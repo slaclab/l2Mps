@@ -61,11 +61,11 @@ private:
     void mpsInfoReceiver(mps_infoData_t info);
 };
 
-Tester::Tester(Path mpsRoot)
+Tester::Tester(Path root)
 :
     polling ( false ),
     msgCnt  ( 0 ),
-    mpsNode ( IMpsNode::create(mpsRoot) )
+    mpsNode ( IMpsNode::create(root) )
 {
 }
 
@@ -305,20 +305,14 @@ int main(int argc, char **argv)
         exit(1);
     }
 
-    const char *mpsRootName = "mmio/AmcCarrierCore/AppMps";
-
     IYamlSetIP setIP(ipAddr);
     Path root = IPath::loadYamlFile( yamlDoc.c_str(), "NetIODev", NULL, &setIP );
 
     std::cout << std::endl << std::endl;
 
-    Path mpsRoot;
-
     try
     {
-        mpsRoot = root->findByName(mpsRootName);
-
-        Tester t( mpsRoot );
+        Tester t( root );
 
         if (-1 != id)
             t.setAppId(id);
