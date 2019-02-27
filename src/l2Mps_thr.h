@@ -79,6 +79,7 @@ struct thr_chInfoData_t
     std::pair< bool, bool    > altEn;
     std::pair< bool, bool    > lcls1En;
     float                      scaleFactor;
+    float                      scaleOffset;
 };
 
 // Threshold channel information scalval interfaces
@@ -156,9 +157,11 @@ public:
     bool setThresholdMinEn(thr_table_t ch, const bool val);
     bool setThresholdMaxEn(thr_table_t ch, const bool val);
 
-    // Set/get scale factor
+    // Set/get scale factor and offset
     bool        setScaleFactor(const float sf);
     const float getScaleFactor() const;
+    bool        setScaleOffset(const float so);
+    const float getScaleOffset() const;
 
     void readAll(thr_ch_t& data) const;
     void readThrChInfo(thr_chInfoData_t& info) const;
@@ -166,10 +169,11 @@ public:
 
 
 private:
-    Path            chRoot;        // Root path to the channel register space
+    Path            chRoot;         // Root path to the channel register space
     int             ch;             // Threhold channel number
     thr_scalval_t   thrScalvals;    // Threshold scalval interfaces
     float           scaleFactor;    // Scale factor (egu/raw)
+    float           scaleOffset;    // Scale offset (raw)
 
     // Helper functions
     thr_tableScalval_t createTableScalVal(const std::string& prefix) const;

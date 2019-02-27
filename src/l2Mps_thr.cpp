@@ -23,7 +23,8 @@
 
 IThrChannel::IThrChannel(Path mpsRoot, uint8_t channel)
 :
-    scaleFactor(1.0)
+    scaleFactor(1.0),
+    scaleOffset(0.0)
 {
     if (channel >= maxChannelCount)
         throw std::runtime_error("Channel exceeds the maximum channel number");
@@ -97,6 +98,7 @@ void IThrChannel::readThrChInfo(thr_chInfoData_t& info) const
     info.altEn       = thrScalvals.info.altEn.get();
     info.ch          = ch;
     info.scaleFactor = scaleFactor;
+    info.scaleOffset = scaleOffset;
 }
 
 void IThrChannel::readThrChData(thr_chData_t& data) const
@@ -109,10 +111,10 @@ void IThrChannel::readThrChData(thr_chData_t& data) const
         tableData.maxEn = (it->second).maxEn.get();
 
         std::pair<bool,uint32_t> tmp ( (it->second).min.get() );
-        tableData.min   = std::make_pair( tmp.first, static_cast<int32_t>(tmp.second) * scaleFactor );
+        tableData.min   = std::make_pair( tmp.first, ( static_cast<int32_t>(tmp.second) - scaleOffset ) * scaleFactor );
 
 	tmp = (it->second).max.get();
-        tableData.max   = std::make_pair( tmp.first, static_cast<int32_t>(tmp.second) * scaleFactor );
+        tableData.max   = std::make_pair( tmp.first, ( static_cast<int32_t>(tmp.second) - scaleOffset ) * scaleFactor );
 
         data.insert( std::make_pair(it->first, tableData) );
     }
@@ -128,13 +130,13 @@ void IThrChannel::readAll(thr_ch_t& data) const
 std::pair<bool, float> IThrChannel::getThresholdMin(thr_table_t ch)
 {
     std::pair<bool, uint32_t> tmp = findDataTableScalval(ch)->min.get();
-    return std::make_pair( tmp.first, ( static_cast<int32_t>(tmp.second) ) * scaleFactor );
+    return std::make_pair( tmp.first, ( static_cast<int32_t>(tmp.second) - scaleOffset ) * scaleFactor );
 }
 
 std::pair<bool, float> IThrChannel::getThresholdMax(thr_table_t ch)
 {
     std::pair<bool, uint32_t> tmp = findDataTableScalval(ch)->max.get();
-    return std::make_pair( tmp.first, ( static_cast<int32_t>(tmp.second) ) * scaleFactor );
+    return std::make_pair( tmp.first, ( static_cast<int32_t>(tmp.second) - scaleOffset ) * scaleFactor );
 }
 
 // Read threshold enable registers
@@ -151,13 +153,13 @@ std::pair<bool,bool> IThrChannel::getThresholdMaxEn(thr_table_t ch)
 // Write threshold registers
 bool IThrChannel::setThresholdMin(thr_table_t ch, const float val)
 {
-    uint32_t scaledVal = static_cast<uint32_t>(val/scaleFactor);
+    uint32_t scaledVal = static_cast<uint32_t>( val/scaleFactor + scaleOffset );
     return findDataTableScalval(ch)->min.set(scaledVal);
 }
 
 bool IThrChannel::setThresholdMax(thr_table_t ch, const float val)
 {
-    uint32_t scaledVal = static_cast<uint32_t>(val/scaleFactor);
+    uint32_t scaledVal = static_cast<uint32_t>( val/scaleFactor + scaleOffset );
     return findDataTableScalval(ch)->max.set(scaledVal);
 }
 
@@ -186,6 +188,19 @@ bool IThrChannel::setScaleFactor(const float sf)
 const float IThrChannel::getScaleFactor() const
 {
     return scaleFactor;
+}
+
+// Set the scale factor
+bool IThrChannel::setScaleOffset(const float so)
+{
+    scaleOffset = so;
+    return true;
+}
+
+// Get the scale factor
+const float IThrChannel::getScaleOffset() const
+{
+    return scaleOffset;
 }
 
 // Helper functions definitions
