@@ -78,7 +78,7 @@ struct thr_chInfoData_t
     std::pair< bool, bool    > idleEn;
     std::pair< bool, bool    > altEn;
     std::pair< bool, bool    > lcls1En;
-    float                      scaleFactor;
+    float                      scaleSlope;
     float                      scaleOffset;
 };
 
@@ -157,9 +157,9 @@ public:
     bool setThresholdMinEn(thr_table_t ch, const bool val);
     bool setThresholdMaxEn(thr_table_t ch, const bool val);
 
-    // Set/get scale factor and offset
-    bool        setScaleFactor(const float sf);
-    const float getScaleFactor() const;
+    // Set/get scale slope and offset
+    bool        setScaleSlope(const float sf);
+    const float getScaleSlope() const;
     bool        setScaleOffset(const float so);
     const float getScaleOffset() const;
 
@@ -172,7 +172,7 @@ private:
     Path            chRoot;         // Root path to the channel register space
     int             ch;             // Threhold channel number
     thr_scalval_t   thrScalvals;    // Threshold scalval interfaces
-    float           scaleFactor;    // Scale factor (egu/raw)
+    float           scaleSlope;     // Scale slope (egu/raw)
     float           scaleOffset;    // Scale offset (raw)
 
     // Helper functions

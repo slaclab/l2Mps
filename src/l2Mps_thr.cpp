@@ -23,7 +23,7 @@
 
 IThrChannel::IThrChannel(Path mpsRoot, uint8_t channel)
 :
-    scaleFactor(1.0),
+    scaleSlope(1.0),
     scaleOffset(0.0)
 {
     if (channel >= maxChannelCount)
@@ -97,7 +97,7 @@ void IThrChannel::readThrChInfo(thr_chInfoData_t& info) const
     info.lcls1En     = thrScalvals.info.lcls1En.get();
     info.altEn       = thrScalvals.info.altEn.get();
     info.ch          = ch;
-    info.scaleFactor = scaleFactor;
+    info.scaleSlope  = scaleSlope;
     info.scaleOffset = scaleOffset;
 }
 
@@ -111,10 +111,10 @@ void IThrChannel::readThrChData(thr_chData_t& data) const
         tableData.maxEn = (it->second).maxEn.get();
 
         std::pair<bool,uint32_t> tmp ( (it->second).min.get() );
-        tableData.min   = std::make_pair( tmp.first, ( static_cast<int32_t>(tmp.second) - scaleOffset ) * scaleFactor );
+        tableData.min   = std::make_pair( tmp.first, ( static_cast<int32_t>(tmp.second) - scaleOffset ) * scaleSlope );
 
 	tmp = (it->second).max.get();
-        tableData.max   = std::make_pair( tmp.first, ( static_cast<int32_t>(tmp.second) - scaleOffset ) * scaleFactor );
+        tableData.max   = std::make_pair( tmp.first, ( static_cast<int32_t>(tmp.second) - scaleOffset ) * scaleSlope );
 
         data.insert( std::make_pair(it->first, tableData) );
     }
@@ -130,13 +130,13 @@ void IThrChannel::readAll(thr_ch_t& data) const
 std::pair<bool, float> IThrChannel::getThresholdMin(thr_table_t ch)
 {
     std::pair<bool, uint32_t> tmp = findDataTableScalval(ch)->min.get();
-    return std::make_pair( tmp.first, ( static_cast<int32_t>(tmp.second) - scaleOffset ) * scaleFactor );
+    return std::make_pair( tmp.first, ( static_cast<int32_t>(tmp.second) - scaleOffset ) * scaleSlope );
 }
 
 std::pair<bool, float> IThrChannel::getThresholdMax(thr_table_t ch)
 {
     std::pair<bool, uint32_t> tmp = findDataTableScalval(ch)->max.get();
-    return std::make_pair( tmp.first, ( static_cast<int32_t>(tmp.second) - scaleOffset ) * scaleFactor );
+    return std::make_pair( tmp.first, ( static_cast<int32_t>(tmp.second) - scaleOffset ) * scaleSlope );
 }
 
 // Read threshold enable registers
@@ -153,13 +153,13 @@ std::pair<bool,bool> IThrChannel::getThresholdMaxEn(thr_table_t ch)
 // Write threshold registers
 bool IThrChannel::setThresholdMin(thr_table_t ch, const float val)
 {
-    uint32_t scaledVal = static_cast<uint32_t>( val/scaleFactor + scaleOffset );
+    uint32_t scaledVal = static_cast<uint32_t>( val/scaleSlope + scaleOffset );
     return findDataTableScalval(ch)->min.set(scaledVal);
 }
 
 bool IThrChannel::setThresholdMax(thr_table_t ch, const float val)
 {
-    uint32_t scaledVal = static_cast<uint32_t>( val/scaleFactor + scaleOffset );
+    uint32_t scaledVal = static_cast<uint32_t>( val/scaleSlope + scaleOffset );
     return findDataTableScalval(ch)->max.set(scaledVal);
 }
 
@@ -174,20 +174,20 @@ bool IThrChannel::setThresholdMaxEn(thr_table_t ch, const bool val)
     return findDataTableScalval(ch)->maxEn.set(val);
 }
 
-// Set the scale factor
-bool IThrChannel::setScaleFactor(const float sf)
+// Set the scale slope
+bool IThrChannel::setScaleSlope(const float sf)
 {
     if (sf == 0)
         return false;
 
-    scaleFactor = sf;
+    scaleSlope = sf;
     return true;
 }
 
 // Get the scale factor
-const float IThrChannel::getScaleFactor() const
+const float IThrChannel::getScaleSlope() const
 {
-    return scaleFactor;
+    return scaleSlope;
 }
 
 // Set the scale factor
