@@ -158,9 +158,9 @@ public:
     bool setThresholdMaxEn(thr_table_t ch, const bool val);
 
     // Set/get scale slope and offset
-    bool        setScaleSlope(const float sf);
+    bool        setScaleSlope(const float slope);
     const float getScaleSlope() const;
-    bool        setScaleOffset(const float so);
+    bool        setScaleOffset(const float offset);
     const float getScaleOffset() const;
 
     void readAll(thr_ch_t& data) const;

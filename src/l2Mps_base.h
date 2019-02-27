@@ -80,10 +80,10 @@ public:
     std::pair<bool, float>   getThresholdMax     ( const appThr_channel_t<T>& ch) const { return findThrChannel(ch.appCh)->getThresholdMax(ch.thrTb); };
 
     // Scale slope and offset set/get methods for thresholds
-    bool                     setScaleSlope       ( const T& ch, const float sf) const { return findThrChannel(ch)->setScaleSlope(sf);   };
-    const float              getScaleSlope       ( const T& ch) const                 { return findThrChannel(ch)->getScaleSlope();     };
-    bool                     setScaleOffset      ( const T& ch, const float so) const { return findThrChannel(ch)->setScaleOffset(so);   };
-    const float              getScaleOffset      ( const T& ch) const                 { return findThrChannel(ch)->getScaleOffset();     };
+    bool                     setScaleSlope       ( const T& ch, const float slope) const  { return findThrChannel(ch)->setScaleSlope(slope);   };
+    const float              getScaleSlope       ( const T& ch) const                     { return findThrChannel(ch)->getScaleSlope();        };
+    bool                     setScaleOffset      ( const T& ch, const float offset) const { return findThrChannel(ch)->setScaleOffset(offset); };
+    const float              getScaleOffset      ( const T& ch) const                     { return findThrChannel(ch)->getScaleOffset();       };
 
     // Set polling thread with callback function
     const void      startPollThread     ( unsigned int poll, p_appCBFunc_t callBack)

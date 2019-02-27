@@ -175,12 +175,12 @@ bool IThrChannel::setThresholdMaxEn(thr_table_t ch, const bool val)
 }
 
 // Set the scale slope
-bool IThrChannel::setScaleSlope(const float sf)
+bool IThrChannel::setScaleSlope(const float slope)
 {
-    if (sf == 0)
+    if (slope == 0)
         return false;
 
-    scaleSlope = sf;
+    scaleSlope = slope;
     return true;
 }
 
@@ -191,9 +191,9 @@ const float IThrChannel::getScaleSlope() const
 }
 
 // Set the scale factor
-bool IThrChannel::setScaleOffset(const float so)
+bool IThrChannel::setScaleOffset(const float offset)
 {
-    scaleOffset = so;
+    scaleOffset = offset;
     return true;
 }
 
