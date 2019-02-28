@@ -4,6 +4,7 @@ Release notes for the SLAC LCLS2 HPS MPS Driver.
 
 ## Releases:
 * __R2.0.0__: 2019-02-26 J. Vasquez
+  * Update CPSW framework to version R3.6.6, boost to 1.64.0 and yaml-cpp to yaml-cpp-0.5.3_boost-1.64.0.
   * Divide the scale factor use on thresholds into slope and offset.
 
 * __R1.2.0__: 2018-10-26 J. Vasquez
