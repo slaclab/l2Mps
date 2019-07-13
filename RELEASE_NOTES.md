@@ -3,6 +3,9 @@
 Release notes for the SLAC LCLS2 HPS MPS Driver.
 
 ## Releases:
+* __R2.1.1__: 2019-07-12 J. Vasquez
+  * Update CPSW framework to version R4.1.2.
+
 * __R2.1.0__: 2019-06-27 J. Vasquez
   * Update CPSW framework to version R4.1.0.
 
