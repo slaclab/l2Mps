@@ -14,9 +14,9 @@ BR_ARCHES += buildroot-2016.11.1
 ########################
 ### Package versions ###
 ########################
-CPSW_VERSION     = R3.6.4
-BOOST_VERSION    = 1.63.0
-YAML_CPP_VERSION = yaml-cpp-0.5.3
+CPSW_VERSION     = R4.1.2
+BOOST_VERSION    = 1.64.0
+YAML_CPP_VERSION = yaml-cpp-0.5.3_boost-1.64.0
 
 ########################
 ### Path definitions ###
