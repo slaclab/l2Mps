@@ -52,6 +52,8 @@ struct thr_tableData_t
     std::pair< bool, bool  >  maxEn;
     std::pair< bool, float >  min;
     std::pair< bool, float >  max;
+    std::pair< bool, uint32_t > minRaw;
+    std::pair< bool, uint32_t > maxRaw;
 };
 
 // Threshold table data map
@@ -92,14 +94,14 @@ struct thr_chInfoScalval_t
     CpswRegRO<uint8_t> lcls1En;
 };
 
-// Threhold data (information + table data)
+// Threshold data (information + table data)
 struct thr_ch_t
 {
     thr_chInfoData_t info;
     thr_chData_t data;
 };
 
-// Threhold scalval interfaces (information + table data)
+// Threshold scalval interfaces (information + table data)
 struct thr_scalval_t
 {
     thr_chInfoScalval_t info;

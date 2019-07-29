@@ -112,10 +112,12 @@ void IThrChannel::readThrChData(thr_chData_t& data) const
 
         std::pair<bool,uint32_t> tmp ( (it->second).min.get() );
         tableData.min   = std::make_pair( tmp.first, ( static_cast<int32_t>(tmp.second) - scaleOffset ) * scaleSlope );
+	tableData.minRaw = std::make_pair( tmp.first, (static_cast<int32_t>(tmp.second)));
 
 	tmp = (it->second).max.get();
         tableData.max   = std::make_pair( tmp.first, ( static_cast<int32_t>(tmp.second) - scaleOffset ) * scaleSlope );
-
+	tableData.maxRaw = std::make_pair( tmp.first, (static_cast<int32_t>(tmp.second)));
+	
         data.insert( std::make_pair(it->first, tableData) );
     }
 }
