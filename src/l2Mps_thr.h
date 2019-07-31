@@ -48,10 +48,10 @@ typedef std::array<int, 2>                          thr_table_t;
 // Threshold table data
 struct thr_tableData_t
 {
-    std::pair< bool, bool  >    minEn;
-    std::pair< bool, bool  >    maxEn;
-    std::pair< bool, float >    min;
-    std::pair< bool, float >    max;
+    std::pair< bool, bool     > minEn;
+    std::pair< bool, bool     > maxEn;
+    std::pair< bool, float    > min;
+    std::pair< bool, float    > max;
     std::pair< bool, uint32_t > minRaw;
     std::pair< bool, uint32_t > maxRaw;
 };
