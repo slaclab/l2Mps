@@ -1,9 +1,9 @@
-#ifndef LCLS2MPSLN_MPS_H
-#define LCLS2MPSLN_MPS_H
+#ifndef L2MPS_MPS_H
+#define L2MPS_MPS_H
 
 /**
  *-----------------------------------------------------------------------------
- * Title      : Common Platfrom MPS module class.
+ * Title      : Common Platform MPS module class.
  * ----------------------------------------------------------------------------
  * File       : l2Mps_mps.h
  * Author     : Jesus Vasquez, jvasquez@slac.stanford.edu
@@ -38,19 +38,26 @@
 #include <boost/atomic.hpp>
 #include <boost/shared_ptr.hpp>
 #include <boost/make_shared.hpp>
+#include <boost/any.hpp>
 #include <cpsw_api_user.h>
 
 #include "l2Mps_cpsw.h"
+#include "l2Mps_bsi.h"
+#include "l2Mps_bpm.h"
+#include "l2Mps_blen.h"
+#include "l2Mps_bcm.h"
+#include "l2Mps_blm.h"
+
 
 class IMpsNode;
 
 typedef boost::shared_ptr<IMpsNode>     MpsNode;
 
 // Name of the Base MPS module
-const std::string MpsBaseModuleName = "AppMpsRegBase";
+const std::string MpsBaseModuleName("AppMpsRegBase/");
 
 // Name of the SALT MPS module
-const std::string MpsSaltModuleName = "AppMpsSalt";
+const std::string MpsSaltModuleName("AppMpsSalt/");
 
 // Application type
 static std::map<int, std::string> appTypeList = {
@@ -66,6 +73,12 @@ static std::map<int, std::string> appTypeList = {
     {120,   "MPS_24CH"},
     {121,   "MPS_6CH"}
 };
+
+// Number of AMC bays on a carrier
+const uint8_t numberOfBays(2);
+
+// Default MPS Root Path
+const std::string defaultMpsRootPath("mmio/AmcCarrierCore/AppMps/");
 
 // Data
 struct mps_infoData_t
@@ -103,11 +116,11 @@ typedef std::function<void(mps_infoData_t)> p_mpsCBFunc_t;
 class IMpsNode
 {
 public:
-    IMpsNode(Path mpsRoot);
+    IMpsNode(Path root);
     ~IMpsNode();
 
     // Factory method, which returns a smart pointer
-    static MpsNode create(Path mpsRoot);
+    static MpsNode create(Path root);
 
     const void readMpsInfo(mps_infoData_t& info) const;
 
@@ -198,11 +211,32 @@ public:
     // Reset the SALT PLL
     bool resetSaltPll(void) const                                     { return rstPll.exe();           };
 
+    // Get the application object
+    boost::any getBayApp(uint8_t bay)                                 { return amc[bay];               };
+
+    // Get the crate ID
+    std::pair<bool,uint16_t> getCrateId() const                       { return mpsBsi->getCrateId();   };
+
+    // Get the Slot Numbe
+    std::pair<bool,uint8_t> getSlotNumber() const                     { return mpsBsi->getSlotNumber(); };
+
+    // Get a copy of the MPS root path
+    Path getMpsRoot() const                                           { return mpsRoot->clone();        };
+
+    // Load configuration (CPSW's YAML) file
+    const uint64_t loadConfigFile(std::string fileName) const;
+
 private:
     p_mpsCBFunc_t       mpsCB;
     unsigned int        pollCB;
     boost::atomic<bool> run;
     std::thread         scanThread;
+
+    // Root path
+    Path                cpswRoot;
+
+    // MPS root path
+    Path                mpsRoot;
 
     // CPSW interface from AppMpsRegAppCh
     CpswRegRW<uint16_t> appId;
@@ -232,8 +266,18 @@ private:
     CpswCmd             rstCnt;
     CpswCmd             rstPll;
 
+    // Application type name
+    std::string         appTypeName;
+
+    // Application object (one for each bay)
+    boost::any          amc[numberOfBays];
+
+    // BSI interface
+    MpsBsi              mpsBsi;
+
     void                        pollThread();
     std::pair<bool,std::string> getConvertedAppType() const;
+
 };
 
 #endif

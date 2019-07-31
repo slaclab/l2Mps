@@ -1,6 +1,6 @@
 /**
  *-----------------------------------------------------------------------------
- * Title      : Common Platfrom MPS module class.
+ * Title      : Common Platform MPS module class.
  * ----------------------------------------------------------------------------
  * File       : l2Mps_mps.cpp
  * Author     : Jesus Vasquez, jvasquez@slac.stanford.edu
@@ -22,45 +22,70 @@
 
 #include "l2Mps_mps.h"
 
-MpsNode IMpsNode::create(Path mpsRoot)
+MpsNode IMpsNode::create(Path root)
 {
-    if(!mpsRoot)
-        throw std::runtime_error("The roo Path is empty");
+    if(!root)
+        throw std::runtime_error("The root Path is empty");
 
-    return boost::make_shared<IMpsNode>(mpsRoot);
+    return boost::make_shared<IMpsNode>(root);
 }
 
-IMpsNode::IMpsNode(Path mpsRoot)
+IMpsNode::IMpsNode(Path root)
 :
     run              ( false ),
+    // MPS root path
+    cpswRoot         ( root ),
+    mpsRoot          ( root->findByName(defaultMpsRootPath.c_str())    ),
     // MPS Base interfaces
-    appId            ( mpsRoot, MpsBaseModuleName + "/mpsAppId"         ),
-    version          ( mpsRoot, MpsBaseModuleName + "/mpsVersion"       ),
-    enable           ( mpsRoot, MpsBaseModuleName + "/mpsEnable"        ),
-    lcls1Mode        ( mpsRoot, MpsBaseModuleName + "/lcls1Mode"        ),
-    byteCount        ( mpsRoot, MpsBaseModuleName + "/byteCount"        ),
-    digitalEn        ( mpsRoot, MpsBaseModuleName + "/digitalEn"        ),
-    beamDestMask     ( mpsRoot, MpsBaseModuleName + "/beamDestMask"     ),
-    altDestMask      ( mpsRoot, MpsBaseModuleName + "/altDestMask"      ),
-    msgCnt           ( mpsRoot, MpsBaseModuleName + "/mpsMsgCount"      ),
-    lastMsgAppId     ( mpsRoot, MpsBaseModuleName + "/lastMsgAppId"     ),
-    lastMsgLcls      ( mpsRoot, MpsBaseModuleName + "/lastMsgLcls"      ),
-    lastMsgTimestamp ( mpsRoot, MpsBaseModuleName + "/lastMsgTimeStamp" ),
-    lastMsgByte      ( mpsRoot, MpsBaseModuleName + "/lastMsgByte"      ),
+    appId            ( mpsRoot, MpsBaseModuleName + "mpsAppId"         ),
+    version          ( mpsRoot, MpsBaseModuleName + "mpsVersion"       ),
+    enable           ( mpsRoot, MpsBaseModuleName + "mpsEnable"        ),
+    lcls1Mode        ( mpsRoot, MpsBaseModuleName + "lcls1Mode"        ),
+    byteCount        ( mpsRoot, MpsBaseModuleName + "byteCount"        ),
+    digitalEn        ( mpsRoot, MpsBaseModuleName + "digitalEn"        ),
+    beamDestMask     ( mpsRoot, MpsBaseModuleName + "beamDestMask"     ),
+    altDestMask      ( mpsRoot, MpsBaseModuleName + "altDestMask"      ),
+    msgCnt           ( mpsRoot, MpsBaseModuleName + "mpsMsgCount"      ),
+    lastMsgAppId     ( mpsRoot, MpsBaseModuleName + "lastMsgAppId"     ),
+    lastMsgLcls      ( mpsRoot, MpsBaseModuleName + "lastMsgLcls"      ),
+    lastMsgTimestamp ( mpsRoot, MpsBaseModuleName + "lastMsgTimeStamp" ),
+    lastMsgByte      ( mpsRoot, MpsBaseModuleName + "lastMsgByte"      ),
     // MPS SALT interfaces
-    txLinkUp         ( mpsRoot, MpsSaltModuleName + "/MpsTxLinkUP"      ),
-    txLinkUpCnt      ( mpsRoot, MpsSaltModuleName + "/MpsTxLinkUpCnt"   ),
-    rxLinkUp         ( mpsRoot, MpsSaltModuleName + "/MpsRxLinkUP"      ),
-    rxLinkUpCnt      ( mpsRoot, MpsSaltModuleName + "/MpsRxLinkUpCnt"   ),
-    mpsSlot          ( mpsRoot, MpsSaltModuleName + "/MPS_SLOT_G"       ),
-    appType          ( mpsRoot, MpsSaltModuleName + "/APP_TYPE_G"       ),
-    pllLocked        ( mpsRoot, MpsSaltModuleName + "/MpsPllLocked"     ),
-    rollOverEn       ( mpsRoot, MpsSaltModuleName + "/RollOverEn"       ),
-    txPktSentCnt     ( mpsRoot, MpsSaltModuleName + "/MpsTxPktSentCnt"  ),
-    rxPktRcvdCnt     ( mpsRoot, MpsSaltModuleName + "/MpsRxPktRcvdCnt"  ),
-    rstCnt           ( mpsRoot, MpsSaltModuleName + "/RstCnt"           ),
-    rstPll           ( mpsRoot, MpsSaltModuleName + "/RstPll"           )
+    txLinkUp         ( mpsRoot, MpsSaltModuleName + "MpsTxLinkUP"      ),
+    txLinkUpCnt      ( mpsRoot, MpsSaltModuleName + "MpsTxLinkUpCnt"   ),
+    rxLinkUp         ( mpsRoot, MpsSaltModuleName + "MpsRxLinkUP"      ),
+    rxLinkUpCnt      ( mpsRoot, MpsSaltModuleName + "MpsRxLinkUpCnt"   ),
+    mpsSlot          ( mpsRoot, MpsSaltModuleName + "MPS_SLOT_G"       ),
+    appType          ( mpsRoot, MpsSaltModuleName + "APP_TYPE_G"       ),
+    pllLocked        ( mpsRoot, MpsSaltModuleName + "MpsPllLocked"     ),
+    rollOverEn       ( mpsRoot, MpsSaltModuleName + "RollOverEn"       ),
+    txPktSentCnt     ( mpsRoot, MpsSaltModuleName + "MpsTxPktSentCnt"  ),
+    rxPktRcvdCnt     ( mpsRoot, MpsSaltModuleName + "MpsRxPktRcvdCnt"  ),
+    rstCnt           ( mpsRoot, MpsSaltModuleName + "RstCnt"           ),
+    rstPll           ( mpsRoot, MpsSaltModuleName + "RstPll"           ),
+    mpsBsi           ( IMpsBsi::create(root)                           )
 {
+
+    // Get the application type
+    bool appTypeValid;
+    std::tie(appTypeValid, appTypeName) = getConvertedAppType();
+
+    // Check if the application type is supported
+    if (!appTypeValid)
+        throw std::runtime_error("Unsupported application type");
+
+    // Create the application specific objects
+    for(std::size_t i {0}; i < numberOfBays; ++i)
+    {
+        if (!appTypeName.compare("BPM"))
+            amc[i] = IMpsBpm::create(mpsRoot, i);
+        else if (!appTypeName.compare("BLEN"))
+            amc[i] = IMpsBlen::create(mpsRoot, i);
+        else if (!appTypeName.compare("BCM"))
+            amc[i] = IMpsBcm::create(mpsRoot, i);
+        else if ((!appTypeName.compare("BLM")) | (!appTypeName.compare("MPS_6CH")) | (!appTypeName.compare("MPS_24CH")))
+            amc[i] = IMpsBlm::create(mpsRoot, i);
+    }
 }
 
 IMpsNode::~IMpsNode()
@@ -142,7 +167,7 @@ const void IMpsNode::startPollThread(unsigned int poll, p_mpsCBFunc_t cbFunc)
 
 void IMpsNode::pollThread()
 {
-    std::cout << "    MPS node scan thread created succesfully." << std::endl;
+    std::cout << "    MPS node scan thread created successfully." << std::endl;
 
     for(;;)
     {
@@ -191,4 +216,12 @@ std::pair<bool,bool> IMpsNode::getRxLinkUp(const uint8_t ch) const
     }
 
     return std::make_pair( valid, val );
+}
+
+// Load configuration (CPSW's YAML) file
+const uint64_t IMpsNode::loadConfigFile(std::string fileName) const
+{
+    std::cout << "Loading MPS application configuration file " << fileName << "..." << std::endl;
+    uint64_t nEntriesLoaded = cpswRoot->loadConfigFromYamlFile(fileName.c_str());
+    std::cout << "Done!. " << unsigned(nEntriesLoaded) << " entries were loaded." << std::endl;
 }

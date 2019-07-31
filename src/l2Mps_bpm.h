@@ -25,7 +25,7 @@
 #include "l2Mps_base.h"
 
 // Number of Threshold channels for BPM is 4: X, Y, C, R
-const uint8_t numBpmChs = 4;
+const uint8_t numBpmChs(4);
 
 // Channel to byte map:
 //   - Fisrt index is the AMC number (0 or 1)
