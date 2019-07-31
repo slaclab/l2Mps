@@ -143,7 +143,7 @@ public:
     std::pair< bool, uint8_t > getByteMap()             const { return thrScalvals.info.byteMap.get();  };
 
 
-    // Read threshold register
+    // Read threshold values (applying scale conversion)
     std::pair< bool, float > getThresholdMin(thr_table_t ch);
     std::pair< bool, float > getThresholdMax(thr_table_t ch);
 
@@ -151,7 +151,7 @@ public:
     std::pair< bool, bool > getThresholdMinEn(thr_table_t ch);
     std::pair< bool, bool > getThresholdMaxEn(thr_table_t ch);
 
-    // Write threshold registers
+    // Write threshold registers (applying scale conversion)
     bool setThresholdMin(thr_table_t ch, const float val);
     bool setThresholdMax(thr_table_t ch, const float val);
 
