@@ -48,10 +48,12 @@ typedef std::array<int, 2>                          thr_table_t;
 // Threshold table data
 struct thr_tableData_t
 {
-    std::pair< bool, bool  >  minEn;
-    std::pair< bool, bool  >  maxEn;
-    std::pair< bool, float >  min;
-    std::pair< bool, float >  max;
+    std::pair< bool, bool     > minEn;
+    std::pair< bool, bool     > maxEn;
+    std::pair< bool, float    > min;
+    std::pair< bool, float    > max;
+    std::pair< bool, uint32_t > minRaw;
+    std::pair< bool, uint32_t > maxRaw;
 };
 
 // Threshold table data map
@@ -60,10 +62,10 @@ typedef std::map<thr_table_t, thr_tableData_t>      thr_chData_t;
 // Threhold table scalval interfaces
 struct thr_tableScalval_t
 {
-    CpswRegRW<uint8_t>  minEn;
-    CpswRegRW<uint8_t>  maxEn;
-    CpswRegRW<uint32_t> min;
-    CpswRegRW<uint32_t> max;
+    CpswRegRW< uint8_t  > minEn;
+    CpswRegRW< uint8_t  > maxEn;
+    CpswRegRW< uint32_t > min;
+    CpswRegRW< uint32_t > max;
 };
 
 // Threshold table scalval interfaces map
@@ -85,21 +87,21 @@ struct thr_chInfoData_t
 // Threshold channel information scalval interfaces
 struct thr_chInfoScalval_t
 {
-    CpswRegRO<uint8_t> count;
-    CpswRegRO<uint8_t> byteMap;
-    CpswRegRW<uint8_t> idleEn;
-    CpswRegRO<uint8_t> altEn;
-    CpswRegRO<uint8_t> lcls1En;
+    CpswRegRO< uint8_t > count;
+    CpswRegRO< uint8_t > byteMap;
+    CpswRegRW< uint8_t > idleEn;
+    CpswRegRO< uint8_t > altEn;
+    CpswRegRO< uint8_t > lcls1En;
 };
 
-// Threhold data (information + table data)
+// Threshold data (information + table data)
 struct thr_ch_t
 {
     thr_chInfoData_t info;
-    thr_chData_t data;
+    thr_chData_t     data;
 };
 
-// Threhold scalval interfaces (information + table data)
+// Threshold scalval interfaces (information + table data)
 struct thr_scalval_t
 {
     thr_chInfoScalval_t info;
@@ -141,7 +143,7 @@ public:
     std::pair< bool, uint8_t > getByteMap()             const { return thrScalvals.info.byteMap.get();  };
 
 
-    // Read threshold register
+    // Read threshold values (applying scale conversion)
     std::pair< bool, float > getThresholdMin(thr_table_t ch);
     std::pair< bool, float > getThresholdMax(thr_table_t ch);
 
@@ -149,7 +151,7 @@ public:
     std::pair< bool, bool > getThresholdMinEn(thr_table_t ch);
     std::pair< bool, bool > getThresholdMaxEn(thr_table_t ch);
 
-    // Write threshold registers
+    // Write threshold values (applying scale conversion)
     bool setThresholdMin(thr_table_t ch, const float val);
     bool setThresholdMax(thr_table_t ch, const float val);
 
@@ -176,7 +178,7 @@ private:
     float           scaleOffset;    // Scale offset (raw)
 
     // Helper functions
-    thr_tableScalval_t createTableScalVal(const std::string& prefix) const;
+    thr_tableScalval_t  createTableScalVal(const std::string& prefix) const;
     thr_tableScalval_t* findDataTableScalval(const thr_table_t& ch);
 };
 

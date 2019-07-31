@@ -107,14 +107,14 @@ void IThrChannel::readThrChData(thr_chData_t& data) const
     {
         thr_tableData_t tableData;
 
-        tableData.minEn = (it->second).minEn.get();
-        tableData.maxEn = (it->second).maxEn.get();
+        tableData.minEn  = (it->second).minEn.get();
+        tableData.maxEn  = (it->second).maxEn.get();
 
-        std::pair<bool,uint32_t> tmp ( (it->second).min.get() );
-        tableData.min   = std::make_pair( tmp.first, ( static_cast<int32_t>(tmp.second) - scaleOffset ) * scaleSlope );
+        tableData.minRaw = (it->second).min.get();
+        tableData.min    = std::make_pair( tableData.minRaw.first, ( static_cast<int32_t>(tableData.minRaw.second) - scaleOffset ) * scaleSlope );
 
-	tmp = (it->second).max.get();
-        tableData.max   = std::make_pair( tmp.first, ( static_cast<int32_t>(tmp.second) - scaleOffset ) * scaleSlope );
+        tableData.maxRaw = (it->second).max.get();
+        tableData.max    = std::make_pair( tableData.maxRaw .first, ( static_cast<int32_t>(tableData.maxRaw .second) - scaleOffset ) * scaleSlope );
 
         data.insert( std::make_pair(it->first, tableData) );
     }
@@ -126,7 +126,7 @@ void IThrChannel::readAll(thr_ch_t& data) const
     readThrChData(data.data);
 }
 
-// Read threshold registers
+// Read threshold values (applying scale conversion)
 std::pair<bool, float> IThrChannel::getThresholdMin(thr_table_t ch)
 {
     std::pair<bool, uint32_t> tmp = findDataTableScalval(ch)->min.get();
@@ -150,7 +150,7 @@ std::pair<bool,bool> IThrChannel::getThresholdMaxEn(thr_table_t ch)
     return findDataTableScalval(ch)->maxEn.get();
 }
 
-// Write threshold registers
+// Write threshold values (applying scale conversion)
 bool IThrChannel::setThresholdMin(thr_table_t ch, const float val)
 {
     uint32_t scaledVal = static_cast<uint32_t>( val/scaleSlope + scaleOffset );
