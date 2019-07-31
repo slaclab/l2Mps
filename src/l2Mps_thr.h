@@ -62,10 +62,10 @@ typedef std::map<thr_table_t, thr_tableData_t>      thr_chData_t;
 // Threhold table scalval interfaces
 struct thr_tableScalval_t
 {
-    CpswRegRW<uint8_t>  minEn;
-    CpswRegRW<uint8_t>  maxEn;
-    CpswRegRW<uint32_t> min;
-    CpswRegRW<uint32_t> max;
+    CpswRegRW< uint8_t  > minEn;
+    CpswRegRW< uint8_t  > maxEn;
+    CpswRegRW< uint32_t > min;
+    CpswRegRW< uint32_t > max;
 };
 
 // Threshold table scalval interfaces map
@@ -87,18 +87,18 @@ struct thr_chInfoData_t
 // Threshold channel information scalval interfaces
 struct thr_chInfoScalval_t
 {
-    CpswRegRO<uint8_t> count;
-    CpswRegRO<uint8_t> byteMap;
-    CpswRegRW<uint8_t> idleEn;
-    CpswRegRO<uint8_t> altEn;
-    CpswRegRO<uint8_t> lcls1En;
+    CpswRegRO< uint8_t > count;
+    CpswRegRO< uint8_t > byteMap;
+    CpswRegRW< uint8_t > idleEn;
+    CpswRegRO< uint8_t > altEn;
+    CpswRegRO< uint8_t > lcls1En;
 };
 
 // Threshold data (information + table data)
 struct thr_ch_t
 {
     thr_chInfoData_t info;
-    thr_chData_t data;
+    thr_chData_t     data;
 };
 
 // Threshold scalval interfaces (information + table data)
