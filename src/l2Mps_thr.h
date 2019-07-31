@@ -178,7 +178,7 @@ private:
     float           scaleOffset;    // Scale offset (raw)
 
     // Helper functions
-    thr_tableScalval_t createTableScalVal(const std::string& prefix) const;
+    thr_tableScalval_t  createTableScalVal(const std::string& prefix) const;
     thr_tableScalval_t* findDataTableScalval(const thr_table_t& ch);
 };
 
