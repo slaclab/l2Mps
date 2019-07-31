@@ -26,12 +26,13 @@
 
 
 //Number of Threshold channels for BLEN is 1 pre bay
-const uint8_t numBlenChs = 1;
+const uint8_t numBlenChs(1);
 
 // Channel to byte map
 //   - The index is the AMC nuber (0 or 1)
 //   - The second index is the channel (0=BLEN)
-const uint8_t blenChByteMap[2][numBlenChs] = {0, 1};
+
+const uint8_t blenChByteMap[2][numBlenChs] = {{0}, {1}};
 
 class IMpsBlen;
 typedef boost::shared_ptr<IMpsBlen> MpsBlen;

@@ -83,26 +83,12 @@ int main(int argc, char **argv)
         exit(1);
     }
 
-    const char *mpsRootName = "mmio/AmcCarrierCore/AppMps";
-
     IYamlSetIP setIP(ipAddr);
     Path root = IPath::loadYamlFile( yamlDoc.c_str(), "NetIODev", NULL, &setIP );
 
-    Path mpsRoot;
     try
     {
-        mpsRoot = root->findByName(mpsRootName);
-    }
-    catch (CPSWError &e)
-    {
-        printf("CPSW error: %s not found!\n", e.getInfo().c_str());
-        return 1;
-    }
-
-
-    try
-    {
-        MpsNode aMpsNode(IMpsNode::create(mpsRoot));
+        MpsNode aMpsNode(IMpsNode::create(root));
 
         std::cout << std::endl;
         std::cout << "MPS application information:"<< std::endl;
@@ -124,6 +110,7 @@ int main(int argc, char **argv)
             std::cout << std::setw(2) << unsigned(ch) << std::string(8, ' ');
             try
             {
+                Path mpsRoot = aMpsNode->getMpsRoot();
                 ThrChannel aThr(IThrChannel::create(mpsRoot, ch));
 
                 printCell(aThr->getByteMap());

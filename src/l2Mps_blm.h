@@ -25,9 +25,9 @@
 #include "l2Mps_base.h"
 
 // Number of Channel for BLM is 3 (per AMC)
-const uint8_t numBlmChs = 3;
+const uint8_t numBlmChs(3);
 // Number of Integration channel for BLM is 4 (per each channel)
-const uint8_t numBlmIntChs = 4;
+const uint8_t numBlmIntChs(4);
 
 // Channel to byte map:
 //    - Fisrt index is the AMC number (0 or 1)
