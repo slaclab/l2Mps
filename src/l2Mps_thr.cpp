@@ -150,7 +150,7 @@ std::pair<bool,bool> IThrChannel::getThresholdMaxEn(thr_table_t ch)
     return findDataTableScalval(ch)->maxEn.get();
 }
 
-// Write threshold registers (applying scale conversion)
+// Write threshold values (applying scale conversion)
 bool IThrChannel::setThresholdMin(thr_table_t ch, const float val)
 {
     uint32_t scaledVal = static_cast<uint32_t>( val/scaleSlope + scaleOffset );
