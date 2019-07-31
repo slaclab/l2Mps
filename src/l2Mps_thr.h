@@ -151,7 +151,7 @@ public:
     std::pair< bool, bool > getThresholdMinEn(thr_table_t ch);
     std::pair< bool, bool > getThresholdMaxEn(thr_table_t ch);
 
-    // Write threshold registers (applying scale conversion)
+    // Write threshold values (applying scale conversion)
     bool setThresholdMin(thr_table_t ch, const float val);
     bool setThresholdMax(thr_table_t ch, const float val);
 
