@@ -93,8 +93,8 @@ public:
             std::cout << "Error creating poll thread: poll time must be greater than 0" << std::endl;
             return;
         }
-        poll   = poll;
-        appCB  = callBack;
+        appPoll = poll;
+        appCB   = callBack;
 
         std::cout << "    Starting MPS app scan thread..." << std::endl;
         run = true;
@@ -121,7 +121,7 @@ public:
 protected:
     std::map<T, ThrChannel>  appThrMap;
     uint8_t                  amc;
-    unsigned int             poll;
+    unsigned int             appPoll;
     p_appCBFunc_t            appCB;
     std::thread              scanThread;
     boost::atomic<bool>      run;
@@ -152,7 +152,7 @@ protected:
             appCB(amc, dataMap);
             dataMap.clear();
 
-            std::this_thread::sleep_for( std::chrono::seconds( poll ) );
+            std::this_thread::sleep_for( std::chrono::seconds( appPoll ) );
         }
     };
 };
