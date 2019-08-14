@@ -3,6 +3,10 @@
 Release notes for the SLAC LCLS2 HPS MPS Driver.
 
 ## Releases:
+* __R2.1.2__: 2019-08-13 J.Vasquez
+  * Bug fix: argument name was shadowing the protected member name. This was causing the polling thread
+    to consume a lot of CPU.
+
 * __R2.1.1__: 2019-07-12 J. Vasquez
   * Update CPSW framework to version R4.1.2.
 
