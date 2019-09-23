@@ -3,6 +3,9 @@
 Release notes for the SLAC LCLS2 HPS MPS Driver.
 
 ## Releases:
+* __R3.1.0__: 2019-09-23 J. Vasquez
+  * Update CPSW framework to version R4.2.0.
+
 * __R3.0.0__: 2019-07-31 J. Vasquez
   * Scale factor is now formed by a slope and a offset value. setScaleFactor/getScaleFactor
     function were change for setScaleSlope/getScaleSlope and setScaleOffset/getScaleOffset.
