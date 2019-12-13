@@ -93,8 +93,8 @@ public:
             std::cout << "Error creating poll thread: poll time must be greater than 0" << std::endl;
             return;
         }
-        appPoll   = poll;
-        appCB  = callBack;
+        appPoll = poll;
+        appCB   = callBack;
 
         std::cout << "    Starting MPS app scan thread..." << std::endl;
         run = true;

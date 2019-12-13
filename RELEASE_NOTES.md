@@ -16,6 +16,16 @@ Release notes for the SLAC LCLS2 HPS MPS Driver.
   * Add method to load a YAML configuration file.
   * Add raw value (value of the firmware register) to the threshold data.
 
+* __R2.3.0__: 2019-10-29 J. Vasquez
+  * Update CPSW framework to version R4.3.1.
+
+* __R2.2.0__: 2019-09-23 J. Vasquez
+  * Update CPSW framework to version R4.2.0.
+
+* __R2.1.2__: 2019-08-13 J.Vasquez
+  * Bug fix: argument name was shadowing the protected member name. This was causing the polling thread
+    to consume a lot of CPU.
+
 * __R2.1.1__: 2019-07-12 J. Vasquez
   * Update CPSW framework to version R4.1.2.
 
