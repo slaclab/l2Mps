@@ -9,12 +9,12 @@ LIB_NAME = l2Mps
 # Host version
 HARCH      = rhel6
 # Buildroot versions
-BR_ARCHES += buildroot-2016.11.1
+BR_ARCHES += buildroot-2019.08
 
 ########################
 ### Package versions ###
 ########################
-CPSW_VERSION     = R4.3.1
+CPSW_VERSION     = R4.4.1
 BOOST_VERSION    = 1.64.0
 YAML_CPP_VERSION = yaml-cpp-0.5.3_boost-1.64.0
 
