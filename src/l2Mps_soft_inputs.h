@@ -26,7 +26,7 @@
 
 class IMpsSoftInputs;
 
-typdef boost::shared_ptr<IMpsSoftInputs> MpsSoftInputs;
+typedef boost::shared_ptr<IMpsSoftInputs> MpsSoftInputs;
 
 // Name of the Digital Message module
 const std::string MpsDigitalMessageModuleName("AppTop/AppCore/MpsLinkNodeCore/MpsDigitalMessage/");
@@ -37,7 +37,7 @@ public:
     IMpsSoftInputs(Path root);
 
     // Factory method, which returns a smart pointer
-    static MpsDigitalMessage create(Path root);
+    static MpsSoftInputs create(Path root);
 
     // Input values
     std::pair<bool, bool> getInput(std::size_t index)               const;

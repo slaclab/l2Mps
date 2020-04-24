@@ -21,7 +21,7 @@
 
 #include "l2Mps_soft_inputs.h"
 
-MpsDigitalMessage IMpsSoftInputs::create(Path root)
+MpsSoftInputs IMpsSoftInputs::create(Path root)
 {
     if(!root)
         throw std::runtime_error("The root Path is empty");
