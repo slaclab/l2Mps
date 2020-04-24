@@ -55,6 +55,10 @@ private:
     CpswRegRW<uint16_t> swBitValue; // Register to set values
     CpswRegRW<uint16_t> swBitError; // Register with values used during timeouts
     std::size_t         numInputs;  // Number of software bits
+
+    // Helper methods
+    std::pair<bool, bool> getBit(const CpswRegRW<uint16_t>& reg, std::size_t index)           const;
+    bool                  setBit(const CpswRegRW<uint16_t>& reg, bool val, std::size_t index) const;
 };
 
 #endif

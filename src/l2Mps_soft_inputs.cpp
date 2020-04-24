@@ -42,25 +42,62 @@ IMpsSoftInputs::IMpsSoftInputs(Path root)
 
 std::pair<bool, bool> IMpsSoftInputs::getInput(std::size_t index) const
 {
-    if ( index > numInputs )
-        throw std::runtime_error("Trying to access a software input out of bounds");
-
+    return getBit(swBitValue, index);
 }
 
 bool IMpsSoftInputs::setInput(bool val, std::size_t index) const
 {
-    if ( index > numInputs )
-        throw std::runtime_error("Trying to access a software input out of bounds");
+    return setBit(swBitValue, val, index);
 }
 
 std::pair<bool, bool> IMpsSoftInputs::getErrorInput(std::size_t index) const
 {
-    if ( index > numInputs )
-        throw std::runtime_error("Trying to access a software input out of bounds");
+    return getBit(swBitError, index);
 }
 
 bool IMpsSoftInputs::setErrorInput(bool val, std::size_t index) const
 {
+    return setBit(swBitError, val, index);
+}
+
+std::pair<bool, bool> IMpsSoftInputs::getBit(const CpswRegRW<uint16_t>& reg, std::size_t index) const
+{
     if ( index > numInputs )
         throw std::runtime_error("Trying to access a software input out of bounds");
+
+    // Read the whole register
+    std::pair<bool, uint16_t> v { reg->get () };
+
+    // Check if we got a valid reading
+    if ( ! v.first )
+        return std::make_pair(false, 0);
+
+    // Extract the bit corresponding to the input number
+    bool b { ( v.second >> index ) & 1u };
+
+    // Return the pair
+    return std::make_pair(true, b);
+}
+
+bool IMpsSoftInputs::setBit(const CpswRegRW<uint16_t>& reg, bool val, std::size_t index) const
+{
+    if ( index > numInputs )
+        throw std::runtime_error("Trying to access a software input out of bounds");
+
+    // Read the whole register
+    std::pair<bool, uint16_t> v { reg->get () };
+
+    // Check if we got a valid reading
+    if ( ! v.first )
+        return false;
+
+    // Set the bit corresponding to the input number in the read word
+    uint16_t w { v.second };
+    if (val)
+        w |= 1u << index;
+    else
+        w &=  ~(1u << index);
+
+    // Write the updated word
+    return reg->set(w);
 }
