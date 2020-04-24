@@ -24,6 +24,7 @@
 
 #include <string.h>
 #include <stdexcept>
+#include <boost/make_shared.hpp>
 
 #include "l2Mps_cpsw.h"
 
