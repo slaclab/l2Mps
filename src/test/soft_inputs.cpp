@@ -50,11 +50,11 @@ void Tester::setInput(bool val, bool faultVal, std::size_t index) const
 {
     std::cout << "Setting input " << index << " to " << val << std::endl;
     mpsSoftInputs->setInput(val, index);
-    printPair( "Read back value:", mpsSoftInputs->getInput(index) )
+    printPair( "Read back value:", mpsSoftInputs->getInput(index) );
 
     std::cout << "Setting fault input " << index << " to " << faultVal << std::endl;
     mpsSoftInputs->setErrorInput(faultVal, index);
-    printPair( "Read back fault value:", mpsSoftInputs->getErrorInput(index) )
+    printPair( "Read back fault value:", mpsSoftInputs->getErrorInput(index) );
 }
 
 void Tester::testAllInputs() const
@@ -68,11 +68,11 @@ void Tester::testAllInputs() const
         for ( std::size_t val {0}; val < 2; ++val)
         {
             std::size_t fval { ! val };
-            std::cout << "Setting input " << i << " to " << j << ", and fault value to " << fval << std::endl;
+            std::cout << "Setting input " << i << " to " << val << ", and fault value to " << fval << std::endl;
             mpsSoftInputs->setInput(val, i);
             mpsSoftInputs->setErrorInput(fval, i);
-            printPair( "Read back value:", mpsSoftInputs->getInput(i) )
-            printPair( "Read back fault value:", mpsSoftInputs->getErrorInput(i) )
+            printPair( "Read back value:", mpsSoftInputs->getInput(i) );
+            printPair( "Read back fault value:", mpsSoftInputs->getErrorInput(i) );
         }
         std::cout << std::endl;
     }
@@ -95,7 +95,6 @@ void usage(const char* name)
 
 int main(int argc, char **argv)
 {
-    signal(SIGINT, intHandler);
     unsigned char buf[sizeof(struct in6_addr)];
     std::string ipAddr;
     std::string yamlDoc;
@@ -103,6 +102,7 @@ int main(int argc, char **argv)
     int val  {    -1 };
     int fval {    -1 };
     bool all { false };
+    int c;
 
     while((c =  getopt(argc, argv, "a:Y:i:c:v:A")) != -1)
     {
@@ -164,7 +164,7 @@ int main(int argc, char **argv)
 
     if ( ( ! all ) && ( ( ch == -1 ) || ( val == -1 ) || ( fval == -1 )) )
     {
-        std::cout << "Error: must specify channel, value and fault value; or use the '-A' option." << tsd::endl;
+        std::cout << "Error: must specify channel, value and fault value; or use the '-A' option." << std::endl;
         exit(1);
     }
 
@@ -182,7 +182,7 @@ int main(int argc, char **argv)
         }
         else
         {
-            t.setInput(val, fval, index);
+            t.setInput(!!val, !!fval, ch);
         }
     }
 
