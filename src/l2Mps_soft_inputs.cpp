@@ -66,7 +66,7 @@ std::pair<bool, bool> IMpsSoftInputs::getBit(const CpswRegRW<uint16_t>& reg, std
         throw std::runtime_error("Trying to access a software input out of bounds");
 
     // Read the whole register
-    std::pair<bool, uint16_t> v { reg->get () };
+    std::pair<bool, uint16_t> v { reg.get () };
 
     // Check if we got a valid reading
     if ( ! v.first )
@@ -85,7 +85,7 @@ bool IMpsSoftInputs::setBit(const CpswRegRW<uint16_t>& reg, bool val, std::size_
         throw std::runtime_error("Trying to access a software input out of bounds");
 
     // Read the whole register
-    std::pair<bool, uint16_t> v { reg->get () };
+    std::pair<bool, uint16_t> v { reg.get () };
 
     // Check if we got a valid reading
     if ( ! v.first )
@@ -99,5 +99,5 @@ bool IMpsSoftInputs::setBit(const CpswRegRW<uint16_t>& reg, bool val, std::size_
         w &=  ~(1u << index);
 
     // Write the updated word
-    return reg->set(w);
+    return reg.set(w);
 }
