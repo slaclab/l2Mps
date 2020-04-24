@@ -22,6 +22,9 @@
  * ----------------------------------------------------------------------------
 **/
 
+#include <string.h>
+#include <stdexcept>
+
 #include "l2Mps_cpsw.h"
 
 class IMpsSoftInputs;
