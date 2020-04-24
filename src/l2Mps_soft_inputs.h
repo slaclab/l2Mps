@@ -44,7 +44,7 @@ public:
     static MpsSoftInputs create(Path root);
 
     // Get number of inputs
-    std::size_t getNumInputs() const; { return numInputs; };
+    std::size_t getNumInputs() const { return numInputs; };
 
     // Input values
     std::pair<bool, bool> getInput(std::size_t index) const;
