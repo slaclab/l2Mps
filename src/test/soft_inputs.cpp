@@ -104,7 +104,7 @@ int main(int argc, char **argv)
     bool all { false };
     int c;
 
-    while((c =  getopt(argc, argv, "a:Y:i:c:v:A")) != -1)
+    while((c =  getopt(argc, argv, "a:Y:c:v:f:A")) != -1)
     {
         switch (c)
         {
