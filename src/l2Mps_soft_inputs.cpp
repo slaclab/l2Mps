@@ -37,30 +37,30 @@ IMpsSoftInputs::IMpsSoftInputs(Path root)
 {
     // Verify that both register has the same number of bits
     if ( numInputs != swBitError.getSizeBits() )
-        throw std::runtime_error("SwBitValue and SwBitError has different sizes")
+        throw std::runtime_error("SwBitValue and SwBitError has different sizes");
 }
 
 std::pair<bool, bool> IMpsSoftInputs::getInput(std::size_t index) const
 {
     if ( index > numInputs )
-        throw std::runtime_error("Trying to access a software input out of bounds")
+        throw std::runtime_error("Trying to access a software input out of bounds");
 
 }
 
 bool IMpsSoftInputs::setInput(bool val, std::size_t index) const
 {
     if ( index > numInputs )
-        throw std::runtime_error("Trying to access a software input out of bounds")
+        throw std::runtime_error("Trying to access a software input out of bounds");
 }
 
 std::pair<bool, bool> IMpsSoftInputs::getErrorInput(std::size_t index) const
 {
     if ( index > numInputs )
-        throw std::runtime_error("Trying to access a software input out of bounds")
+        throw std::runtime_error("Trying to access a software input out of bounds");
 }
 
 bool IMpsSoftInputs::setErrorInput(bool val, std::size_t index) const
 {
     if ( index > numInputs )
-        throw std::runtime_error("Trying to access a software input out of bounds")
+        throw std::runtime_error("Trying to access a software input out of bounds");
 }
