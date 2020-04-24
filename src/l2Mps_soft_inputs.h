@@ -43,13 +43,16 @@ public:
     // Factory method, which returns a smart pointer
     static MpsSoftInputs create(Path root);
 
+    // Get number of inputs
+    std::size_t getNumInputs() const; { return numInputs; };
+
     // Input values
-    std::pair<bool, bool> getInput(std::size_t index)               const;
-    bool                  setInput(bool val, std::size_t index)     const;
+    std::pair<bool, bool> getInput(std::size_t index) const;
+    bool setInput(bool val, std::size_t index) const;
 
     // Input error values
-    std::pair<bool, bool> getErrorInput(std::size_t index)           const;
-    bool                  setErrorInput(bool val, std::size_t index) const;
+    std::pair<bool, bool> getErrorInput(std::size_t index) const;
+    bool setErrorInput(bool val, std::size_t index) const;
 
 private:
     CpswRegRW<uint16_t> swBitValue; // Register to set values
@@ -57,8 +60,8 @@ private:
     std::size_t         numInputs;  // Number of software bits
 
     // Helper methods
-    std::pair<bool, bool> getBit(const CpswRegRW<uint16_t>& reg, std::size_t index)           const;
-    bool                  setBit(const CpswRegRW<uint16_t>& reg, bool val, std::size_t index) const;
+    std::pair<bool, bool> getBit(const CpswRegRW<uint16_t>& reg, std::size_t index) const;
+    bool setBit(const CpswRegRW<uint16_t>& reg, bool val, std::size_t index) const;
 };
 
 #endif
