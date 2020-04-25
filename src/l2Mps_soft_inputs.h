@@ -33,7 +33,7 @@ class IMpsSoftInputs;
 typedef boost::shared_ptr<IMpsSoftInputs> MpsSoftInputs;
 
 // Name of the Digital Message module
-const std::string MpsDigitalMessageModuleName("AppTop/AppCore/MpsLinkNodeCore/MpsDigitalMessage/");
+const std::string MpsDigitalMessageModuleName("mmio/AppTop/AppCore/MpsLinkNodeCore/MpsDigitalMessage/");
 
 class IMpsSoftInputs
 {
