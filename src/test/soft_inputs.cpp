@@ -90,14 +90,14 @@ void Tester::testAllInputs() const
 
         for ( std::size_t j {0}; j < 2; ++j)
         {
-            bool val  { !!j };
-            bool fVal {  !j };
+            bool val  { !!j };  // Value
+            bool eVal {  !j };  // Error value
 
 
             std::cout << "Set value                = " << std::boolalpha << val << std::endl;
-            std::cout << "Set error value          = " << std::boolalpha << fVal << std::endl;
+            std::cout << "Set error value          = " << std::boolalpha << eVal << std::endl;
             mpsSoftInputs->setInput(val, i);
-            mpsSoftInputs->setErrorInput(fVal, i);
+            mpsSoftInputs->setErrorInput(eVal, i);
             printPair( "Read back value          ", mpsSoftInputs->getInput(i) );
             printPair( "Read back error value    ", mpsSoftInputs->getErrorInput(i) );
             printPair( "Value word content       ", mpsSoftInputs->getInputWord(), true);
