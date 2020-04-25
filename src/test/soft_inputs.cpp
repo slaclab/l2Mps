@@ -34,7 +34,7 @@ class Tester
 public:
     Tester(Path root);
 
-    void setInput(bool val, bool eVal, std::size_t index) const;
+    void testInput(bool val, bool eVal, std::size_t index) const;
     void testAllInputs() const;
 
 private:
@@ -47,7 +47,7 @@ Tester::Tester(Path root)
 {
 }
 
-void Tester::setInput(bool val, bool eVal, std::size_t index) const
+void Tester::testInput(bool val, bool eVal, std::size_t index) const
 {
     std::cout << "Testing input " << index << ":" << std::endl;
     std::cout << "----------------" << std::endl;
@@ -92,6 +92,7 @@ void Tester::testAllInputs() const
         {
             bool val  { !!j };
             bool fVal {  !j };
+
 
             std::cout << "Set value                = " << std::boolalpha << val << std::endl;
             std::cout << "Set error value          = " << std::boolalpha << fVal << std::endl;
@@ -210,7 +211,7 @@ int main(int argc, char **argv)
         }
         else
         {
-            t.setInput(!!val, !!eVal, ch);
+            t.testInput(!!val, !!eVal, ch);
         }
     }
 
