@@ -54,6 +54,10 @@ public:
     std::pair<bool, bool> getErrorInput(std::size_t index) const;
     bool setErrorInput(bool val, std::size_t index) const;
 
+    // Get the full words
+    std::pair<bool, uint16_t> getInputWord() const      { return swBitValue.get() };
+    std::pair<bool, uint16_t> getErrorInputWord() const { return swBitError.get() };
+
 private:
     CpswRegRW<uint16_t> swBitValue; // Register to set values
     CpswRegRW<uint16_t> swBitError; // Register with values used during timeouts
