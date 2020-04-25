@@ -24,6 +24,7 @@
 #include <iomanip>
 #include <yaml-cpp/yaml.h>
 #include <arpa/inet.h>
+#include <assert.h>
 
 #include "l2Mps_soft_inputs.h"
 #include "helpers.h"
@@ -52,12 +53,26 @@ void Tester::setInput(bool val, bool eVal, std::size_t index) const
     std::cout << "----------------" << std::endl;
     std::cout << "Set value                = " << std::boolalpha << val << std::endl;
     std::cout << "Set error value          = " << std::boolalpha << eVal << std::endl;
-    mpsSoftInputs->setInput(val, index);
-    mpsSoftInputs->setErrorInput(eVal, index);
-    printPair( "Read back value          ", mpsSoftInputs->getInput(index) );
-    printPair( "Read back error value    ", mpsSoftInputs->getErrorInput(index) );
+
+    // Write values
+    assert( true == mpsSoftInputs->setInput(val, index) );
+    assert( true == mpsSoftInputs->setErrorInput(eVal, index) );
+
+    // Read back values
+    std::pair<bool, bool> valRB  { mpsSoftInputs->getInput(index) };
+    assert( true == valRB.first);
+
+    std::pair<bool, bool> eValRB { mpsSoftInputs->getErrorInput(index) };
+    assert( true == eValRB.first);
+
+    printPair( "Read back value          ", valRB );
+    printPair( "Read back error value    ", eValRB );
     printPair( "Value word content       ", mpsSoftInputs->getInputWord(), true);
     printPair( "Error value word content ", mpsSoftInputs->getErrorInputWord(), true);
+
+    // Assert read back values
+    assert( valRB.second  == val);
+    assert( eValRB.second == eVal);
 }
 
 void Tester::testAllInputs() const
