@@ -55,8 +55,8 @@ public:
     bool setErrorInput(bool val, std::size_t index) const;
 
     // Get the full words
-    std::pair<bool, uint16_t> getInputWord() const      { return swBitValue.get() };
-    std::pair<bool, uint16_t> getErrorInputWord() const { return swBitError.get() };
+    std::pair<bool, uint16_t> getInputWord() const      { return swBitValue.get(); };
+    std::pair<bool, uint16_t> getErrorInputWord() const { return swBitError.get(); };
 
 private:
     CpswRegRW<uint16_t> swBitValue; // Register to set values
