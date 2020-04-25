@@ -51,11 +51,10 @@ void Tester::setInput(bool val, bool faultVal, std::size_t index) const
     std::cout << "Testing input " << index << ":" << std::endl;
     std::cout << "----------------" << std::endl;
     std::cout << "Set value             = " << std::boolalpha << val << std::endl;
-    mpsSoftInputs->setInput(val, index);
-    printPair( "Read back value       ", mpsSoftInputs->getInput(index) );
-
     std::cout << "Set fault value       = " << std::boolalpha << faultVal << std::endl;
+    mpsSoftInputs->setInput(val, index);
     mpsSoftInputs->setErrorInput(faultVal, index);
+    printPair( "Read back value       ", mpsSoftInputs->getInput(index) );
     printPair( "Read back fault value ", mpsSoftInputs->getErrorInput(index) );
 }
 
@@ -69,12 +68,14 @@ void Tester::testAllInputs() const
 
     for ( std::size_t i {0}; i < numInputs; ++i )
     {
-        for ( std::size_t val {0}; val < 2; ++val)
-        {
-            std::size_t fVal { ! val };
+        std::cout << "Testing input " << i << ":" << std::endl;
+        std::cout << "----------------" << std::endl;
 
-            std::cout << "Testing input " << i << ":" << std::endl;
-            std::cout << "----------------" << std::endl;
+        for ( std::size_t j {0}; j < 2; ++j)
+        {
+            bool val  { !!j }
+            bool fVal {  !j };
+
             std::cout << "Set value             = " << std::boolalpha << val << std::endl;
             std::cout << "Set fault value       = " << std::boolalpha << fVal << std::endl;
             mpsSoftInputs->setInput(val, i);
