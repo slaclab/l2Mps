@@ -33,7 +33,7 @@ class Tester
 public:
     Tester(Path root);
 
-    void setInput(bool val, bool faultVal, std::size_t index) const;
+    void setInput(bool val, bool eVal, std::size_t index) const;
     void testAllInputs() const;
 
 private:
@@ -46,16 +46,18 @@ Tester::Tester(Path root)
 {
 }
 
-void Tester::setInput(bool val, bool faultVal, std::size_t index) const
+void Tester::setInput(bool val, bool eVal, std::size_t index) const
 {
     std::cout << "Testing input " << index << ":" << std::endl;
     std::cout << "----------------" << std::endl;
-    std::cout << "Set value             = " << std::boolalpha << val << std::endl;
-    std::cout << "Set fault value       = " << std::boolalpha << faultVal << std::endl;
+    std::cout << "Set value                = " << std::boolalpha << val << std::endl;
+    std::cout << "Set error value          = " << std::boolalpha << eVal << std::endl;
     mpsSoftInputs->setInput(val, index);
-    mpsSoftInputs->setErrorInput(faultVal, index);
-    printPair( "Read back value       ", mpsSoftInputs->getInput(index) );
-    printPair( "Read back fault value ", mpsSoftInputs->getErrorInput(index) );
+    mpsSoftInputs->setErrorInput(eVal, index);
+    printPair( "Read back value          ", mpsSoftInputs->getInput(index) );
+    printPair( "Read back error value    ", mpsSoftInputs->getErrorInput(index) );
+    printPair( "Value word content       ", mpsSoftInputs->getInputWord(), true);
+    printPair( "Error value word content ", mpsSoftInputs->getErrorInputWord(), true);
 }
 
 void Tester::testAllInputs() const
@@ -73,15 +75,17 @@ void Tester::testAllInputs() const
 
         for ( std::size_t j {0}; j < 2; ++j)
         {
-            bool val  { !!j }
+            bool val  { !!j };
             bool fVal {  !j };
 
-            std::cout << "Set value             = " << std::boolalpha << val << std::endl;
-            std::cout << "Set fault value       = " << std::boolalpha << fVal << std::endl;
+            std::cout << "Set value                = " << std::boolalpha << val << std::endl;
+            std::cout << "Set error value          = " << std::boolalpha << fVal << std::endl;
             mpsSoftInputs->setInput(val, i);
             mpsSoftInputs->setErrorInput(fVal, i);
-            printPair( "Read back value       ", mpsSoftInputs->getInput(i) );
-            printPair( "Read back fault value ", mpsSoftInputs->getErrorInput(i) );
+            printPair( "Read back value          ", mpsSoftInputs->getInput(i) );
+            printPair( "Read back error value    ", mpsSoftInputs->getErrorInput(i) );
+            printPair( "Value word content       ", mpsSoftInputs->getInputWord(), true);
+            printPair( "Error value word content ", mpsSoftInputs->getErrorInputWord(), true);
             std::cout << std::endl;
         }
     }
@@ -97,8 +101,8 @@ void usage(const char* name)
     std::cout << "    -Y <Yaml_top>    : Path to YAML top level file." << std::endl;
     std::cout << "    -c <channel>     : Input channel to set (Needs -v and-f. Ignored if -A is used)." << std::endl;
     std::cout << "    -v <value>       : Input value to set (Needs -c. Ignored if -A is used)." << std::endl;
-    std::cout << "    -f <fault_value> : Input fault value to set (Needs -c. Ignored is -A is used)." << std::endl;
-    std::cout << "    -A               : Set and readback all software inputs sequentially." << std::endl;
+    std::cout << "    -e <error_value> : Error value to set (Needs -c. Ignored is -A is used)." << std::endl;
+    std::cout << "    -A               : Set and read back all software inputs sequentially." << std::endl;
     std::cout << std::endl;
 }
 
@@ -109,11 +113,11 @@ int main(int argc, char **argv)
     std::string yamlDoc;
     int ch   {    -1 };
     int val  {    -1 };
-    int fval {    -1 };
+    int eVal {    -1 };
     bool all { false };
     int c;
 
-    while((c =  getopt(argc, argv, "a:Y:c:v:f:A")) != -1)
+    while((c =  getopt(argc, argv, "a:Y:c:v:e:A")) != -1)
     {
         switch (c)
         {
@@ -142,10 +146,10 @@ int main(int argc, char **argv)
                     exit(1);
                 }
                 break;
-            case 'f':
-                if ( ( 1 != sscanf(optarg, "%d", &fval) ) || ( (fval != 0) && (fval != 1) ) )
+            case 'e':
+                if ( ( 1 != sscanf(optarg, "%d", &eVal) ) || ( (eVal != 0) && (eVal != 1) ) )
                 {
-                    std::cout << "Error: Invalid fault value." << std::endl;
+                    std::cout << "Error: Invalid error value." << std::endl;
                     exit(1);
                 }
                 break;
@@ -171,9 +175,9 @@ int main(int argc, char **argv)
         exit(1);
     }
 
-    if ( ( ! all ) && ( ( ch == -1 ) || ( val == -1 ) || ( fval == -1 )) )
+    if ( ( ! all ) && ( ( ch == -1 ) || ( val == -1 ) || ( eVal == -1 )) )
     {
-        std::cout << "Error: must specify channel, value and fault value; or use the '-A' option." << std::endl;
+        std::cout << "Error: must specify channel, value and error value; or use the '-A' option." << std::endl;
         exit(1);
     }
 
@@ -191,7 +195,7 @@ int main(int argc, char **argv)
         }
         else
         {
-            t.setInput(!!val, !!fval, ch);
+            t.setInput(!!val, !!eVal, ch);
         }
     }
 
