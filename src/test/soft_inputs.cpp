@@ -50,7 +50,7 @@ void Tester::setInput(bool val, bool faultVal, std::size_t index) const
 {
     std::cout << "Testing input " << index << ":" << std::endl;
     std::cout << "----------------" << std::endl;
-    std::cout << "Set value             = " << val << std::endl
+    std::cout << "Set value             = " << val << std::endl;
     mpsSoftInputs->setInput(val, index);
     printPair( "Read back value       ", mpsSoftInputs->getInput(index) );
 
@@ -63,7 +63,7 @@ void Tester::testAllInputs() const
 {
     std::cout << "Testing all the inputs:" << std::endl;
     std::cout << "=======================" << std::endl;
-    std::cout << std::endkl;
+    std::cout << std::endl;
 
     std::size_t numInputs { mpsSoftInputs->getNumInputs() };
 
@@ -75,7 +75,7 @@ void Tester::testAllInputs() const
 
             std::cout << "Testing input " << i << ":" << std::endl;
             std::cout << "----------------" << std::endl;
-            std::cout << "Set value             = " << val << std::endl
+            std::cout << "Set value             = " << val << std::endl;
             std::cout << "Set fault value       = " << fVal << std::endl;
             mpsSoftInputs->setInput(val, i);
             mpsSoftInputs->setErrorInput(fVal, i);
