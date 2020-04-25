@@ -48,18 +48,22 @@ Tester::Tester(Path root)
 
 void Tester::setInput(bool val, bool faultVal, std::size_t index) const
 {
-    std::cout << "Setting input " << index << " to " << val << std::endl;
+    std::cout << "Testing input " << index << ":" << std::endl;
+    std::cout << "----------------" << std::endl;
+    std::cout << "Set value             = " << val << std::endl
     mpsSoftInputs->setInput(val, index);
-    printPair( "Read back value:", mpsSoftInputs->getInput(index) );
+    printPair( "Read back value       ", mpsSoftInputs->getInput(index) );
 
-    std::cout << "Setting fault input " << index << " to " << faultVal << std::endl;
+    std::cout << "Set fault value       = " << faultVal << std::endl;
     mpsSoftInputs->setErrorInput(faultVal, index);
-    printPair( "Read back fault value:", mpsSoftInputs->getErrorInput(index) );
+    printPair( "Read back fault value ", mpsSoftInputs->getErrorInput(index) );
 }
 
 void Tester::testAllInputs() const
 {
     std::cout << "Testing all the inputs:" << std::endl;
+    std::cout << "=======================" << std::endl;
+    std::cout << std::endkl;
 
     std::size_t numInputs { mpsSoftInputs->getNumInputs() };
 
@@ -67,14 +71,18 @@ void Tester::testAllInputs() const
     {
         for ( std::size_t val {0}; val < 2; ++val)
         {
-            std::size_t fval { ! val };
-            std::cout << "Setting input " << i << " to " << val << ", and fault value to " << fval << std::endl;
+            std::size_t fVal { ! val };
+
+            std::cout << "Testing input " << i << ":" << std::endl;
+            std::cout << "----------------" << std::endl;
+            std::cout << "Set value             = " << val << std::endl
+            std::cout << "Set fault value       = " << fVal << std::endl;
             mpsSoftInputs->setInput(val, i);
-            mpsSoftInputs->setErrorInput(fval, i);
-            printPair( "Read back value:", mpsSoftInputs->getInput(i) );
-            printPair( "Read back fault value:", mpsSoftInputs->getErrorInput(i) );
+            mpsSoftInputs->setErrorInput(fVal, i);
+            printPair( "Read back value       ", mpsSoftInputs->getInput(i) );
+            printPair( "Read back fault value ", mpsSoftInputs->getErrorInput(i) );
+            std::cout << std::endl;
         }
-        std::cout << std::endl;
     }
 
     std::cout << "Done!" << std::endl;
