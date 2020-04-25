@@ -85,23 +85,13 @@ void Tester::testAllInputs() const
 
     for ( std::size_t i {0}; i < numInputs; ++i )
     {
-        std::cout << "Testing input " << i << ":" << std::endl;
-        std::cout << "----------------" << std::endl;
-
         for ( std::size_t j {0}; j < 2; ++j)
         {
             bool val  { !!j };  // Value
             bool eVal {  !j };  // Error value
 
+            testInput(val, eVal, i);
 
-            std::cout << "Set value                = " << std::boolalpha << val << std::endl;
-            std::cout << "Set error value          = " << std::boolalpha << eVal << std::endl;
-            mpsSoftInputs->setInput(val, i);
-            mpsSoftInputs->setErrorInput(eVal, i);
-            printPair( "Read back value          ", mpsSoftInputs->getInput(i) );
-            printPair( "Read back error value    ", mpsSoftInputs->getErrorInput(i) );
-            printPair( "Value word content       ", mpsSoftInputs->getInputWord(), true);
-            printPair( "Error value word content ", mpsSoftInputs->getErrorInputWord(), true);
             std::cout << std::endl;
         }
     }
