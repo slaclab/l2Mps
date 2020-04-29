@@ -47,7 +47,7 @@
 #include "l2Mps_blen.h"
 #include "l2Mps_bcm.h"
 #include "l2Mps_blm.h"
-
+#include "l2Mps_soft_inputs.h"
 
 class IMpsNode;
 
@@ -220,6 +220,9 @@ public:
     // Get the Slot Numbe
     std::pair<bool,uint8_t> getSlotNumber() const                     { return mpsBsi->getSlotNumber(); };
 
+    // Get the soft input object
+    MpsSoftInputs getMpsSoftInputs() const                            { return mpsSoftInputs;           };
+
     // Get a copy of the MPS root path
     Path getMpsRoot() const                                           { return mpsRoot->clone();        };
 
@@ -274,6 +277,9 @@ private:
 
     // BSI interface
     MpsBsi              mpsBsi;
+
+    // Soft inputs object (used only for LN applications)
+    MpsSoftInputs       mpsSoftInputs;
 
     void                        pollThread();
     std::pair<bool,std::string> getConvertedAppType() const;

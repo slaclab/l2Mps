@@ -84,7 +84,12 @@ IMpsNode::IMpsNode(Path root)
         else if (!appTypeName.compare("BCM"))
             amc[i] = IMpsBcm::create(mpsRoot, i);
         else if ((!appTypeName.compare("BLM")) | (!appTypeName.compare("MPS_6CH")) | (!appTypeName.compare("MPS_24CH")))
+        {
             amc[i] = IMpsBlm::create(mpsRoot, i);
+
+            // For Link Node application types, also create the a SoftInput object
+            mpsSoftInputs = IMpsSoftInputs::create(root);
+        }
     }
 }
 
