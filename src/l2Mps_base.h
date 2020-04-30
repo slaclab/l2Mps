@@ -104,7 +104,7 @@ public:
     };
 
     // Find ThrChannel in the App-ThrChannel map
-    ThrChannel      findThrChannel(const T& appCh) const
+    ThrChannel findThrChannel( const T& appCh ) const
     {
         typename std::map<T, ThrChannel>::const_iterator it;
         it = appThrMap.find(appCh);
