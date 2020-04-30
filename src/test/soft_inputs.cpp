@@ -25,8 +25,9 @@
 #include <yaml-cpp/yaml.h>
 #include <arpa/inet.h>
 #include <assert.h>
+#include <stdexcept>
 
-#include "l2Mps_soft_inputs.h"
+#include "l2Mps_mps.h"
 #include "helpers.h"
 
 class Tester
@@ -38,13 +39,16 @@ public:
     void testAllInputs() const;
 
 private:
-    MpsSoftInputs mpsSoftInputs;
+    MpsNode mpsNode;
 };
 
 Tester::Tester(Path root)
 :
-    mpsSoftInputs(IMpsSoftInputs::create(root))
+    mpsNode(IMpsNode::create(root))
 {
+    if (!mpsNode->getMpsSoftInputs())
+        throw std::runtime_error("This MPS node does not contain a MpsSoftInput object. " \
+                                  "Verify that the FW application is a Link Node");
 }
 
 void Tester::testInput(bool val, bool eVal, std::size_t index) const
@@ -55,20 +59,20 @@ void Tester::testInput(bool val, bool eVal, std::size_t index) const
     std::cout << "Set error value          = " << std::boolalpha << eVal << std::endl;
 
     // Write values
-    assert( true == mpsSoftInputs->setInput(val, index) );
-    assert( true == mpsSoftInputs->setErrorInput(eVal, index) );
+    assert( true == mpsNode->getMpsSoftInputs()->setInput(val, index) );
+    assert( true == mpsNode->getMpsSoftInputs()->setErrorInput(eVal, index) );
 
     // Read back values
-    std::pair<bool, bool> valRB  { mpsSoftInputs->getInput(index) };
+    std::pair<bool, bool> valRB  { mpsNode->getMpsSoftInputs()->getInput(index) };
     assert( true == valRB.first);
 
-    std::pair<bool, bool> eValRB { mpsSoftInputs->getErrorInput(index) };
+    std::pair<bool, bool> eValRB { mpsNode->getMpsSoftInputs()->getErrorInput(index) };
     assert( true == eValRB.first);
 
     printPair( "Read back value          ", valRB );
     printPair( "Read back error value    ", eValRB );
-    printPair( "Value word content       ", mpsSoftInputs->getInputWord(), true);
-    printPair( "Error value word content ", mpsSoftInputs->getErrorInputWord(), true);
+    printPair( "Value word content       ", mpsNode->getMpsSoftInputs()->getInputWord(), true);
+    printPair( "Error value word content ", mpsNode->getMpsSoftInputs()->getErrorInputWord(), true);
 
     // Assert read back values
     assert( valRB.second  == val);
@@ -81,7 +85,7 @@ void Tester::testAllInputs() const
     std::cout << "=======================" << std::endl;
     std::cout << std::endl;
 
-    std::size_t numInputs { mpsSoftInputs->getNumInputs() };
+    std::size_t numInputs { mpsNode->getMpsSoftInputs()->getNumInputs() };
 
     for ( std::size_t i {0}; i < numInputs; ++i )
     {
