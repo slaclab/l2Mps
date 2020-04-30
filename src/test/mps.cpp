@@ -212,22 +212,22 @@ void Tester::printInfo()
         std::cout << std::endl;
         std::cout << "Soft input status: " << std::endl;
         std::cout << "-------------------" << std::endl;
-        printPair( "  Input Values", mpsNode->getInputWord(), true );
-        printPair( "  Error Values", mpsNode->getErrorInputWord(), true );
+        printPair( "  Input Values", mpsNode->getMpsSoftInputs()->getInputWord(), true );
+        printPair( "  Error Values", mpsNode->getMpsSoftInputs()->getErrorInputWord(), true );
 
         std::vector< std::pair< bool, std::vector<bool> > > ps(2);
-        std::string<std::string> ns({"Input", "Error"});
+        std::vector<std::string> ns({"Input", "Error"});
 
-        ps.at(0).fist = true;
-        ps.at(1).fist = true;
+        ps.at(0).first = true;
+        ps.at(1).first = true;
 
-        for (std::size_t i {0}; i < mpsNode->getNumInputs(); ++i)
+        for (std::size_t i {0}; i < mpsNode->getMpsSoftInputs()->getNumInputs(); ++i)
         {
-            std::pair<bool, bool> inputBit { mpsNode->getInput(i) };
+            std::pair<bool, bool> inputBit { mpsNode->getMpsSoftInputs()->getInput(i) };
             ps.at(0).first &= inputBit.first;
             ps.at(0).second.push_back(inputBit.second);
 
-            std::pair<bool, bool> errorBit { mpsNode->getErrorInput(i) };
+            std::pair<bool, bool> errorBit { mpsNode->getMpsSoftInputs()->getErrorInput(i) };
             ps.at(1).first &= errorBit.first;
             ps.at(1).second.push_back(errorBit.second);
         }
