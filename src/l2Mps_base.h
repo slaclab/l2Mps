@@ -53,7 +53,7 @@ public:
         }
     };
 
-    // Threhold channel information
+    // Threshold channel information
     uint8_t                  getChannel  ( const T& ch) const                { return findThrChannel(ch)->getChannel();  };
     std::pair<bool, uint8_t> getIdleEn   ( const T& ch) const                { return findThrChannel(ch)->getIdleEn();   };
     bool                     setIdleEn   ( const T& ch, const bool en) const { return findThrChannel(ch)->setIdleEn(en); };
@@ -86,7 +86,7 @@ public:
     const float              getScaleOffset      ( const T& ch) const                     { return findThrChannel(ch)->getScaleOffset();       };
 
     // Set polling thread with callback function
-    const void      startPollThread     ( unsigned int poll, p_appCBFunc_t callBack)
+    const void startPollThread( unsigned int poll, p_appCBFunc_t callBack )
     {
         if (poll == 0)
         {
@@ -116,7 +116,7 @@ public:
     };
 
     // Print APP channel information
-    virtual void            printChInfo     ( void ) const = 0;
+    virtual void printChInfo( void ) const = 0;
 
 protected:
     std::map<T, ThrChannel>  appThrMap;
@@ -127,9 +127,9 @@ protected:
     boost::atomic<bool>      run;
 
     // Polling functions
-    void        pollThread()
+    void pollThread()
     {
-        std::cout << "    MPS app scan thread created succesfully." << std::endl;
+        std::cout << "    MPS app scan thread created successfully." << std::endl;
 
         for(;;)
         {
