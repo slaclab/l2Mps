@@ -128,7 +128,7 @@ void Tester::mpsInfoReceiver(mps_infoData_t info)
     }
     std::cout << "=============================" << std::endl;
 
-    std::cout << "\033[47A\r";
+    std::cout << "\033[53A\r";
 }
 
 void Tester::printInfo()
