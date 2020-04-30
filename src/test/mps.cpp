@@ -115,6 +115,17 @@ void Tester::mpsInfoReceiver(mps_infoData_t info)
     };
     printArray( n, v, false);
 
+
+    // Print the soft input status, which is only available on Link Node applications
+    if (mpsNode->getMpsSoftInputs())
+    {
+        std::cout << std::endl;
+        std::cout << "Soft input status: " << std::endl;
+        std::cout << "-------------------" std::endl;
+        printPair( "  Input Values", info.softInputs.inputWord, true );
+        printPair( "  Error Values", info.softInputs.errorWord, true );
+        std::cout << "-------------------" std::endl;
+    }
     std::cout << "=============================" << std::endl;
 
     std::cout << "\033[47A\r";
