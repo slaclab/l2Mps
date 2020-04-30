@@ -121,10 +121,10 @@ void Tester::mpsInfoReceiver(mps_infoData_t info)
     {
         std::cout << std::endl;
         std::cout << "Soft input status: " << std::endl;
-        std::cout << "-------------------" std::endl;
+        std::cout << "-------------------" << std::endl;
         printPair( "  Input Values", info.softInputs.inputWord, true );
         printPair( "  Error Values", info.softInputs.errorWord, true );
-        std::cout << "-------------------" std::endl;
+        std::cout << "-------------------" << std::endl;
     }
     std::cout << "=============================" << std::endl;
 
