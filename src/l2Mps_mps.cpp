@@ -150,6 +150,14 @@ const void IMpsNode::readMpsInfo(mps_infoData_t& info) const
         }
     }
     info.rxLinkUp = std::make_pair( valid, vals );
+
+    // Add soft inputs status (only for Link Node applications)
+    if (mpsSoftInputs)
+    {
+        info.softInputs.inputWord = mpsSoftInputs->getInputWord();
+        info.softInputs.errorWord = mpsSoftInputs->getErrorInputWord();
+    }
+
 }
 
 const void IMpsNode::startPollThread(unsigned int poll, p_mpsCBFunc_t cbFunc)

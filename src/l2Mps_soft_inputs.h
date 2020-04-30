@@ -35,6 +35,13 @@ typedef boost::shared_ptr<IMpsSoftInputs> MpsSoftInputs;
 // Name of the Digital Message module
 const std::string MpsDigitalMessageModuleName("mmio/AppTop/AppCore/MpsLinkNodeCore/MpsDigitalMessage/");
 
+// Soft input word status
+struct si_data_t
+{
+    std::pair<bool, uint16_t> inputWord;
+    std::pair<bool, uint16_t> errorWord;
+};
+
 class IMpsSoftInputs
 {
 public:

@@ -109,6 +109,9 @@ struct mps_infoData_t
     std::pair< bool, uint16_t              > rollOverEn;
     std::pair< bool, uint32_t              > txPktSentCnt;
     std::pair< bool, std::vector<uint32_t> > rxPktRcvdCnt;
+
+    // Soft input data (used by Link Node applications)
+    si_data_t                                softInputs;
 };
 
 typedef std::function<void(mps_infoData_t)> p_mpsCBFunc_t;
