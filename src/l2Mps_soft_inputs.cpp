@@ -45,7 +45,7 @@ std::pair<bool, bool> IMpsSoftInputs::getInput(std::size_t index) const
     return getBit(swBitValue, index);
 }
 
-bool IMpsSoftInputs::setInput(bool val, std::size_t index) const
+bool IMpsSoftInputs::setInput(std::size_t index, bool val) const
 {
     return setBit(swBitValue, val, index);
 }
@@ -55,7 +55,7 @@ std::pair<bool, bool> IMpsSoftInputs::getErrorInput(std::size_t index) const
     return getBit(swBitError, index);
 }
 
-bool IMpsSoftInputs::setErrorInput(bool val, std::size_t index) const
+bool IMpsSoftInputs::setErrorInput(std::size_t index, bool val) const
 {
     return setBit(swBitError, val, index);
 }

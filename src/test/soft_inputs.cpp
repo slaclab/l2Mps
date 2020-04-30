@@ -59,8 +59,8 @@ void Tester::testInput(bool val, bool eVal, std::size_t index) const
     std::cout << "Set error value          = " << std::boolalpha << eVal << std::endl;
 
     // Write values
-    assert( true == mpsNode->getMpsSoftInputs()->setInput(val, index) );
-    assert( true == mpsNode->getMpsSoftInputs()->setErrorInput(eVal, index) );
+    assert( true == mpsNode->getMpsSoftInputs()->setInput(index, val) );
+    assert( true == mpsNode->getMpsSoftInputs()->setErrorInput(index, eVal) );
 
     // Read back values
     std::pair<bool, bool> valRB  { mpsNode->getMpsSoftInputs()->getInput(index) };

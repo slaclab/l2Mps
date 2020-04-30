@@ -48,11 +48,11 @@ public:
 
     // Input values
     std::pair<bool, bool> getInput(std::size_t index) const;
-    bool setInput(bool val, std::size_t index) const;
+    bool setInput(std::size_t index, bool val) const;
 
     // Input error values
     std::pair<bool, bool> getErrorInput(std::size_t index) const;
-    bool setErrorInput(bool val, std::size_t index) const;
+    bool setErrorInput(std::size_t index, bool val) const;
 
     // Get the full words
     std::pair<bool, uint16_t> getInputWord() const      { return swBitValue.get(); };
