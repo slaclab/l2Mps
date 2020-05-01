@@ -109,7 +109,7 @@ void usage(const char* name)
     std::cout << "    -h               : show this message." << std::endl;
     std::cout << "    -a <IP_address>  : IP address of the target FPGA." << std::endl;
     std::cout << "    -Y <Yaml_top>    : Path to YAML top level file." << std::endl;
-    std::cout << "    -c <channel>     : Input channel to set (Needs -v and-f. Ignored if -A is used)." << std::endl;
+    std::cout << "    -c <channel>     : Input channel to set (Needs -v and -e. Ignored if -A is used)." << std::endl;
     std::cout << "    -v <value>       : Input value to set (Needs -c. Ignored if -A is used)." << std::endl;
     std::cout << "    -e <error_value> : Error value to set (Needs -c. Ignored is -A is used)." << std::endl;
     std::cout << "    -A               : Set and read back all software inputs sequentially." << std::endl;
