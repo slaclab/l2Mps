@@ -3,6 +3,9 @@
 Release notes for the SLAC LCLS2 HPS MPS Driver.
 
 ## Releases:
+* __R3.4.0__: 2020-05-01 J. Vasquez
+  * Add support for the Link Node's software input.
+
 * __R3.3.0__: 2020-02-07 J. Vasquez
   * update CPSW framework to version R4.4.1 and buildroot architecture to buildroot-2019.08
 
