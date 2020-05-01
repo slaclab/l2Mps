@@ -69,7 +69,6 @@ public:
     si_data_t getData() const;
 
 private:
-    Path                digMesRoot; // Root to the MpsDigitalMessage module
     CpswRegRW<uint16_t> swBitValue; // Register to set values
     CpswRegRW<uint16_t> swBitError; // Register with values used during timeouts
     std::size_t         numInputs;  // Number of software bits

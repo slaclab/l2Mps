@@ -31,9 +31,8 @@ MpsSoftInputs IMpsSoftInputs::create(Path root)
 
 IMpsSoftInputs::IMpsSoftInputs(Path root)
 :
-    digMesRoot ( root->findByName(MpsDigitalMessageModuleName.c_str())  ),
-    swBitValue ( digMesRoot, MpsDigitalMessageModuleName + "SwBitValue" ),
-    swBitError ( digMesRoot, MpsDigitalMessageModuleName + "SwBitError" ),
+    swBitValue ( root, MpsDigitalMessageModuleName + "SwBitValue" ),
+    swBitError ( root, MpsDigitalMessageModuleName + "SwBitError" ),
     numInputs  ( swBitValue.getSizeBits() )
 {
     // Verify that both register has the same number of bits
