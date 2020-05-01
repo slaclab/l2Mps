@@ -74,7 +74,7 @@ public:
         }
         catch(CPSWError& e)
         {
-            //std::cout << "Failed to created " << name << std::endl;
+            std::cerr << "l2Mps warning: Failed to create: " << name << std::endl;
         }
     };
 
