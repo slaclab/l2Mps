@@ -5,7 +5,7 @@
  *-----------------------------------------------------------------------------
  * Title      : Link Node Software Inputs class
  * ----------------------------------------------------------------------------
- * File       : l2Mps_blm.h
+ * File       : l2Mps_soft_inputs.h
  * Author     : Jesus Vasquez, jvasquez@slac.stanford.edu
  * Created    : 2020-04-24
  * ----------------------------------------------------------------------------
@@ -32,8 +32,8 @@ class IMpsSoftInputs;
 
 typedef boost::shared_ptr<IMpsSoftInputs> MpsSoftInputs;
 
-// Name of the Digital Message module
-const std::string MpsDigitalMessageModuleName("mmio/AppTop/AppCore/MpsLinkNodeCore/MpsDigitalMessage/");
+// Name of the digital message module (relative to the Link Node module)
+const std::string MpsDigitalMessageModuleName("MpsDigitalMessage/");
 
 // Soft input word status
 struct si_data_t
@@ -65,7 +65,11 @@ public:
     std::pair<bool, uint16_t> getInputWord() const      { return swBitValue.get(); };
     std::pair<bool, uint16_t> getErrorInputWord() const { return swBitError.get(); };
 
+    // Get Data
+    si_data_t getData() const;
+
 private:
+    Path                digMesRoot; // Root to the MpsDigitalMessage module
     CpswRegRW<uint16_t> swBitValue; // Register to set values
     CpswRegRW<uint16_t> swBitError; // Register with values used during timeouts
     std::size_t         numInputs;  // Number of software bits

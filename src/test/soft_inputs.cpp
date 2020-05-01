@@ -46,7 +46,7 @@ Tester::Tester(Path root)
 :
     mpsNode(IMpsNode::create(root))
 {
-    if (!mpsNode->getMpsSoftInputs())
+    if (!mpsNode->getMpsLinkNode())
         throw std::runtime_error("This MPS node does not contain a MpsSoftInput object. " \
                                   "Verify that the FW application is a Link Node");
 }
@@ -59,20 +59,20 @@ void Tester::testInput(bool val, bool eVal, std::size_t index) const
     std::cout << "Set error value          = " << std::boolalpha << eVal << std::endl;
 
     // Write values
-    assert( true == mpsNode->getMpsSoftInputs()->setInput(index, val) );
-    assert( true == mpsNode->getMpsSoftInputs()->setErrorInput(index, eVal) );
+    assert( true == mpsNode->getMpsLinkNode()->getMpsSoftInputs()->setInput(index, val) );
+    assert( true == mpsNode->getMpsLinkNode()->getMpsSoftInputs()->setErrorInput(index, eVal) );
 
     // Read back values
-    std::pair<bool, bool> valRB  { mpsNode->getMpsSoftInputs()->getInput(index) };
+    std::pair<bool, bool> valRB  { mpsNode->getMpsLinkNode()->getMpsSoftInputs()->getInput(index) };
     assert( true == valRB.first);
 
-    std::pair<bool, bool> eValRB { mpsNode->getMpsSoftInputs()->getErrorInput(index) };
+    std::pair<bool, bool> eValRB { mpsNode->getMpsLinkNode()->getMpsSoftInputs()->getErrorInput(index) };
     assert( true == eValRB.first);
 
     printPair( "Read back value          ", valRB );
     printPair( "Read back error value    ", eValRB );
-    printPair( "Value word content       ", mpsNode->getMpsSoftInputs()->getInputWord(), true);
-    printPair( "Error value word content ", mpsNode->getMpsSoftInputs()->getErrorInputWord(), true);
+    printPair( "Value word content       ", mpsNode->getMpsLinkNode()->getMpsSoftInputs()->getInputWord(), true);
+    printPair( "Error value word content ", mpsNode->getMpsLinkNode()->getMpsSoftInputs()->getErrorInputWord(), true);
 
     // Assert read back values
     assert( valRB.second  == val);
@@ -85,7 +85,7 @@ void Tester::testAllInputs() const
     std::cout << "=======================" << std::endl;
     std::cout << std::endl;
 
-    std::size_t numInputs { mpsNode->getMpsSoftInputs()->getNumInputs() };
+    std::size_t numInputs { mpsNode->getMpsLinkNode()->getMpsSoftInputs()->getNumInputs() };
 
     for ( std::size_t i {0}; i < numInputs; ++i )
     {

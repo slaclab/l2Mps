@@ -2,7 +2,7 @@
  *-----------------------------------------------------------------------------
  * Title      : Link Node Software Inputs class
  * ----------------------------------------------------------------------------
- * File       : l2Mps_blm.h
+ * File       : l2Mps_soft_inputs.cpp
  * Author     : Jesus Vasquez, jvasquez@slac.stanford.edu
  * Created    : 2020-04-24
  * ----------------------------------------------------------------------------
@@ -31,8 +31,9 @@ MpsSoftInputs IMpsSoftInputs::create(Path root)
 
 IMpsSoftInputs::IMpsSoftInputs(Path root)
 :
-    swBitValue ( root, MpsDigitalMessageModuleName + "SwBitValue" ),
-    swBitError ( root, MpsDigitalMessageModuleName + "SwBitError" ),
+    digMesRoot ( root->findByName(MpsDigitalMessageModuleName.c_str())  ),
+    swBitValue ( digMesRoot, MpsDigitalMessageModuleName + "SwBitValue" ),
+    swBitError ( digMesRoot, MpsDigitalMessageModuleName + "SwBitError" ),
     numInputs  ( swBitValue.getSizeBits() )
 {
     // Verify that both register has the same number of bits
@@ -100,4 +101,14 @@ bool IMpsSoftInputs::setBit(const CpswRegRW<uint16_t>& reg, bool val, std::size_
 
     // Write the updated word
     return reg.set(w);
+}
+
+si_data_t IMpsSoftInputs::getData() const
+{
+    si_data_t data;
+
+    data.inputWord = getInputWord();
+    data.errorWord = getErrorInputWord();
+
+    return data;
 }

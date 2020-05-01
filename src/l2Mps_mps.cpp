@@ -87,9 +87,9 @@ IMpsNode::IMpsNode(Path root)
             amc[i] = IMpsBlm::create(mpsRoot, i);
     }
 
-    // For Link Node application types, also create the a SoftInput object
+    // For Link Node application types, also create the a MpsLinkNode object
     if ((!appTypeName.compare("BLM")) | (!appTypeName.compare("MPS_6CH")) | (!appTypeName.compare("MPS_24CH")))
-        mpsSoftInputs = IMpsSoftInputs::create(root);
+        mpsLinkNode = IMpsLinkNode::create(root);
 }
 
 IMpsNode::~IMpsNode()
@@ -152,11 +152,8 @@ const void IMpsNode::readMpsInfo(mps_infoData_t& info) const
     info.rxLinkUp = std::make_pair( valid, vals );
 
     // Add soft inputs status (only for Link Node applications)
-    if (mpsSoftInputs)
-    {
-        info.softInputs.inputWord = mpsSoftInputs->getInputWord();
-        info.softInputs.errorWord = mpsSoftInputs->getErrorInputWord();
-    }
+    if (mpsLinkNode)
+        info.lnData =  mpsLinkNode->getData();
 
 }
 
