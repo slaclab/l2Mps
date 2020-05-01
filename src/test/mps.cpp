@@ -120,10 +120,10 @@ void Tester::mpsInfoReceiver(mps_infoData_t info)
     if (mpsNode->getMpsLinkNode())
     {
         std::cout << std::endl;
-        std::cout << "Link Node status: " << std::endl;
+        std::cout << "Link node status: " << std::endl;
         std::cout << "-------------------" << std::endl;
-        printPair( "  Soft Input Values      ", info.lnData.softInputData.inputWord, true );
-        printPair( "  Soft Input Error Values", info.lnData.softInputData.errorWord, true );
+        printPair( "  Soft input values      ", info.lnData.softInputData.inputWord, true );
+        printPair( "  Soft input error values", info.lnData.softInputData.errorWord, true );
         std::cout << "-------------------" << std::endl;
 
             std::cout << "=============================" << std::endl;
@@ -213,14 +213,14 @@ void Tester::printInfo()
         printArray(ns, ps);
     }
 
-    // Print the soft input status, which is only available on Link Node applications
+    // If this is a Link Node application, print its status
     if (mpsNode->getMpsLinkNode())
     {
         std::cout << std::endl;
-        std::cout << "Soft input status: " << std::endl;
+        std::cout << "Link node status: " << std::endl;
         std::cout << "-------------------" << std::endl;
-        printPair( "  Input Values", mpsNode->getMpsLinkNode()->getMpsSoftInputs()->getInputWord(), true );
-        printPair( "  Error Values", mpsNode->getMpsLinkNode()->getMpsSoftInputs()->getErrorInputWord(), true );
+        printPair( "  Soft input values      ", mpsNode->getMpsLinkNode()->getMpsSoftInputs()->getInputWord(), true );
+        printPair( "  Soft input error values", mpsNode->getMpsLinkNode()->getMpsSoftInputs()->getErrorInputWord(), true );
 
         std::vector< std::pair< bool, std::vector<bool> > > ps(2);
         std::vector<std::string> ns({"Input", "Error"});
