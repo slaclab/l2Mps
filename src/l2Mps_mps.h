@@ -111,7 +111,7 @@ struct mps_infoData_t
     std::pair< bool, std::vector<uint32_t> > rxPktRcvdCnt;
 
     // Link Node data
-    ln_data_t                                softInputs;
+    ln_data_t                                lnData;
 };
 
 typedef std::function<void(mps_infoData_t)> p_mpsCBFunc_t;
