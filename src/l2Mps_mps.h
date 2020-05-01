@@ -47,7 +47,7 @@
 #include "l2Mps_blen.h"
 #include "l2Mps_bcm.h"
 #include "l2Mps_blm.h"
-
+#include "l2Mps_link_node.h"
 
 class IMpsNode;
 
@@ -109,6 +109,9 @@ struct mps_infoData_t
     std::pair< bool, uint16_t              > rollOverEn;
     std::pair< bool, uint32_t              > txPktSentCnt;
     std::pair< bool, std::vector<uint32_t> > rxPktRcvdCnt;
+
+    // Link Node data
+    ln_data_t                                lnData;
 };
 
 typedef std::function<void(mps_infoData_t)> p_mpsCBFunc_t;
@@ -217,8 +220,11 @@ public:
     // Get the crate ID
     std::pair<bool,uint16_t> getCrateId() const                       { return mpsBsi->getCrateId();   };
 
-    // Get the Slot Numbe
+    // Get the Slot Number
     std::pair<bool,uint8_t> getSlotNumber() const                     { return mpsBsi->getSlotNumber(); };
+
+    // Get Link Node object
+    MpsLinkNode getMpsLinkNode() const                                { return mpsLinkNode;             };
 
     // Get a copy of the MPS root path
     Path getMpsRoot() const                                           { return mpsRoot->clone();        };
@@ -271,6 +277,9 @@ private:
 
     // Application object (one for each bay)
     boost::any          amc[numberOfBays];
+
+    // Link Node object (used only for LN application types)
+    MpsLinkNode         mpsLinkNode;
 
     // BSI interface
     MpsBsi              mpsBsi;

@@ -86,6 +86,10 @@ IMpsNode::IMpsNode(Path root)
         else if ((!appTypeName.compare("BLM")) | (!appTypeName.compare("MPS_6CH")) | (!appTypeName.compare("MPS_24CH")))
             amc[i] = IMpsBlm::create(mpsRoot, i);
     }
+
+    // For Link Node application types, also create the a MpsLinkNode object
+    if ((!appTypeName.compare("BLM")) | (!appTypeName.compare("MPS_6CH")) | (!appTypeName.compare("MPS_24CH")))
+        mpsLinkNode = IMpsLinkNode::create(root);
 }
 
 IMpsNode::~IMpsNode()
@@ -146,6 +150,11 @@ const void IMpsNode::readMpsInfo(mps_infoData_t& info) const
         }
     }
     info.rxLinkUp = std::make_pair( valid, vals );
+
+    // Add soft inputs status (only for Link Node applications)
+    if (mpsLinkNode)
+        info.lnData =  mpsLinkNode->getData();
+
 }
 
 const void IMpsNode::startPollThread(unsigned int poll, p_mpsCBFunc_t cbFunc)

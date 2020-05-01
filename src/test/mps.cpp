@@ -115,9 +115,27 @@ void Tester::mpsInfoReceiver(mps_infoData_t info)
     };
     printArray( n, v, false);
 
-    std::cout << "=============================" << std::endl;
 
-    std::cout << "\033[47A\r";
+    // If this is a Link Node application, print its status
+    if (mpsNode->getMpsLinkNode())
+    {
+        std::cout << std::endl;
+        std::cout << "Link node status: " << std::endl;
+        std::cout << "-------------------" << std::endl;
+        printPair( "  Soft input values      ", info.lnData.softInputData.inputWord, true );
+        printPair( "  Soft input error values", info.lnData.softInputData.errorWord, true );
+        std::cout << "-------------------" << std::endl;
+
+            std::cout << "=============================" << std::endl;
+
+            std::cout << "\033[53A\r";
+    }
+    else
+    {
+        std::cout << "=============================" << std::endl;
+
+        std::cout << "\033[47A\r";
+    }
 }
 
 void Tester::printInfo()
@@ -190,6 +208,35 @@ void Tester::printInfo()
             std::pair<bool, uint32_t> v3 = mpsNode->getRxPktRcvdCnt(i);
             ps.at(2).first &= v3.first;
             ps.at(2).second.push_back(v3.second);
+        }
+
+        printArray(ns, ps);
+    }
+
+    // If this is a Link Node application, print its status
+    if (mpsNode->getMpsLinkNode())
+    {
+        std::cout << std::endl;
+        std::cout << "Link node status: " << std::endl;
+        std::cout << "-------------------" << std::endl;
+        printPair( "  Soft input values      ", mpsNode->getMpsLinkNode()->getMpsSoftInputs()->getInputWord(), true );
+        printPair( "  Soft input error values", mpsNode->getMpsLinkNode()->getMpsSoftInputs()->getErrorInputWord(), true );
+
+        std::vector< std::pair< bool, std::vector<bool> > > ps(2);
+        std::vector<std::string> ns({"Input", "Error"});
+
+        ps.at(0).first = true;
+        ps.at(1).first = true;
+
+        for (std::size_t i {0}; i < mpsNode->getMpsLinkNode()->getMpsSoftInputs()->getNumInputs(); ++i)
+        {
+            std::pair<bool, bool> inputBit { mpsNode->getMpsLinkNode()->getMpsSoftInputs()->getInput(i) };
+            ps.at(0).first &= inputBit.first;
+            ps.at(0).second.push_back(inputBit.second);
+
+            std::pair<bool, bool> errorBit { mpsNode->getMpsLinkNode()->getMpsSoftInputs()->getErrorInput(i) };
+            ps.at(1).first &= errorBit.first;
+            ps.at(1).second.push_back(errorBit.second);
         }
 
         printArray(ns, ps);
