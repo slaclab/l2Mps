@@ -83,6 +83,14 @@ IMpsNode::IMpsNode(Path root)
     if (!slotNumberValid)
         throw std::runtime_error("Could not read the slot number\n");
 
+    // For Link Node, instantiate a MpsLinkNode object.
+    // Link nodes are BLM or MPS app types, installed in slot 2.
+    if ( ( 2 == slotNumber ) & ((!appTypeName.compare("BLM")) | (!appTypeName.compare("MPS_6CH")) | (!appTypeName.compare("MPS_24CH"))) )
+    {
+        std::cout << "    > This is a Mps Link Node" << std::endl;
+        mpsLinkNode = IMpsLinkNode::create(root);
+    }
+
     // Create the application specific objects
     for(std::size_t i {0}; i < numberOfBays; ++i)
     {
@@ -98,10 +106,6 @@ IMpsNode::IMpsNode(Path root)
             // Throw and error when the application type is not supported
             throw std::runtime_error("Unsupported application type");
     }
-
-    // For Link Node application types, also create the a MpsLinkNode object
-    if ((!appTypeName.compare("BLM")) | (!appTypeName.compare("MPS_6CH")) | (!appTypeName.compare("MPS_24CH")))
-        mpsLinkNode = IMpsLinkNode::create(root);
 }
 
 IMpsNode::~IMpsNode()
