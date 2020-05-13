@@ -72,7 +72,7 @@ IMpsNode::IMpsNode(Path root)
 
     // Check if the application type is supported
     if (!appTypeValid)
-        throw std::runtime_error("Unsupported application type");
+        throw std::runtime_error("Could not read the application type\n");
 
     // Create the application specific objects
     for(std::size_t i {0}; i < numberOfBays; ++i)
@@ -85,6 +85,8 @@ IMpsNode::IMpsNode(Path root)
             amc[i] = IMpsBcm::create(mpsRoot, i);
         else if ((!appTypeName.compare("BLM")) | (!appTypeName.compare("MPS_6CH")) | (!appTypeName.compare("MPS_24CH")))
             amc[i] = IMpsBlm::create(mpsRoot, i);
+        else
+            throw std::runtime_error("Unsupported application type");
     }
 
     // For Link Node application types, also create the a MpsLinkNode object
