@@ -70,9 +70,18 @@ IMpsNode::IMpsNode(Path root)
     bool appTypeValid;
     std::tie(appTypeValid, appTypeName) = getConvertedAppType();
 
-    // Check if the application type is supported
+    // Check if we could read successfully the application type
     if (!appTypeValid)
         throw std::runtime_error("Could not read the application type\n");
+
+    // Get the slot number
+    bool slotNumberValid;
+    uint8_t slotNumber;
+    std::tie(slotNumberValid, slotNumber) = getSlotNumber();
+
+    // Check if we could read successfully the slot number
+    if (!slotNumberValid)
+        throw std::runtime_error("Could not read the slot number\n");
 
     // Create the application specific objects
     for(std::size_t i {0}; i < numberOfBays; ++i)
@@ -86,6 +95,7 @@ IMpsNode::IMpsNode(Path root)
         else if ((!appTypeName.compare("BLM")) | (!appTypeName.compare("MPS_6CH")) | (!appTypeName.compare("MPS_24CH")))
             amc[i] = IMpsBlm::create(mpsRoot, i);
         else
+            // Throw and error when the application type is not supported
             throw std::runtime_error("Unsupported application type");
     }
 
