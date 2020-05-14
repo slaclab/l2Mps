@@ -3,6 +3,10 @@
 Release notes for the SLAC LCLS2 HPS MPS Driver.
 
 ## Releases:
+* __R3.4.1__: 2020-05-13 J. Vasquez
+  * Bug fix: Instantiate the LinkNode object only on Link Nodes.
+    Link nodes are BLM or MPS application types, installed in slot 2.
+
 * __R3.4.0__: 2020-05-01 J. Vasquez
   * Add support for the Link Node's software input.
 
