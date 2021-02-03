@@ -71,7 +71,8 @@ static std::map<int, std::string> appTypeList = {
     {100,   "BPM"},
     {101,   "BPM"},
     {120,   "MPS_24CH"},
-    {121,   "MPS_6CH"}
+    {121,   "MPS_6CH"},
+    {122,   "MPS_DN"}
 };
 
 // Number of AMC bays on a carrier
