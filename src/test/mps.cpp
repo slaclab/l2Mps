@@ -122,8 +122,8 @@ void Tester::mpsInfoReceiver(mps_infoData_t info)
         std::cout << std::endl;
         std::cout << "Link node status: " << std::endl;
         std::cout << "-------------------" << std::endl;
-        printPair( "  Soft input values      ", info.lnData.softInputData.inputWord, true );
-        printPair( "  Soft input error values", info.lnData.softInputData.errorWord, true );
+        printPair( "Soft input values", info.lnData.softInputData.inputWord, true, 2, 24 );
+        printPair( "Soft input error values", info.lnData.softInputData.errorWord, true, 2, 24 );
         std::cout << "-------------------" << std::endl;
 
             std::cout << "=============================" << std::endl;
