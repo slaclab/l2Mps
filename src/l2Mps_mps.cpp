@@ -84,8 +84,9 @@ IMpsNode::IMpsNode(Path root)
         throw std::runtime_error("Could not read the slot number\n");
 
     // For Link Node, instantiate a MpsLinkNode object.
-    // Link nodes are BLM or MPS app types, installed in slot 2.
-    if ( ( 2 == slotNumber ) & ((!appTypeName.compare("BLM")) | (!appTypeName.compare("MPS_6CH")) | (!appTypeName.compare("MPS_24CH"))) )
+    // Link nodes are BLM, Digital Nodes, or MPS app types, installed in slot 2.
+    if ( ( 2 == slotNumber ) & ((!appTypeName.compare("BLM")) | (!appTypeName.compare("MPS_6CH")) | \
+        (!appTypeName.compare("MPS_24CH")) | (!appTypeName.compare("MPS_DN"))) )
     {
         std::cout << "    > This is a Mps Link Node" << std::endl;
         mpsLinkNode = IMpsLinkNode::create(root);
@@ -102,6 +103,8 @@ IMpsNode::IMpsNode(Path root)
             amc[i] = IMpsBcm::create(mpsRoot, i);
         else if ((!appTypeName.compare("BLM")) | (!appTypeName.compare("MPS_6CH")) | (!appTypeName.compare("MPS_24CH")))
             amc[i] = IMpsBlm::create(mpsRoot, i);
+        else if (!appTypeName.compare("MPS_DN"))
+            ; // The Digital AMC does not contain any settings. So, we let the amc object empty here.
         else
             // Throw and error when the application type is not supported
             throw std::runtime_error("Unsupported application type");
