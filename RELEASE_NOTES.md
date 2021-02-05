@@ -3,6 +3,11 @@
 Release notes for the SLAC LCLS2 HPS MPS Driver.
 
 ## Releases:
+* __R3.5.0__: 2021-02-04 J. Vasquez
+  * Add support for the new Digital Link Node. The new type is MPS_DN.
+  * Update list of app types for MPS nodes, to match FW definitions.
+    The new types are MPS_LN (for link nodes), and MPS_AN for application nodes.
+
 * __R3.4.1__: 2020-05-13 J. Vasquez
   * Bug fix: Instantiate the LinkNode object only on Link Nodes.
     Link nodes are BLM or MPS application types, installed in slot 2.
