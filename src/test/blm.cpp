@@ -79,7 +79,7 @@ int main(int argc, char **argv)
 
         std::string appType(mpsNode->getAppType().second);
         std::cout << "This application type is " << appType << std::endl;
-        if ( !!appType.compare("BLM") & !!appType.compare("MPS_6CH") & !!appType.compare("MPS_24CH") )
+        if ( !!appType.compare("MPS_LN") & !!appType.compare("MPS_AN") )
         {
             std::cout << "ERROR: This is not a BLM application. Aborting." << std::endl;
             return 1;
