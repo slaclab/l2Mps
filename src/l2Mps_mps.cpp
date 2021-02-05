@@ -74,19 +74,8 @@ IMpsNode::IMpsNode(Path root)
     if (!appTypeValid)
         throw std::runtime_error("Could not read the application type\n");
 
-    // Get the slot number
-    bool slotNumberValid;
-    uint8_t slotNumber;
-    std::tie(slotNumberValid, slotNumber) = getSlotNumber();
-
-    // Check if we could read successfully the slot number
-    if (!slotNumberValid)
-        throw std::runtime_error("Could not read the slot number\n");
-
     // For Link Node, instantiate a MpsLinkNode object.
-    // Link nodes are Digital Nodes, or MPS app types, installed in slot 2.
-    if ( ( 2 == slotNumber ) & ((!appTypeName.compare("MPS_LN")) | \
-        (!appTypeName.compare("MPS_AN")) | (!appTypeName.compare("MPS_DN"))) )
+    if ((!appTypeName.compare("MPS_LN")) | (!appTypeName.compare("MPS_DN")))
     {
         std::cout << "    > This is a Mps Link Node" << std::endl;
         mpsLinkNode = IMpsLinkNode::create(root);
