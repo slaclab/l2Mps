@@ -3,6 +3,11 @@
 Release notes for the SLAC LCLS2 HPS MPS Driver.
 
 ## Releases:
+
+  * Add new SALT diagnostic registers: `MpsTxPktPeriod`, `MpsRxPktPeriod`, `MpsTxPktPeriodMax`,
+    `MpsRxPktPeriodMax`, `MpsTxPktPeriodMin`, `MpsRxPktPeriodMin`, `DiagnosticStrbCnt`,
+    `MpsPllLockCnt`, `MpsTxEofeSentCnt`, and `MpsRxErrDetCnt`.
+
 * __R3.5.0__: 2021-02-04 J. Vasquez
   * Add support for the new Digital Link Node. The new type is `MPS_DN`.
   * Update list of app types for MPS nodes, to match FW definitions.

@@ -110,6 +110,16 @@ struct mps_infoData_t
     std::pair< bool, uint16_t              > rollOverEn;
     std::pair< bool, uint32_t              > txPktSentCnt;
     std::pair< bool, std::vector<uint32_t> > rxPktRcvdCnt;
+    std::pair< bool, uint32_t              > txPktPeriod;
+    std::pair< bool, uint32_t              > txPktPeriodMin;
+    std::pair< bool, uint32_t              > txPktPeriodMax;
+    std::pair< bool, std::vector<uint32_t> > rxPktPeriod;
+    std::pair< bool, std::vector<uint32_t> > rxPktPeriodMin;
+    std::pair< bool, std::vector<uint32_t> > rxPktPeriodMax;
+    std::pair< bool, uint32_t              > diagStrbCnt;
+    std::pair< bool, uint32_t              > pllLockCnt;
+    std::pair< bool, uint32_t              > txEofeSentCnt;
+    std::pair< bool, std::vector<uint32_t> > rxErrDetCnt;
 
     // Link Node data
     ln_data_t                                lnData;
@@ -130,105 +140,139 @@ public:
 
     const void startPollThread(unsigned int poll, p_mpsCBFunc_t cbFunc);
 
-    const size_t getLastMsgByteSize()  const { return lastMsgByte.getNelms();  };
-    const size_t getRxLinkUpCntSize()  const { return rxLinkUpCnt.getNelms();  };
-    const size_t getRxPktRcvdCntSize() const { return rxPktRcvdCnt.getNelms(); };
+    const size_t getLastMsgByteSize()    const { return lastMsgByte.getNelms();    }
+    const size_t getRxLinkUpCntSize()    const { return rxLinkUpCnt.getNelms();    }
+    const size_t getRxPktRcvdCntSize()   const { return rxPktRcvdCnt.getNelms();   }
+    const size_t getRxPktPeriodSize()    const { return rxPktPeriod.getNelms();    }
+    const size_t getRxPktPeriodMinSize() const { return rxPktPeriodMin.getNelms(); }
+    const size_t getRxPktPeriodMaxSize() const { return rxPktPeriodMax.getNelms(); }
+    const size_t getRxErrDetCntSize()    const { return rxErrDetCnt.getNelms();    }
 
     // Mps Application ID
-    std::pair<bool,uint16_t> getAppId(void) const                     { return appId.get();            };
-    bool setAppId(const uint16_t id) const                            { return appId.set(id);          };
+    std::pair<bool,uint16_t> getAppId(void) const                        { return appId.get();            }
+    bool setAppId(const uint16_t id) const                               { return appId.set(id);          }
 
     // Mps version
-    std::pair<bool,uint8_t>  getVersion(void) const                   { return version.get();          };
-    bool setVersion(uint8_t ver) const                                { return version.set(ver);       };
+    std::pair<bool,uint8_t>  getVersion(void) const                      { return version.get();          }
+    bool setVersion(uint8_t ver) const                                   { return version.set(ver);       }
 
     // Mps Enable
-    std::pair<bool,bool> getEnable(void) const                        { return enable.get();           };
-    bool setEnable(const bool en) const                               { return enable.set(en);         };
+    std::pair<bool,bool> getEnable(void) const                           { return enable.get();           }
+    bool setEnable(const bool en) const                                  { return enable.set(en);         }
 
     // Lcls1 Mode (true = LCLS1 mode; false = LCLS2 Mode)
-    std::pair<bool,bool>  getLcls1Mode(void) const                    { return lcls1Mode.get();        };
-    bool  setLcls1Mode(const bool mode) const                         { return lcls1Mode.set(mode);    };
+    std::pair<bool,bool>  getLcls1Mode(void) const                       { return lcls1Mode.get();        }
+    bool  setLcls1Mode(const bool mode) const                            { return lcls1Mode.set(mode);    }
 
     // Number ofbytes in the MPS message
-    std::pair<bool,uint8_t>  getByteCount(void) const                 { return byteCount.get();        };
+    std::pair<bool,uint8_t>  getByteCount(void) const                    { return byteCount.get();        }
 
     // Application generates digital messages
-    std::pair<bool,bool> getDigitalEnable(void) const                 { return digitalEn.get();        };
+    std::pair<bool,bool> getDigitalEnable(void) const                    { return digitalEn.get();        }
 
     // Beam destination mask
-    std::pair<bool,int16_t> getBeamDestMask(void) const               { return beamDestMask.get();     };
-    bool setBeamDestMask(const uint16_t mask) const                   { return beamDestMask.set(mask); };
+    std::pair<bool,int16_t> getBeamDestMask(void) const                  { return beamDestMask.get();     }
+    bool setBeamDestMask(const uint16_t mask) const                      { return beamDestMask.set(mask); }
 
     // Alt destination mask
-    std::pair<bool,uint8_t> getAltDestMask(void) const                { return altDestMask.get();      };
-    bool setAltDestMask(const uint8_t mask) const                     { return altDestMask.set(mask);  };
+    std::pair<bool,uint8_t> getAltDestMask(void) const                   { return altDestMask.get();      }
+    bool setAltDestMask(const uint8_t mask) const                        { return altDestMask.set(mask);  }
 
     // Application type
-    std::pair<bool,std::string> getAppType(void) const                { return getConvertedAppType();  };
+    std::pair<bool,std::string> getAppType(void) const                   { return getConvertedAppType();  }
 
     // MPS Tx Link Up counter
-    std::pair<bool,uint32_t> getTxLinkUpCnt(void) const               { return txLinkUpCnt.get();      };
+    std::pair<bool,uint32_t> getTxLinkUpCnt(void) const                  { return txLinkUpCnt.get();      }
 
     // MPS Rx Link Up counter
-    std::pair<bool,uint32_t> getRxLinkUpCnt(const uint8_t ch) const   { return rxLinkUpCnt.get(ch);    };
+    std::pair<bool,uint32_t> getRxLinkUpCnt(const uint8_t ch) const      { return rxLinkUpCnt.get(ch);    }
 
     // Status Counter Roll Over Enable
-    std::pair<bool,uint32_t> getRollOverEn(void) const                { return rollOverEn.get();       };
+    std::pair<bool,uint32_t> getRollOverEn(void) const                   { return rollOverEn.get();       }
 
     // Mps Tx LinkUp status
-    std::pair<bool,bool> getTxLinkUp(void) const                      { return txLinkUp.get();         };
+    std::pair<bool,bool> getTxLinkUp(void) const                         { return txLinkUp.get();         }
 
     // Mps Rx LinkUp status
     std::pair<bool,bool> getRxLinkUp(const uint8_t ch) const;
 
     // Mps Slot
-    std::pair<bool,bool> getMpsSlot(void) const                       { return mpsSlot.get();          };
+    std::pair<bool,bool> getMpsSlot(void) const                          { return mpsSlot.get();          }
 
     // MPS PLL Lock Status
-    std::pair<bool,bool> getPllLocked(void) const                     { return pllLocked.get();        };
+    std::pair<bool,bool> getPllLocked(void) const                        { return pllLocked.get();        }
 
     // Mps TX Packet Sent Counter
-    std::pair<bool,uint32_t> getTxPktSentCnt(void) const              { return txPktSentCnt.get();     };
+    std::pair<bool,uint32_t> getTxPktSentCnt(void) const                 { return txPktSentCnt.get();     }
 
     // MPS RX Packet Received Counter
-    std::pair<bool,uint32_t> getRxPktRcvdCnt(const uint8_t ch) const  { return rxPktRcvdCnt.get(ch);   };
+    std::pair<bool,uint32_t> getRxPktRcvdCnt(const uint8_t ch) const     { return rxPktRcvdCnt.get(ch);   }
+
+    // MPS TX Period between packets
+    std::pair<bool, uint32_t>  getTxPktPeriod(void) const                { return txPktPeriod.get();      }
+
+    // Min MPS TX Period between packets
+    std::pair<bool, uint32_t>  getTxPktPeriodMin(void) const             { return txPktPeriodMin.get();   }
+
+    // Max MPS TX Period between packets
+    std::pair<bool, uint32_t>  getTxPktPeriodMax(void) const             { return txPktPeriodMax.get();   }
+
+    // MPS RX[13:0] Period between packets
+    std::pair<bool, uint32_t>  getRxPktPeriod(const uint8_t ch) const    { return rxPktPeriod.get(ch);    }
+
+    // Min MPS RX[13:0] Period between packets
+    std::pair<bool, uint32_t>  getRxPktPeriodMin(const uint8_t ch) const { return rxPktPeriodMin.get(ch); }
+
+    // Max MPS RX[13:0] Period between packets
+    std::pair<bool, uint32_t>  getRxPktPeriodMax(const uint8_t ch) const { return rxPktPeriodMax.get(ch); }
+
+    // Counts the diagnostic strobes
+    std::pair<bool, uint32_t>  getDiagStrbCnt(void) const                { return diagStrbCnt.get();      }
+
+    // Counts the PLL Lock events
+    std::pair<bool, uint32_t>  getPllLockCnt(void) const                 { return pllLockCnt.get();       }
+
+    // MPS TX EOFE Sent Counter
+    std::pair<bool, uint32_t>  getTxEofeSentCnt(void) const              { return txEofeSentCnt.get();    }
+
+    // MPS RX Error Detected Counter[13:0]
+    std::pair<bool, uint32_t>  getRxErrDetCnt(const uint8_t ch) const    { return rxErrDetCnt.get(ch);    }
 
     // MpsMessage counter
-    std::pair<bool,uint32_t> getMsgCount(void) const                  { return msgCnt.get();           };
+    std::pair<bool,uint32_t> getMsgCount(void) const                     { return msgCnt.get();           }
 
     // App ID in the last message
-    std::pair<bool,int16_t> getLastMsgAppId(void) const               { return lastMsgAppId.get();     };
+    std::pair<bool,int16_t> getLastMsgAppId(void) const                  { return lastMsgAppId.get();     }
 
     // LCLS flag in the last message
-    std::pair<bool,bool> getLastMsgLcls(void) const                   { return lastMsgLcls.get();      };
+    std::pair<bool,bool> getLastMsgLcls(void) const                      { return lastMsgLcls.get();      }
 
     // Timestamp in the last message
-    std::pair<bool,uint16_t> getLastMsgTimeStamp(void) const          { return lastMsgTimestamp.get(); };
+    std::pair<bool,uint16_t> getLastMsgTimeStamp(void) const             { return lastMsgTimestamp.get(); }
 
     // Bytes from the last message
-    std::pair<bool,uint8_t> getLastMsgByte(const uint8_t index) const { return lastMsgByte.get(index); };
+    std::pair<bool,uint8_t> getLastMsgByte(const uint8_t index) const    { return lastMsgByte.get(index); }
 
     // Reset the SALT conuters
-    bool resetSaltCnt(void) const                                     { return rstCnt.exe();           };
+    bool resetSaltCnt(void) const                                        { return rstCnt.exe();           }
 
     // Reset the SALT PLL
-    bool resetSaltPll(void) const                                     { return rstPll.exe();           };
+    bool resetSaltPll(void) const                                        { return rstPll.exe();           }
 
     // Get the application object
-    boost::any getBayApp(uint8_t bay)                                 { return amc[bay];               };
+    boost::any getBayApp(uint8_t bay)                                    { return amc[bay];               }
 
     // Get the crate ID
-    std::pair<bool,uint16_t> getCrateId() const                       { return mpsBsi->getCrateId();   };
+    std::pair<bool,uint16_t> getCrateId() const                          { return mpsBsi->getCrateId();   }
 
     // Get the Slot Number
-    std::pair<bool,uint8_t> getSlotNumber() const                     { return mpsBsi->getSlotNumber(); };
+    std::pair<bool,uint8_t> getSlotNumber() const                        { return mpsBsi->getSlotNumber(); }
 
     // Get Link Node object
-    MpsLinkNode getMpsLinkNode() const                                { return mpsLinkNode;             };
+    MpsLinkNode getMpsLinkNode() const                                   { return mpsLinkNode;             }
 
     // Get a copy of the MPS root path
-    Path getMpsRoot() const                                           { return mpsRoot->clone();        };
+    Path getMpsRoot() const                                              { return mpsRoot->clone();        }
 
     // Load configuration (CPSW's YAML) file
     const uint64_t loadConfigFile(std::string fileName) const;
@@ -270,6 +314,16 @@ private:
     CpswRegRW<uint16_t> rollOverEn;
     CpswRegRO<uint32_t> txPktSentCnt;
     CpswRegRO<uint32_t> rxPktRcvdCnt;
+    CpswRegRO<uint32_t> txPktPeriod;
+    CpswRegRO<uint32_t> txPktPeriodMin;
+    CpswRegRO<uint32_t> txPktPeriodMax;
+    CpswRegRO<uint32_t> rxPktPeriod;
+    CpswRegRO<uint32_t> rxPktPeriodMin;
+    CpswRegRO<uint32_t> rxPktPeriodMax;
+    CpswRegRO<uint32_t> diagStrbCnt;
+    CpswRegRO<uint32_t> pllLockCnt;
+    CpswRegRO<uint32_t> txEofeSentCnt;
+    CpswRegRO<uint32_t> rxErrDetCnt;
     CpswCmd             rstCnt;
     CpswCmd             rstPll;
 
