@@ -120,6 +120,7 @@ struct mps_infoData_t
     std::pair< bool, uint32_t              > pllLockCnt;
     std::pair< bool, uint32_t              > txEofeSentCnt;
     std::pair< bool, std::vector<uint32_t> > rxErrDetCnt;
+    std::pair< bool, uint16_t              > chEnable;
 
     // Link Node data
     ln_data_t                                lnData;
@@ -235,6 +236,9 @@ public:
     // MPS TX EOFE Sent Counter
     std::pair<bool, uint32_t>  getTxEofeSentCnt(void) const              { return txEofeSentCnt.get();    }
 
+    // MPS RX SALT Channel enable bitmask
+    std::pair<bool, uint16_t>  getChEnable(void) const                   { return chEnable.get();         }
+
     // MPS RX Error Detected Counter[13:0]
     std::pair<bool, uint32_t>  getRxErrDetCnt(const uint8_t ch) const    { return rxErrDetCnt.get(ch);    }
 
@@ -324,6 +328,7 @@ private:
     CpswRegRO<uint32_t> pllLockCnt;
     CpswRegRO<uint32_t> txEofeSentCnt;
     CpswRegRO<uint32_t> rxErrDetCnt;
+    CpswRegRW<uint16_t> chEnable;
     CpswCmd             rstCnt;
     CpswCmd             rstPll;
 

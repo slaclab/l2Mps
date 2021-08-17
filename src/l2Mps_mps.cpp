@@ -71,6 +71,7 @@ IMpsNode::IMpsNode(Path root)
     pllLockCnt       ( mpsRoot, MpsSaltModuleName + "MpsPllLockCnt"     ),
     txEofeSentCnt    ( mpsRoot, MpsSaltModuleName + "MpsTxEofeSentCnt"  ),
     rxErrDetCnt      ( mpsRoot, MpsSaltModuleName + "MpsRxErrDetCnt"    ),
+    chEnable         ( mpsRoot, MpsSaltModuleName + "MpsChEnable"       ),
     rstCnt           ( mpsRoot, MpsSaltModuleName + "RstCnt"            ),
     rstPll           ( mpsRoot, MpsSaltModuleName + "RstPll"            ),
     mpsBsi           ( IMpsBsi::create(root)                            )
@@ -147,6 +148,7 @@ const void IMpsNode::readMpsInfo(mps_infoData_t& info) const
     info.diagStrbCnt      = diagStrbCnt.get();
     info.pllLockCnt       = pllLockCnt.get();
     info.txEofeSentCnt    = txEofeSentCnt.get();
+    info.chEnable         = chEnable.get();
 
     // AppType which is converted to string
     info.appType          = getConvertedAppType();
