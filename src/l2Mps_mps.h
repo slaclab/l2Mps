@@ -68,6 +68,7 @@ static std::map<int, std::string> appTypeList = {
     {12,    "BLEN"},
     {13,    "LLRF"},
     {14,    "EXTREF_GEN"},
+    {15,    "FWS"},
     {100,   "BPM"},
     {101,   "BPM"},
     {120,   "MPS_AN"},
