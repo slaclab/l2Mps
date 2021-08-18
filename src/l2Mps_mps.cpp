@@ -107,6 +107,8 @@ IMpsNode::IMpsNode(Path root)
             ; // The Digital AMC does not contain any settings. So, we let the amc object empty here.
         else if (!appTypeName.compare("LLRF"))
             ; // The LLRF application does not contain any settings. So, we let the amc object empty here.
+        else if (!appTypeName.compare("FWS"))
+            ; // The Fast wire scanner application does not contain any settings. So, we let the amc object empty here.
         else
             // Throw and error when the application type is not supported
             throw std::runtime_error("Unsupported application type");
