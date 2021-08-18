@@ -105,6 +105,8 @@ IMpsNode::IMpsNode(Path root)
             amc[i] = IMpsBlm::create(mpsRoot, i);
         else if (!appTypeName.compare("MPS_DN"))
             ; // The Digital AMC does not contain any settings. So, we let the amc object empty here.
+        else if (!appTypeName.compare("LLRF"))
+            ; // The LLRF application does not contain any settings. So, we let the amc object empty here.
         else
             // Throw and error when the application type is not supported
             throw std::runtime_error("Unsupported application type");
