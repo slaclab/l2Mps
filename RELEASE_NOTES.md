@@ -3,6 +3,12 @@
 Release notes for the SLAC LCLS2 HPS MPS Driver.
 
 ## Releases:
+* __R3.8.0__: 2022-05-03 J. Mock
+  * Change src/l2Mps_thr.cpp so that idl table threshold support is built for all applications.  
+    Method of using idle table enable bit as a deciding factor for whether to build support or not
+    does not work since this table can be enabled / disabled at run time.  Other tables are enables / 
+    disabled at build time
+
 * __R3.7.0__: 2021-08-18 J. Vasquez
   * Add support for the Fast Wire Scanner (FWS) application type. This type of application
     doesn't have any application specific settings.
