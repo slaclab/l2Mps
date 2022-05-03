@@ -58,7 +58,7 @@ IThrChannel::IThrChannel(Path mpsRoot, uint8_t channel)
     if (thrChInfo.lcls1En.first && thrChInfo.lcls1En.second)
         thrScalvals.data.insert( std::make_pair( thr_table_t{{0,0}}, createTableScalVal("lcls1Thr/") ) );
 
-    if ( thrChInfo.idleEn.first && thrChInfo.idleEn.second )
+    if ( thrChInfo.idleEn.first )
         thrScalvals.data.insert( std::make_pair( thr_table_t{{1,0}}, createTableScalVal("idleThr/") ) );
 
     if ( thrChInfo.count.first )

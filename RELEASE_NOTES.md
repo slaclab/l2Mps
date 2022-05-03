@@ -3,6 +3,9 @@
 Release notes for the SLAC LCLS2 HPS MPS Driver.
 
 ## Releases:
+* __R2.5.0__: 2022-05-03 J. Mock
+  * Change how idle table is initialized in SW
+
 * __R2.4.0__: 2020-01-28 J. Vasquez
   * Update CPSW framework to version R4.4.1, and buildroot architecture to buildroot-2019.08
 
