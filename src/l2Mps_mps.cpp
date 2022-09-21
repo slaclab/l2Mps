@@ -58,6 +58,16 @@ IMpsNode::IMpsNode(Path mpsRoot)
     rollOverEn       ( mpsRoot, MpsSaltModuleName + "/RollOverEn"       ),
     txPktSentCnt     ( mpsRoot, MpsSaltModuleName + "/MpsTxPktSentCnt"  ),
     rxPktRcvdCnt     ( mpsRoot, MpsSaltModuleName + "/MpsRxPktRcvdCnt"  ),
+    txPktPeriod      ( mpsRoot, MpsSaltModuleName + "MpsTxPktPeriod"    ),
+    txPktPeriodMin   ( mpsRoot, MpsSaltModuleName + "MpsTxPktPeriodMin" ),
+    txPktPeriodMax   ( mpsRoot, MpsSaltModuleName + "MpsTxPktPeriodMax" ),
+    rxPktPeriod      ( mpsRoot, MpsSaltModuleName + "MpsRxPktPeriod"    ),
+    rxPktPeriodMin   ( mpsRoot, MpsSaltModuleName + "MpsRxPktPeriodMin" ),
+    rxPktPeriodMax   ( mpsRoot, MpsSaltModuleName + "MpsRxPktPeriodMax" ),
+    diagStrbCnt      ( mpsRoot, MpsSaltModuleName + "DiagnosticStrbCnt" ),
+    pllLockCnt       ( mpsRoot, MpsSaltModuleName + "MpsPllLockCnt"     ),
+    txEofeSentCnt    ( mpsRoot, MpsSaltModuleName + "MpsTxEofeSentCnt"  ),
+    rxErrDetCnt      ( mpsRoot, MpsSaltModuleName + "MpsRxErrDetCnt"    ),
     rstCnt           ( mpsRoot, MpsSaltModuleName + "/RstCnt"           ),
     rstPll           ( mpsRoot, MpsSaltModuleName + "/RstPll"           )
 {
@@ -94,6 +104,12 @@ const void IMpsNode::readMpsInfo(mps_infoData_t& info) const
     info.pllLocked        = pllLocked.get();
     info.rollOverEn       = rollOverEn.get();
     info.txPktSentCnt     = txPktSentCnt.get();
+    info.txPktPeriod      = txPktPeriod.get();
+    info.txPktPeriodMin   = txPktPeriodMin.get();
+    info.txPktPeriodMax   = txPktPeriodMax.get();
+    info.diagStrbCnt      = diagStrbCnt.get();
+    info.pllLockCnt       = pllLockCnt.get();
+    info.txEofeSentCnt    = txEofeSentCnt.get();
 
     // AppType which is converted to string
     info.appType          = getConvertedAppType();
@@ -102,6 +118,10 @@ const void IMpsNode::readMpsInfo(mps_infoData_t& info) const
     info.lastMsgByte      = lastMsgByte.getArray();
     info.rxPktRcvdCnt     = rxPktRcvdCnt.getArray();
     info.rxLinkUpCnt      = rxLinkUpCnt.getArray();
+    info.rxPktPeriod      = rxPktPeriod.getArray();
+    info.rxPktPeriodMin   = rxPktPeriodMin.getArray();
+    info.rxPktPeriodMax   = rxPktPeriodMax.getArray();
+    info.rxErrDetCnt      = rxErrDetCnt.getArray();
 
     // Convert the rxLnkUp status from register bit to a std::vector<bool>
     bool valid = false;

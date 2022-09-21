@@ -96,6 +96,16 @@ struct mps_infoData_t
     std::pair< bool, uint16_t              > rollOverEn;
     std::pair< bool, uint32_t              > txPktSentCnt;
     std::pair< bool, std::vector<uint32_t> > rxPktRcvdCnt;
+    std::pair< bool, uint32_t              > txPktPeriod;
+    std::pair< bool, uint32_t              > txPktPeriodMin;
+    std::pair< bool, uint32_t              > txPktPeriodMax;
+    std::pair< bool, std::vector<uint32_t> > rxPktPeriod;
+    std::pair< bool, std::vector<uint32_t> > rxPktPeriodMin;
+    std::pair< bool, std::vector<uint32_t> > rxPktPeriodMax;
+    std::pair< bool, uint32_t              > diagStrbCnt;
+    std::pair< bool, uint32_t              > pllLockCnt;
+    std::pair< bool, uint32_t              > txEofeSentCnt;
+    std::pair< bool, std::vector<uint32_t> > rxErrDetCnt;
 };
 
 typedef std::function<void(mps_infoData_t)> p_mpsCBFunc_t;
@@ -113,9 +123,13 @@ public:
 
     const void startPollThread(unsigned int poll, p_mpsCBFunc_t cbFunc);
 
-    const size_t getLastMsgByteSize()  const { return lastMsgByte.getNelms();  };
-    const size_t getRxLinkUpCntSize()  const { return rxLinkUpCnt.getNelms();  };
-    const size_t getRxPktRcvdCntSize() const { return rxPktRcvdCnt.getNelms(); };
+    const size_t getLastMsgByteSize()  const { return lastMsgByte.getNelms();      };
+    const size_t getRxLinkUpCntSize()  const { return rxLinkUpCnt.getNelms();      };
+    const size_t getRxPktRcvdCntSize() const { return rxPktRcvdCnt.getNelms();     };
+    const size_t getRxPktPeriodSize()    const { return rxPktPeriod.getNelms();    }
+    const size_t getRxPktPeriodMinSize() const { return rxPktPeriodMin.getNelms(); }
+    const size_t getRxPktPeriodMaxSize() const { return rxPktPeriodMax.getNelms(); }
+    const size_t getRxErrDetCntSize()    const { return rxErrDetCnt.getNelms();    }
 
     // Mps Application ID
     std::pair<bool,uint16_t> getAppId(void) const                     { return appId.get();            };
@@ -177,6 +191,36 @@ public:
     // MPS RX Packet Received Counter
     std::pair<bool,uint32_t> getRxPktRcvdCnt(const uint8_t ch) const  { return rxPktRcvdCnt.get(ch);   };
 
+    // MPS TX Period between packets
+    std::pair<bool, uint32_t>  getTxPktPeriod(void) const                { return txPktPeriod.get();      }
+
+    // Min MPS TX Period between packets
+    std::pair<bool, uint32_t>  getTxPktPeriodMin(void) const             { return txPktPeriodMin.get();   }
+
+    // Max MPS TX Period between packets
+    std::pair<bool, uint32_t>  getTxPktPeriodMax(void) const             { return txPktPeriodMax.get();   }
+
+    // MPS RX[13:0] Period between packets
+    std::pair<bool, uint32_t>  getRxPktPeriod(const uint8_t ch) const    { return rxPktPeriod.get(ch);    }
+
+    // Min MPS RX[13:0] Period between packets
+    std::pair<bool, uint32_t>  getRxPktPeriodMin(const uint8_t ch) const { return rxPktPeriodMin.get(ch); }
+
+    // Max MPS RX[13:0] Period between packets
+    std::pair<bool, uint32_t>  getRxPktPeriodMax(const uint8_t ch) const { return rxPktPeriodMax.get(ch); }
+
+    // Counts the diagnostic strobes
+    std::pair<bool, uint32_t>  getDiagStrbCnt(void) const                { return diagStrbCnt.get();      }
+
+    // Counts the PLL Lock events
+    std::pair<bool, uint32_t>  getPllLockCnt(void) const                 { return pllLockCnt.get();       }
+
+    // MPS TX EOFE Sent Counter
+    std::pair<bool, uint32_t>  getTxEofeSentCnt(void) const              { return txEofeSentCnt.get();    }
+
+    // MPS RX Error Detected Counter[13:0]
+    std::pair<bool, uint32_t>  getRxErrDetCnt(const uint8_t ch) const    { return rxErrDetCnt.get(ch);    }
+
     // MpsMessage counter
     std::pair<bool,uint32_t> getMsgCount(void) const                  { return msgCnt.get();           };
 
@@ -229,6 +273,16 @@ private:
     CpswRegRW<uint16_t> rollOverEn;
     CpswRegRO<uint32_t> txPktSentCnt;
     CpswRegRO<uint32_t> rxPktRcvdCnt;
+    CpswRegRO<uint32_t> txPktPeriod;
+    CpswRegRO<uint32_t> txPktPeriodMin;
+    CpswRegRO<uint32_t> txPktPeriodMax;
+    CpswRegRO<uint32_t> rxPktPeriod;
+    CpswRegRO<uint32_t> rxPktPeriodMin;
+    CpswRegRO<uint32_t> rxPktPeriodMax;
+    CpswRegRO<uint32_t> diagStrbCnt;
+    CpswRegRO<uint32_t> pllLockCnt;
+    CpswRegRO<uint32_t> txEofeSentCnt;
+    CpswRegRO<uint32_t> rxErrDetCnt;
     CpswCmd             rstCnt;
     CpswCmd             rstPll;
 
