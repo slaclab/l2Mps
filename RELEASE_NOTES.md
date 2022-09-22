@@ -3,6 +3,9 @@
 Release notes for the SLAC LCLS2 HPS MPS Driver.
 
 ## Releases:
+* __R2.6.1__: 2022-09-22 J. Mock
+  * Fix bug in parameter name for SALT diagnostic parameters introduced in previous tag
+
 * __R2.6.0__: 2022-09-21 J. Mock
   * Add new SALT diagnostic registers: `MpsTxPktPeriod`, `MpsRxPktPeriod`, `MpsTxPktPeriodMax`,
     `MpsRxPktPeriodMax`, `MpsTxPktPeriodMin`, `MpsRxPktPeriodMin`, `DiagnosticStrbCnt`,
