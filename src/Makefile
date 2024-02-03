@@ -5,7 +5,7 @@ ifdef BR_VERSION
 	TARCH    = $(BR_VERSION)-x86_64
 else
 	CXX    = g++
-	TARCH  = $(H_VERSION)-x86_64
+	TARCH  = $(HARCH)
 endif
 
 OBJDIR   = O.$(TARCH)
