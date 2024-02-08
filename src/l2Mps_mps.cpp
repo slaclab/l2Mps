@@ -267,4 +267,5 @@ const uint64_t IMpsNode::loadConfigFile(std::string fileName) const
     std::cout << "Loading MPS application configuration file " << fileName << "..." << std::endl;
     uint64_t nEntriesLoaded = cpswRoot->loadConfigFromYamlFile(fileName.c_str());
     std::cout << "Done!. " << unsigned(nEntriesLoaded) << " entries were loaded." << std::endl;
+    return nEntriesLoaded;
 }

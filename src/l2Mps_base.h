@@ -22,7 +22,9 @@
  * ----------------------------------------------------------------------------
 **/
 
+#ifndef _GLIBCXX_USE_NANOSLEEP
 #define _GLIBCXX_USE_NANOSLEEP    // Workaround to use std::this_thread::sleep_for
+#endif
 
 #include <thread>
 #include <chrono>
