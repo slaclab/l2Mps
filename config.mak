@@ -7,7 +7,7 @@ LIB_NAME = l2Mps
 ### Arch Versions ###
 #####################
 # Host version
-HARCH      = rhel6
+#HARCH      = rhel6
 # Buildroot versions
 BR_ARCHES += buildroot-2019.08
 
