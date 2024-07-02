@@ -92,6 +92,7 @@ struct mps_infoData_t
     std::pair< bool, uint8_t              > version;
     std::pair< bool, bool                 > enable;
     std::pair< bool, bool                 > lcls1Mode;
+    std::pair< bool, uint8_t              > rstTripValue;
     std::pair< bool, uint8_t              > byteCount;
     std::pair< bool, bool                 > digitalEn;
     std::pair< bool, uint16_t             > beamDestMask;
@@ -167,6 +168,10 @@ public:
     // Lcls1 Mode (true = LCLS1 mode; false = LCLS2 Mode)
     std::pair<bool,bool>  getLcls1Mode(void) const                       { return lcls1Mode.get();        }
     bool  setLcls1Mode(const bool mode) const                            { return lcls1Mode.set(mode);    }
+
+    // Reset Latched trip values, for all channels.  1 reset
+    std::pair<bool,uint8_t>  getRstTrip(void) const                      { return rstTripValue.get();        }
+    bool  resetTripVals(const uint8_t rst) const                         { return rstTripValue.set(rst);  }
 
     // Number ofbytes in the MPS message
     std::pair<bool,uint8_t>  getByteCount(void) const                    { return byteCount.get();        }
@@ -301,6 +306,7 @@ private:
     CpswRegRW<uint8_t>  version;
     CpswRegRW<uint8_t>  enable;
     CpswRegRW<uint8_t>  lcls1Mode;
+    CpswRegRW<uint8_t>  rstTripValue;
     CpswRegRO<uint8_t>  byteCount;
     CpswRegRO<uint8_t>  digitalEn;
     CpswRegRW<uint16_t> beamDestMask;
