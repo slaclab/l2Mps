@@ -3,6 +3,17 @@
 Release notes for the SLAC LCLS2 HPS MPS Driver.
 
 ## Releases:
+* __R3.9.0__: 2024-07-02 J. Mock
+  * amc-cerrier-core adds two registers per MPS Channel into AppMps that store latched
+    mps trip value and pulse ID of the trip.  See (https://github.com/slaclab/amc-carrier-core/pull/408)
+  * Add mps cpsw driver support to access:
+    * mpsTripValue --> 32 bit integer ScalVal_RO interface, 1 per channel, stores analog value that went OOT
+    * mpsTripPulseId --> 64 bit integer ScalVal_RO interface, 1 per channel, stores PID 
+      of alanog value that caused trip.  Note, if trip value persists the latched PID will continue
+      to update.
+    * rstTripValue --> 1 bit.  Will reset all channels in application, PID and Latched Values
+      whenever it is 1.
+
 * __R3.8.0__: 2022-05-03 J. Mock
   * Change src/l2Mps_thr.cpp so that idl table threshold support is built for all applications.  
     Method of using idle table enable bit as a deciding factor for whether to build support or not
