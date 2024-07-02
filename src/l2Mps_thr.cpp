@@ -46,11 +46,13 @@ IThrChannel::IThrChannel(Path mpsRoot, uint8_t channel)
     }
 
     // Get Channel header information register
-    thrScalvals.info.count   = CpswRegRO<uint8_t>( chRoot, "thresholdCount" );
-    thrScalvals.info.idleEn  = CpswRegRW<uint8_t>( chRoot, "idleEn"         );
-    thrScalvals.info.altEn   = CpswRegRO<uint8_t>( chRoot, "altEn"          );
-    thrScalvals.info.lcls1En = CpswRegRO<uint8_t>( chRoot, "lcls1En"        );
-    thrScalvals.info.byteMap = CpswRegRO<uint8_t>( chRoot, "byteMap"        );
+    thrScalvals.info.count          = CpswRegRO<uint8_t> ( chRoot, "thresholdCount" );
+    thrScalvals.info.idleEn         = CpswRegRW<uint8_t> ( chRoot, "idleEn"         );
+    thrScalvals.info.altEn          = CpswRegRO<uint8_t> ( chRoot, "altEn"          );
+    thrScalvals.info.lcls1En        = CpswRegRO<uint8_t> ( chRoot, "lcls1En"        );
+    thrScalvals.info.byteMap        = CpswRegRO<uint8_t> ( chRoot, "byteMap"        );
+    thrScalvals.info.mpsTripValue   = CpswRegRO<uint32_t>( chRoot, "mpsTripValue"   );
+    thrScalvals.info.mpsTripPulseId = CpswRegRO<uint64_t>( chRoot, "mpsTripPulseId" );
 
     thr_chInfoData_t thrChInfo;
     readThrChInfo(thrChInfo);
@@ -91,14 +93,16 @@ ThrChannel IThrChannel::create(Path mpsRoot, uint8_t channel)
 
 void IThrChannel::readThrChInfo(thr_chInfoData_t& info) const
 {
-    info.count       = thrScalvals.info.count.get();
-    info.byteMap     = thrScalvals.info.byteMap.get();
-    info.idleEn      = thrScalvals.info.idleEn.get();
-    info.lcls1En     = thrScalvals.info.lcls1En.get();
-    info.altEn       = thrScalvals.info.altEn.get();
-    info.ch          = ch;
-    info.scaleSlope  = scaleSlope;
-    info.scaleOffset = scaleOffset;
+    info.count          = thrScalvals.info.count.get();
+    info.byteMap        = thrScalvals.info.byteMap.get();
+    info.idleEn         = thrScalvals.info.idleEn.get();
+    info.lcls1En        = thrScalvals.info.lcls1En.get();
+    info.altEn          = thrScalvals.info.altEn.get();
+    info.mpsTripValue   = thrScalvals.info.mpsTripValue.get();
+    info.mpsTripPulseId = thrScalvals.info.mpsTripPulseId.get();
+    info.ch             = ch;
+    info.scaleSlope     = scaleSlope;
+    info.scaleOffset    = scaleOffset;
 }
 
 void IThrChannel::readThrChData(thr_chData_t& data) const

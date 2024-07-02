@@ -82,6 +82,9 @@ struct thr_chInfoData_t
     std::pair< bool, bool    > lcls1En;
     float                      scaleSlope;
     float                      scaleOffset;
+    std::pair< bool, uint32_t> mpsTripValue;
+    std::pair< bool, uint64_t> mpsTripPulseId;
+
 };
 
 // Threshold channel information scalval interfaces
@@ -92,6 +95,8 @@ struct thr_chInfoScalval_t
     CpswRegRW< uint8_t > idleEn;
     CpswRegRO< uint8_t > altEn;
     CpswRegRO< uint8_t > lcls1En;
+    CpswRegRO< uint32_t >mpsTripValue;
+    CpswRegRO< uint64_t >mpsTripPulseId;
 };
 
 // Threshold data (information + table data)
@@ -134,13 +139,15 @@ public:
     static ThrChannel create(Path mpsRoot, uint8_t channel);
 
     // Channel header
-    uint8_t                    getChannel()             const { return ch;                              };
-    std::pair< bool, uint8_t > getThrCount()            const { return thrScalvals.info.count.get();    };
-    std::pair< bool, bool    > getIdleEn()              const { return thrScalvals.info.idleEn.get();   };
-    bool                       setIdleEn(const bool en) const { return thrScalvals.info.idleEn.set(en); };
-    std::pair< bool, bool    > getAltEn()               const { return thrScalvals.info.altEn.get();    };
-    std::pair< bool, bool    > getLcls1En()             const { return thrScalvals.info.lcls1En.get();  };
-    std::pair< bool, uint8_t > getByteMap()             const { return thrScalvals.info.byteMap.get();  };
+    uint8_t                    getChannel()             const { return ch;                                    };
+    std::pair< bool, uint8_t > getThrCount()            const { return thrScalvals.info.count.get();          };
+    std::pair< bool, bool    > getIdleEn()              const { return thrScalvals.info.idleEn.get();         };
+    bool                       setIdleEn(const bool en) const { return thrScalvals.info.idleEn.set(en);       };
+    std::pair< bool, bool    > getAltEn()               const { return thrScalvals.info.altEn.get();          };
+    std::pair< bool, bool    > getLcls1En()             const { return thrScalvals.info.lcls1En.get();        };
+    std::pair< bool, uint8_t > getByteMap()             const { return thrScalvals.info.byteMap.get();        };
+    std::pair< bool, uint32_t> getMpsTripValue()        const { return thrScalvals.info.mpsTripValue.get();   };
+    std::pair< bool, uint64_t> getMpsTripTS()           const { return thrScalvals.info.mpsTripPulseId.get(); };
 
 
     // Read threshold values (applying scale conversion)
