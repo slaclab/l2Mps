@@ -41,6 +41,7 @@ IMpsNode::IMpsNode(Path root)
     version          ( mpsRoot, MpsBaseModuleName + "mpsVersion"        ),
     enable           ( mpsRoot, MpsBaseModuleName + "mpsEnable"         ),
     lcls1Mode        ( mpsRoot, MpsBaseModuleName + "lcls1Mode"         ),
+    rstTripValue     ( mpsRoot, MpsBaseModuleName + "rstTripValue"      ),
     byteCount        ( mpsRoot, MpsBaseModuleName + "byteCount"         ),
     digitalEn        ( mpsRoot, MpsBaseModuleName + "digitalEn"         ),
     beamDestMask     ( mpsRoot, MpsBaseModuleName + "beamDestMask"      ),
@@ -132,6 +133,7 @@ const void IMpsNode::readMpsInfo(mps_infoData_t& info) const
     info.version          = version.get();
     info.enable           = enable.get();
     info.lcls1Mode        = lcls1Mode.get();
+    info.rstTripValue     = rstTripValue.get();
     info.byteCount        = byteCount.get();
     info.digitalEn        = digitalEn.get();
     info.beamDestMask     = beamDestMask.get();
