@@ -56,13 +56,15 @@ public:
     };
 
     // Threshold channel information
-    uint8_t                  getChannel  ( const T& ch) const                { return findThrChannel(ch)->getChannel();  };
-    std::pair<bool, uint8_t> getIdleEn   ( const T& ch) const                { return findThrChannel(ch)->getIdleEn();   };
-    bool                     setIdleEn   ( const T& ch, const bool en) const { return findThrChannel(ch)->setIdleEn(en); };
-    std::pair<bool, uint8_t> getAltEn    ( const T& ch) const                { return findThrChannel(ch)->getAltEn();    };
-    std::pair<bool, uint8_t> getLcls1En  ( const T& ch) const                { return findThrChannel(ch)->getLcls1En();  };
-    std::pair<bool, uint8_t> getByteMap  ( const T& ch) const                { return findThrChannel(ch)->getByteMap();  };
-    std::pair<bool, uint8_t> getThrCount ( const T& ch) const                { return findThrChannel(ch)->getThrCount(); };
+    uint8_t                   getChannel  ( const T& ch) const                { return findThrChannel(ch)->getChannel();  };
+    std::pair<bool, uint8_t>  getIdleEn   ( const T& ch) const                { return findThrChannel(ch)->getIdleEn();   };
+    bool                      setIdleEn   ( const T& ch, const bool en) const { return findThrChannel(ch)->setIdleEn(en); };
+    std::pair<bool, uint8_t>  getAltEn    ( const T& ch) const                { return findThrChannel(ch)->getAltEn();    };
+    std::pair<bool, uint8_t>  getLcls1En  ( const T& ch) const                { return findThrChannel(ch)->getLcls1En();  };
+    std::pair<bool, uint8_t>  getByteMap  ( const T& ch) const                { return findThrChannel(ch)->getByteMap();  };
+    std::pair<bool, uint8_t>  getThrCount ( const T& ch) const                { return findThrChannel(ch)->getThrCount(); };
+    std::pair<bool, uint32_t> getTripVal  ( const T& ch) const                { return findThrChannel(ch)->getTripVal();  };
+    std::pair<bool, uint64_t> getTripPID  ( const T& ch) const                { return findThrChannel(ch)->getTripPID();  }
 
 
     // Threshold set enable methods
