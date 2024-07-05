@@ -93,16 +93,19 @@ ThrChannel IThrChannel::create(Path mpsRoot, uint8_t channel)
 
 void IThrChannel::readThrChInfo(thr_chInfoData_t& info) const
 {
-    info.count          = thrScalvals.info.count.get();
-    info.byteMap        = thrScalvals.info.byteMap.get();
-    info.idleEn         = thrScalvals.info.idleEn.get();
-    info.lcls1En        = thrScalvals.info.lcls1En.get();
-    info.altEn          = thrScalvals.info.altEn.get();
-    info.mpsTripValue   = thrScalvals.info.mpsTripValue.get();
-    info.mpsTripPulseId = thrScalvals.info.mpsTripPulseId.get();
-    info.ch             = ch;
-    info.scaleSlope     = scaleSlope;
-    info.scaleOffset    = scaleOffset;
+    info.count           = thrScalvals.info.count.get();
+    info.byteMap         = thrScalvals.info.byteMap.get();
+    info.idleEn          = thrScalvals.info.idleEn.get();
+    info.lcls1En         = thrScalvals.info.lcls1En.get();
+    info.altEn           = thrScalvals.info.altEn.get();
+    info.mpsTripValueRaw = thrScalvals.info.mpsTripValue.get();
+    info.mpsTripPulseId  = thrScalvals.info.mpsTripPulseId.get();
+    info.ch              = ch;
+    info.scaleSlope      = scaleSlope;
+    info.scaleOffset     = scaleOffset;
+
+    // Convert Raw trip value to scaled trip value
+    info.mpsTripValue    = std::make_pair( info.mpsTripValueRaw.first, ( static_cast<int32_t>(info.mpsTripValueRaw.second) - scaleOffset ) * scaleSlope );
 }
 
 void IThrChannel::readThrChData(thr_chData_t& data) const
@@ -118,7 +121,7 @@ void IThrChannel::readThrChData(thr_chData_t& data) const
         tableData.min    = std::make_pair( tableData.minRaw.first, ( static_cast<int32_t>(tableData.minRaw.second) - scaleOffset ) * scaleSlope );
 
         tableData.maxRaw = (it->second).max.get();
-        tableData.max    = std::make_pair( tableData.maxRaw .first, ( static_cast<int32_t>(tableData.maxRaw .second) - scaleOffset ) * scaleSlope );
+        tableData.max    = std::make_pair( tableData.maxRaw.first, ( static_cast<int32_t>(tableData.maxRaw.second) - scaleOffset ) * scaleSlope );
 
         data.insert( std::make_pair(it->first, tableData) );
     }
