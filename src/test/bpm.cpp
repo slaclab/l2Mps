@@ -116,11 +116,13 @@ int main(int argc, char **argv)
                     std::cout << "  ===============================================" << std::endl;
 
                     std::cout << "    Thr channel  = " << unsigned(myMpsBpm[i]->getChannel(bpmCh)) << std::endl;
-                    printPair( "    Thr count",     myMpsBpm[i]->getThrCount(bpmCh) );
-                    printPair( "    Byte map",      myMpsBpm[i]->getByteMap(bpmCh)  );
-                    printPair( "    Idle EN",  myMpsBpm[i]->getIdleEn(bpmCh)   );
-                    printPair( "    Lcls1 EN", myMpsBpm[i]->getLcls1En(bpmCh)  );
-                    printPair( "    Alt EN",   myMpsBpm[i]->getAltEn(bpmCh)    );
+                    printPair( "    Thr count", myMpsBpm[i]->getThrCount(bpmCh)      );
+                    printPair( "    Byte map",  myMpsBpm[i]->getByteMap(bpmCh)       );
+                    printPair( "    Idle EN",   myMpsBpm[i]->getIdleEn(bpmCh)        );
+                    printPair( "    Lcls1 EN",  myMpsBpm[i]->getLcls1En(bpmCh)       );
+                    printPair( "    Alt EN",    myMpsBpm[i]->getAltEn(bpmCh)         );
+                    printPair( "    Trip Val",  myMpsBpm[i]->getTripVal(bpmCh)       );
+                    printPair( "    Trip PID",  myMpsBpm[i]->getTripPID(bpmCh), true );
 
                     std::cout << std::endl;
                     std::cout << "    Threshold tables:" << std::endl;
