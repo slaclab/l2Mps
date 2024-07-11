@@ -27,7 +27,7 @@
 // Number of Channel for BLM is 3 (per AMC)
 const uint8_t numBlmChs(3);
 // Number of Integration channel for BLM is 4 (per each channel)
-const uint8_t numBlmIntChs(4);
+const uint8_t numBlmIntChs(2);
 
 // Channel to byte map:
 //    - Fisrt index is the AMC number (0 or 1)
@@ -36,14 +36,14 @@ const uint8_t numBlmIntChs(4);
 const uint8_t blmChByteMap[2][numBlmChs][numBlmIntChs] =
 {
     {
-        {  0,  6, 12, 18 },
-        {  1,  7, 13, 19 },
-        {  2,  8, 14, 20 },
+        {  0,  6 },
+        {  1,  7 },
+        {  2,  8 },
     },
     {
-        {  3,  9, 15, 21 },
-        {  4, 10, 16, 22 },
-        {  5, 11, 17, 23 },
+        {  3,  9 },
+        {  4, 10 },
+        {  5, 11 },
     }
 };
 

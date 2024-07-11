@@ -15,6 +15,7 @@ Release notes for the SLAC LCLS2 HPS MPS Driver.
       whenever it is 1.
   * Create scaled version of mpsTripValue, scaled by FWSLO and FWOFF like threshold values
   * Add diagnostics to retrieve mpsTripValue and mpsTripPulseId with command line tools
+  * Reduce number of BLM integrators from 4 to 2 to match FW
 
 * __R3.8.0__: 2022-05-03 J. Mock
   * Change src/l2Mps_thr.cpp so that idl table threshold support is built for all applications.  
