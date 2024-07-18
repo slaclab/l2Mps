@@ -26,7 +26,7 @@
 
 // Number of Channel for BLM is 3 (per AMC)
 const uint8_t numBlmChs(3);
-// Number of Integration channel for BLM is 4 (per each channel)
+// Number of Integration channel for BLM is 2 (per each channel)
 const uint8_t numBlmIntChs(2);
 
 // Channel to byte map:
