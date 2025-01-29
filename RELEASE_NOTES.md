@@ -3,6 +3,10 @@
 Release notes for the SLAC LCLS2 HPS MPS Driver.
 
 ## Releases:
+* __R3.10.0__: 2025-01-28 J. Lorelli
+  * Upgrade to cpsw/R4.5.2
+  * Link against libtirpc on rocky9/rhel9 to fix linker errors
+
 * __R3.9.0__: 2024-07-02 J. Mock
   * amc-cerrier-core adds two registers per MPS Channel into AppMps that store latched
     mps trip value and pulse ID of the trip.  See (https://github.com/slaclab/amc-carrier-core/pull/408)
