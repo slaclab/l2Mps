@@ -22,8 +22,15 @@ TIRPC_VERSION    = 1.3.5
 ########################
 ### Path definitions ###
 ########################
+# Set a directory for the toolchain location. in S3DF, this is the same as EPICS_PACKAGE_TOP
+ifeq ($(EPICS_PACKAGE_TOP),)
+TOOLCHAINS=/afs/slac/package
+else
+TOOLCHAINS=$(EPICS_PACKAGE_TOP)
+endif
+
 # Location of BuildRoot home:
-BUILDROOT_HOME=$(PACKAGE_SITE_TOP)/linuxRT/$(BR_VERSION)
+BUILDROOT_HOME=$(TOOLCHAINS)/linuxRT/$(BR_VERSION)
 # Location CrossCompiler HOME:
 XCROSS_HOME=$(BUILDROOT_HOME)/host/linux-x86_64/x86_64/usr/bin/x86_64-buildroot-linux-gnu-
 
