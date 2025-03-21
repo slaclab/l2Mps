@@ -1,5 +1,7 @@
 # l2Mps Driver fo the SLAC LCLS2 HPS MPS System
 
+[DOE Code](https://www.osti.gov/doecode/biblio/75981)
+
 ## Description
 
 Driver for the LCLS-2 Machine Protection Systems (MPS), which is based on the ATCA High Performance System (HPS).
